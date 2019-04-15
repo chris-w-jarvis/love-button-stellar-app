@@ -98,6 +98,7 @@ function sendPayment(amount) {
     } else {
         privateKey = sourceKeyIn.value
     }
+    paymentStatusDiv.innerHTML = '<p>Wait...</p>'
     Stellar.sendPaymentToStellar(privateKey, destKeyElement.innerHTML, amount)
         .then( res => {
             paymentStatusDiv.innerHTML = `<p>Success, sent ${amount} XLM\nSee this transaction on Stellar public ledger: ${stellarLedgerUrl}${res.hash}</p>`
@@ -110,7 +111,8 @@ function sendPayment(amount) {
         })
         .catch(err => {
             console.log(err)
-            alert('Request failed, check your private key.')
+            paymentStatusDiv.innerHTML = '<p>Failed, check your private key, is your account funded?</p>'
+            paymentStatusDiv.style.backgroundColor = "red";
         })
 }
 
