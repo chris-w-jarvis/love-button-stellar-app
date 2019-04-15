@@ -1,7 +1,7 @@
 $( document ).ready(function () {
     let getLinkBtn = document.getElementById('getLinkSubmitBtn')
     let host = 'https://love-button-stellar-app.herokuapp.com/'
-    //let host = 'localhost:8080/'
+    //let host = 'http://localhost:8080/'
 
     getLinkBtn.onclick = function() {
         var request = {}

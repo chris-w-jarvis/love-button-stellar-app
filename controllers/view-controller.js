@@ -1,11 +1,11 @@
 const Mustache = require('mustache')
 const fs = require('fs')
 
-const Pages = require('../models/pages')
+const Pages = require('../models/pages').Pages
 
 // read html file to memory
 var htmlTemplate = '';
-fs.readFile('/app/views/sendMoneyPage.html', 'utf8', function(err, data) {htmlTemplate = data});
+fs.readFile('./views/sendMoneyPage.html', 'utf8', function(err, data) {htmlTemplate = data});
 
 module.exports = function(req, res, next) {
   // find corresponding public key in db for req.params.pageId

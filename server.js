@@ -19,9 +19,46 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+// Rate limiter
+const rateLimit = require("express-rate-limit")
+const RedisStore = require("rate-limit-redis")
+var Redis = require('ioredis')
+var client = new Redis(process.env.REDIS_URL)
+ 
+app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+ 
+const generalLimiter = rateLimit(
+  {
+    store: new RedisStore({
+      client: client
+    }),
+    windowMs: 60000, // 1 minute window
+    max: 20, // start blocking after 20 requests
+    message: "You can only hit this service 20 times per minute, this is to prevent money laundering."
+  }
+);
+ 
+//  apply to all requests
+app.use(generalLimiter);
+
 // VIEWS
 app.get('/', function(req, res) {
-  res.send('Landing page')
+  res.redirect('/about')
+})
+app.get('/about', function(req, res) {
+  res.redirect('https://love-button.launchaco.com/')
+})
+
+app.get('/getStellarLumens', function(req, res) {
+  res.sendFile(__dirname + '/views/getStellarLumens.html')
+})
+
+app.get('/getStartedCreators', function(req, res) {
+  res.sendFile(__dirname + '/views/getStartedCreators.html')
+})
+
+app.get('/get-my-link/premium', function(req, res) {
+  res.send("Not setup yet, email me at chris.at.love.button@gmail.com , it'll cost 10$")
 })
 
 app.get('/get-my-link', function(request, response) {

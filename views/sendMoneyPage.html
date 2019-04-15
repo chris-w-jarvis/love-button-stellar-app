@@ -1,69 +1,149 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script
-      src="https://code.jquery.com/jquery-3.3.1.min.js"
-      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-      crossorigin="anonymous">
-    </script>
-  </head>
-  <body class="card" style="width: 48rem;">
-    <div style="text-align: center">
-    <header class="row">
-      <h1 class="col-12 bg-danger text-white" style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif">Love Button</h1>
-    </header>
 
-    <div class="row">
-      <label class="input-group-text">Public key for {{name}}:</label>
-      <p id="destKey" class="col-12">{{key}}</p>
-    </div>
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	 crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	 crossorigin="anonymous">
+	</script>
+	<link rel="shortcut icon" type="image/ico" href="../js/dist/favicon.ico"/>
+	<style>
+		.bg-love {
+              background-color: #d21717;
+          }
+	  </style>
+</head>
 
-    <div class="row mb-2">
-      <div class="col-12">
-        <input type="text" id="sourceKeyIn" class="form-control" placeholder="Your Private Key">
-      </div>
-    </div>
-    
-    <div class="input-group col-12">
-        <div class="input-group-prepend">
-          <label class="input-group-text" for="selectedCurrency">Currency</label>
-        </div>
-        <select id="selectedCurrency" class="custom-select">
-          <option value="xlm" selected="selected">XLM</option>
-          <option value="usd">USD (translated to XLM)</option>
-        </select>
-        <input type="text" id="paymentAmount" class="col-5 form-control" placeholder="Payment amount">
-    </div>
+<body class="container-fluid">
+	<header class="row pt-4 pb-3 bg-love">
+		<h1 class="offset-1 col-10 text-white" style="font-family: Montserrat,sans-serif;">love-button</h1>
+	</header>
 
-    <div class="row mb-2">
-      <div class="col-6">      
-        <button type="text" id="defaultPaymentAmountBtn" class="col-12 btn btn-danger" title="Change default in options page for this extension">Send 0.02$</button>
-      </div>
-      <div class="col-6">      
-        <button type="button" id="sendPaymentBtn" class="col-12 btn btn-danger">Send Payment</button>
-      </div>
-    </div>
+	<div class="row">
+		<label id="destKey" class="input-group-text offset-1 col-sm-8">{{key}}</label>
+		<p class="input-group-text offset-1 col-sm-8">{{name}}</p>
+	</div>
 
-    <div id="priceCheckDiv" class="row mb-2">
-      <p id="xlmPrice" class="col-8">loading</p>
-      <div class="col-4">
-          <button type="button" id="priceCheck" class="col-12 btn btn-danger" title="Updated at most 5 minutes ago">Update price</button>
-      </div>
+	<div class="row mt-4">
+		<input type="password" id="sourceKeyIn" class="offset-1 col-10 form-control" placeholder="Your Private Key">
+		<button type="button" id="saveKeyInBrowserBtn" class="offset-1 col-10 btn bg-love text-white">Save in Browser</button>
+        <input type="text" id="saveKeyPassphraseInput" style="display:none" class="offset-1 col-10 form-control" placeholder="Encrypt your key with a password you'll remember">
+	</div>
+	<div class="row mt-4">
+		<div class="offset-1 col-10 px-0">
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text">Currency</span>
+					<select class="custom-select" id="selectedCurrency">
+						<option value="xlm" selected>XLM(Stellar Lumens)</option>
+						<option value="usd">USD (converted to XLM)</option>
+					</select>
+				</div>
+				<input id="paymentAmount" type="text" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="Payment amount">
+			</div>
+		</div>
+	</div>
 
-    </div>
+	<div class="row mt-4">
+		<div class="offset-1 col-10">
+			<div class="row">
+				<div class="col-6">
+					<div class="row pr-1">
+						<button type="text" id="defaultPaymentAmountBtn" class="col-12 btn bg-love text-white" title="Change default in options page for this extension">Default</button>
+					</div>
+				</div>
+				<div class="col-6">
+					<div class="row pl-1">
+						<button type="button" id="sendPaymentBtn" class="col-12 btn btn-success">Send Payment</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <div id="accountBalanceOuterDiv" class="row mb-2">
-      <p id="accountBalanceDiv" class="col-8">Source is needed to check balance</p>
-      <div class="col-4">
-          <button type="button" id="accountBalanceCheck" class="col-12 btn btn-danger">Check balance</button>
-      </div>
-    </div>
+	</div>
 
-    <footer class="row bg-danger pb-0">
-      <a class="col-12 text-white" href="https://love-button-stellar-app.herokuapp.com/about">About Love Button</a>
-    </footer>
-  </div>
-  </body>
-  <script src="../js/index.js"></script>
+	<div id="priceCheckDiv" class="row mt-4">
+		<div class="offset-1 col-10">
+			<div class="row">
+				<p id="xlmPrice" class="col-8 px-0">Loading...</p>
+				<div class="col-4">
+					<div class="row">
+						<button type="button" id="priceCheck" class="col-12 btn bg-love text-white" title="Updated at most 5 minutes ago">Update
+							price</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="accountBalanceOuterDiv" class="row mt-4">
+		<div class="offset-1 col-10">
+			<div class="row">
+				<p id="accountBalanceDiv" class="col-8 px-0">Unable to check balance. Source needed.</p>
+				<div class="col-4">
+					<div class="row">
+						<button type="button" id="accountBalanceCheck" class="col-12 btn bg-love text-white">Check balance</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="paymentStatusDiv" style="border-radius: 5px; text-align: center;">
+
+	</div>
+
+	<section id="optionsDiv" class="row" style="display:none">
+		<div class="offset-1 col-10">
+
+			<hr>
+			<div class="row">
+				<h4 class="col-12 px-0">Options</h4>
+			</div>
+
+			<div class="row mt-2">
+				<div class="col-12 px-0">
+					<div class="input-group ">
+						<div class="input-group-prepend">
+							<label class="input-group-text">Select Default Amount</label>
+						</div>
+						<input id="defaultAmt" type="text" class="form-control" placeholder="Default amount" aria-label="Username"
+						 aria-describedby="basic-addon1">
+						<div class="input-group-append">
+							<select class="custom-select" id="selectedCurrencyDefault">
+								<option value="xlm" selected>XLM(Stellar Lumens)</option>
+								<option value="usd">USD (converted to XLM)</option>
+							</select>
+							<button class="btn btn-outline-secondary" id="defaultBtn" type="button">Save</button>
+						</div>
+					</div>
+				</div>
+			</div>
+						<button id="clearKeyBtn" class="btn btn-outline-secondary" type="button">Clear Storage</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+	<footer class="row bg-love pb-0 py-3 fixed-bottom">
+		<div class="offset-1 col-7">
+			<a class="col-12 text-white" href="https://love-button-stellar-app.herokuapp.com/about">DON'T KNOW WHAT THIS
+				IS??</a>
+		</div>
+		<div class="offset-1 col-7">
+			<a class="col-12 text-white" href="https://love-button-stellar-app.herokuapp.com/getStartedCreators">Get your link!</a>
+		</div>
+		<div class="col-3">
+			<div class="row">
+				<button id="showOptionsDivBtn" type="button" class="btn col-12">Show Options</button>
+			</div>
+		</div>
+
+	</footer>
+</body>
+<script src="../js/dist/main.js"></script>
+
 </html>

@@ -1,6 +1,6 @@
 require('dotenv').config()
 const Sequelize = require('sequelize')
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_GREEN_URL, {
     dialect: 'postgres'
 })
 
@@ -21,9 +21,17 @@ const Pages = sequelize.define('Pages', {
   id: {type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4}
 })
 
-// REMOVE TRUE BEFORE LAUNCE, in case I need to restart server don't delete whole db!
-Pages.sync({force: true})
+const LastPageId = sequelize.define('LastPageId', {
+  pageId: {type: Sequelize.STRING, primaryKey: true}
+})
 
-module.exports = Pages
+// to delete db add as argument {force:true}
+Pages.sync()
+LastPageId.sync()
+
+module.exports = {
+  Pages: Pages,
+  LastPageId: LastPageId
+}
 
 

@@ -7,18 +7,24 @@
   "description": "A simple Node app built on Express, instantly up and running.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "webpack"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "crypto-js": "^3.1.9-1",
     "dotenv": "^6.2.0",
     "express": "^4.16.3",
+    "express-rate-limit": "^3.4.0",
+    "ioredis": "^4.9.0",
     "mustache": "^3.0.1",
     "pg": "^6.4.2",
+    "rate-limit-redis": "^1.6.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.42.0",
-    "stellar-sdk": "^0.11.0"
+    "stellar-sdk": "^0.11.0",
+    "webpack": "^4.30.0"
   },
   "engines": {
     "node": "8.x"
@@ -31,5 +37,9 @@
     "node",
     "glitch",
     "express"
-  ]
+  ],
+  "devDependencies": {
+    "webpack-cli": "^3.3.0",
+    "webpack-dev-server": "^3.3.1"
+  }
 }
