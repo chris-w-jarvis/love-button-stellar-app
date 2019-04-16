@@ -58,7 +58,7 @@ app.get('/getStartedCreators', function(req, res) {
 })
 
 app.get('/get-my-link/premium', function(req, res) {
-  res.send("Not setup yet, email me at chris.at.love.button@gmail.com , it'll cost 10$")
+  res.send("Not setup yet, email me at chris.at.love.button@gmail.com")
 })
 
 app.get('/get-my-link', function(request, response) {

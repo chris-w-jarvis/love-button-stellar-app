@@ -12,7 +12,12 @@
 		.bg-orange {
           background-color: #d21717;
       }
-  </style>
+	</style>
+	<script>
+	if (location.protocol !== "https:") {
+		location.protocol = "https:";
+	}
+	</script>
 </head>
 <div class="container-fluid">
 	<header class="row pt-4 pb-3 bg-orange">
@@ -20,25 +25,10 @@
 	</header>
 	<section>
 		<div class="row mt-3">
-			<p class="offset-1 col-10">Whichever wallet you have will have an option to recieve payment to the wallet. This will
-				expose your public "Stellar address" that <span>love-button</span> will use to send money to you.
+			<p class="offset-1 col-10">Paste your Stellar public address (public key) here, in your wallet there will be an option to Receive Payment 
+				that will expose this address. More instructions <a href="/getStartedCreators">here</a>.
 			</p>
 		</div>
-		<div class="row">
-			<p class="offset-1 col-10">
-				Make sure you choose Stellar address not federation address.
-			</p>
-		</div>
-		<div class="row">
-			<p class="offset-1 col-10">
-				Your Stellar address should be a 56
-				character string of alphanumeric characters not anything that looks like a url. You will copy this address
-				and paste it into the public key input. </p>
-		</div>
-		<div class="row">
-				<p class="offset-1 col-10">
-					Paste your link anywhere people see your content! </p>
-			</div>
 	</section>
 
 	<section class="offset-1 col-10 p-0">
@@ -52,7 +42,13 @@
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="inputGroup-sizing-sm">Name or text to display with your key:</span>
 			</div>
-			<input type="text" class="form-control" id="name" placeholder="YourName">
+			<input type="text" class="form-control" id="name" placeholder="name">
+		</div>
+		<div class="input-group input-group-sm mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text" id="inputGroup-sizing-sm">[OPTIONAL] email to get news about love-button:</span>
+			</div>
+			<input type="email" class="form-control" id="emailInput"placeholder="you@example.com">
 		</div>
 
 		<div class="row">
@@ -63,9 +59,13 @@
 		<br>
 		<div class="input-group input-group-sm mb-3">
 			<div class="input-group-prepend">
-				<span class="input-group-text" id="inputGroup-sizing-sm">Your generated link:</span>
+				<span class="input-group-text" id="inputGroup-sizing-sm">Your love-button link:</span>
 			</div>
 			<input type="text" class="form-control" id="link" placeholder="Enter your info and click the button to get your link">
+		</div>
+		<div class="row">
+			<p class="offset-1 col-10">
+				Paste your link anywhere people see your content! </p>
 		</div>
 
 	</section>

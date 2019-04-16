@@ -22,7 +22,7 @@ const Encryption = require('./encryption-browser')
 let loveButtonAcctAddr = 'GCP4TPXG3TIYJ2U7Z77T5QFXVMJZTTWDKBQBFPGXJL4WG26FZ6DVT5GZ'
 
 let stellarLedgerUrl = 'http://testnet.stellarchain.io/tx/'
-let host = 'https://love-button-stellar-app.herokuapp.com/api/'
+let host = 'https://www.love-button.org/api/'
 //let host = 'http://localhost:8080/api/'
 let stellarPrice = ''
 
