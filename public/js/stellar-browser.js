@@ -22,6 +22,7 @@ module.exports = {
                   asset: StellarSdk.Asset.native(),
                   amount: lumensAmount
                 }))
+                .addMemo(StellarSdk.Memo.text('1'))
                 .build();
               transaction.sign(sourceKeys);
               return server.submitTransaction(transaction);

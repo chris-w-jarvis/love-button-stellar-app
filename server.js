@@ -1,15 +1,25 @@
-// server.js
-// where your node app starts
+// // server.js
+// // where your node app starts
 
-// init project
-require('dotenv').config()
+// // init project
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-
-const Model = require('./models/pages')
+require('dotenv').config()
 const viewController = require('./controllers/view-controller')
+
+const Auth = require('./controllers/authentication');
+// this code just needs to run, its not used in this file but it sets up passport
+// run before api router imports passport
+const PassportService = require('./services/passport');
+
 const Api = require('./api-router')
+
+const passport = require('passport');
+
+// setup passport, token not session (cookie) based
+const requireAuth = passport.authenticate('jwt', {session: false, failureRedirect: "/login"});
+const requireSignin = passport.authenticate('local', {session: false});
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.
@@ -18,28 +28,6 @@ const Api = require('./api-router')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
-// Rate limiter
-const rateLimit = require("express-rate-limit")
-const RedisStore = require("rate-limit-redis")
-var Redis = require('ioredis')
-var client = new Redis(process.env.REDIS_URL)
- 
-app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
- 
-const generalLimiter = rateLimit(
-  {
-    store: new RedisStore({
-      client: client
-    }),
-    windowMs: 60000, // 1 minute window
-    max: 20, // start blocking after 20 requests
-    message: "You can only hit this service 20 times per minute, this is to prevent money laundering."
-  }
-);
- 
-//  apply to all requests
-app.use(generalLimiter);
 
 // VIEWS
 app.get('/', function(req, res) {
@@ -61,15 +49,35 @@ app.get('/get-my-link/premium', function(req, res) {
   res.send("Not setup yet, email me at chris.at.love.button@gmail.com")
 })
 
+app.get('/login', function(req, res) {
+    res.send("Login page")
+})
+
 app.get('/get-my-link', function(request, response) {
   response.sendFile(__dirname + '/views/getLink.html');
 });
 
+// TODO: remove
+app.get('/userId', requireAuth, function(req, res) {
+    res.send({id: req.user.accountBalanceId})
+})
+
 // render html for each url on /pages
 app.get('/pages/:pageId', viewController)
 
+// passport checks for correct username and password before auth controller gives you a token
+app.post('/auth/signin', requireSignin, Auth.signin);
+app.post('/auth/signup', Auth.signup);
+
 // send all other requests to api router
 Api(app)
+
+// app.get('/get-my-link', function(req, res) {
+//   res.send('getmy link')
+// })
+
+// turn on transaction listener
+const stellarAccountListener = require('./listeners/fund-account-listener')
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function() {
