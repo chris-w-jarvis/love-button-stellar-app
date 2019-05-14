@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	 crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	 crossorigin="anonymous"></script>
+	<script src="../js/getLink.js"></script>
+	<link rel="shortcut icon" type="image/ico" href="../js/dist/favicon.ico"/>
+	<style>
+		.bg-orange {
+          background-color: #d21717;
+      }
+	</style>
+	<!-- NEED IN PROD <script>
+                if (location.protocol !== "https:") {
+                    location.protocol = "https:";
+                }
+                </script> -->
+</head>
+<div >
+	<header >
+		<h1 >Get your link</h1>
+	</header>
+	<section>
+		<div >
+			<p >Paste your Stellar public address (public key) here, in your wallet there will be an option to Receive Payment 
+				that will expose this address. More instructions <a href="/getStartedCreators">here</a>.
+			</p>
+		</div>
+	</section>
+
+	<section >
+		<div >
+			<div >
+				<span  >Your public key:</span>
+			</div>
+			<input type="text"  id="publicKey"placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+		</div>
+		<div >
+				<div >
+					<span  >Your memo:</span>
+				</div>
+				<input type="text"  id="memo"placeholder="Needed for Coinbase users">
+			</div>
+		<div >
+			<div >
+				<span  >Name or text to display with your key:</span>
+			</div>
+			<input type="text"  id="name" placeholder="name">
+		</div>
+		<div >
+			<div >
+				<span  >[OPTIONAL] email to get news about love-button:</span>
+			</div>
+			<input type="email"  id="emailInput"placeholder="you@example.com">
+		</div>
+
+		<div >
+			<button type="button"  id="getLinkSubmitBtn">Generate Link</button>
+		</div>
+
+		<br>
+		<br>
+		<div >
+			<div >
+				<span  >Your love-button link:</span>
+			</div>
+			<input type="text"  id="link" placeholder="Enter your info and click the button to get your link">
+		</div>
+		<div >
+			<p >
+				Paste your link anywhere people see your content! </p>
+		</div>
+
+	</section>
+</div>
+
+</html>

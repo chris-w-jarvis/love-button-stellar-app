@@ -1,0 +1,45 @@
+<h1>love-button</h1>
+<h3>{{NameOrTextForPage}}</h3>
+<label>Currency:</label>{{CURRENCY SELECTOR}}
+<label>Amount:</label><input id="amount" type="text">
+<br>
+<button type="button" id="defaultBtn">Default (N xlm)</button>
+<button type="button" id="sendPaymentBtn">Send Payment</button>
+<br>
+<label>Xlm Price:</label><p>{{xlmPrice}} USD</p>
+<label>Your account balance:</label><p>{{curBal}} Xlm</p>
+<a href="/">WHAT IS THIS?</a>
+<button type="button" id="optionsBtn">Show Options</button>
+<section id="optionsDiv">
+    <div >
+
+        <hr>
+        <div >
+            <h4 >Options</h4>
+        </div>
+
+        <div >
+            <div >
+                <div >
+                    <div >
+                        <label >Select Default Amount</label>
+                    </div>
+                    <input id="defaultAmt" type="text"  placeholder="Default amount" aria-label="Username"
+                     aria-describedby="basic-addon1">
+                    <div >
+                        <select  id="selectedCurrencyDefault">
+                            <option value="xlm" selected>XLM(Stellar Lumens)</option>
+                            <option value="usd">USD (converted to XLM)</option>
+                        </select>
+                        <button  id="defaultBtn" type="button">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    <button id="clearKeyBtn"  type="button">Clear Storage</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
