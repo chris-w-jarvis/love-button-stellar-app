@@ -21,8 +21,28 @@ const passport = require('passport');
 const requireAuth = passport.authenticate('jwt', {session: false, failureRedirect: "/login"});
 const requireSignin = passport.authenticate('local', {session: false});
 
-// we've started you off with Express, 
-// but feel free to use whatever libs or frameworks you'd like through `package.json`.
+// General Rate Limiter
+const rateLimit = require("express-rate-limit")
+const RedisStore = require("rate-limit-redis")
+var Redis = require('ioredis')
+var client = new Redis(process.env.REDIS_URL)
+ 
+
+app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+ 
+const generalLimiter = rateLimit(
+  {
+    store: new RedisStore({
+      client: client
+    }),
+    windowMs: 60000, // 1 minute window
+    max: 60,
+    message: "General rate limiter: 60 times per minute."
+  }
+);
+ 
+//  apply to all requests
+app.use(generalLimiter);
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'))
@@ -49,8 +69,12 @@ app.get('/get-my-link/premium', function(req, res) {
   res.send("Not setup yet, email me at chris.at.love.button@gmail.com")
 })
 
+app.get('/fundMyAccount', function(req, res) {
+  res.sendFile(__dirname + '/views/fundAccount.html')
+})
+
 app.get('/login', function(req, res) {
-    res.send("Login page")
+    res.sendFile(__dirname + '/views/login.html')
 })
 
 app.get('/get-my-link', function(request, response) {
@@ -62,8 +86,8 @@ app.get('/userId', requireAuth, function(req, res) {
     res.send({id: req.user.accountBalanceId})
 })
 
-// render html for each url on /pages
-app.get('/pages/:pageId', viewController)
+// render html for each url on /give
+app.get('/give/:pageId', viewController)
 
 // passport checks for correct username and password before auth controller gives you a token
 app.post('/auth/signin', requireSignin, Auth.signin);

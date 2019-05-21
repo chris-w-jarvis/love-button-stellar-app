@@ -53,9 +53,22 @@ const checkBalance = function(balanceId) {
     })
   }
 
+  const fundAccount = function(userId) {
+    return new Promise((resolve, reject) => {
+      Accounts.findOne({
+        attributes: ['accountBalanceId', 'balance'],
+        where : {
+          id: userId
+        }
+      }).then(res => resolve(res))
+      .catch(err => reject(err))
+    })
+  }
+
   module.exports = {
     checkBalance: checkBalance,
     checkBalanceUserId: checkBalanceUserId,
     modifyFunds: modifyFunds,
-    modifyFundsUserId: modifyFundsUserId
+    modifyFundsUserId: modifyFundsUserId,
+    fundAccount: fundAccount
   }

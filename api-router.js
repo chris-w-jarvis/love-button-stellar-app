@@ -1,6 +1,7 @@
 const stellarController = require('./controllers/stellar-controller')
 const accountController = require('./controllers/account-balance-controller')
 const Pages = require('./models/pages').Pages
+const sendPaymentService = require('./services/payment-account-transaction').sendPaymentService
 const path = require('path') 
 const fs = require('fs')
 require('dotenv').config()
@@ -15,25 +16,25 @@ const requireAuth = passport.authenticate('jwt', {session: false, failureRedirec
 // Rate limiter
 const rateLimit = require("express-rate-limit")
 const RedisStore = require("rate-limit-redis")
-// var Redis = require('ioredis')
-// var client = new Redis(process.env.REDIS_URL)
- 
+var Redis = require('ioredis')
+var client = new Redis(process.env.REDIS_URL)
 
-//app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
- 
-// const generalLimiter = rateLimit(
-//   {
-//     store: new RedisStore({
-//       client: client
-//     }),
-//     windowMs: 60000, // 1 minute window
-//     max: 20, // start blocking after 20 requests
-//     message: "You can only hit this service 20 times per minute, this is to prevent money laundering."
-//   }
-// );
- 
-// //  apply to all requests
-// app.use(generalLimiter);
+const paymentRateLimiter = rateLimit({
+  store: new RedisStore({
+    client: client
+  }),
+  windowMs: 10000, // 10 second window
+  max: 1, // 1 payment per 10 seconds
+  message: "Payment rate limiter: 1 per 10 seconds.",
+  keyGenerator: function(req) {
+    if (req.user) {
+      return req.user.id
+    }
+    else {
+      return req.get("Authorization")
+    }
+  }
+})
 
 // value returned by /api/priceCheck
 var stellarPrice = "";
@@ -124,44 +125,12 @@ module.exports = function router(app) {
     })
   })
 
-  // TODO: rate limiting
-  app.post('/api/sendPayment', requireAuth, function(req, res) {
-    accountController.checkBalanceUserId(req.user.id)
-    .then(balance => {
-      // check account balance
-      const bal = parseFloat(balance)
-      const pmt = parseFloat(req.body.amount)
-      if (bal <= pmt) {
-        res.status(400).send({msg: "Not enough money in account"})
-        return
-      }
-      // lower acct bal
-      accountController.modifyFundsUserId(req.user.id, bal - pmt)
-      .then(modifyResult => {
-        if (modifyResult != 1) {
-          console.log(`Error occured changing account balance before sending payment for userid ${req.user.id}`)
-        }
-        // send payment
-        stellarController.sendPayment(req.body.destination, req.body.amount)
-        .then(pmtRes => {
-          // successful transaction
-          res.sendStatus(204)
-        })
-        .catch(err => {
-          console.log('Payment failed', err)
-          res.status(400).send({msg: "Transaction failed in Stellar network"})
-          // revert transaction
-          accountController.modifyFundsUserId(req.user.id, bal)
-          .then(modifyResult2 => {
-            res.sendStatus(400)
-            if (modifyResult2 != 1) throw new Error('Error rolling back transaction')
-          })
-          .catch(err => {
-            console.log(err)
-            res.sendStatus(400)
-          })
-        })
-      })
+  app.post('/api/sendPayment', paymentRateLimiter, requireAuth, paymentRateLimiter, sendPaymentService)
+
+  app.get('/api/fund', requireAuth, function(req, res) {
+    accountController.fundAccount(req.user.id)
+    .then(dbRes => {
+      res.send({'balance':dbRes.balance, 'memo':dbRes.accountBalanceId, 'loveButtonPublicAddress':process.env.LOVE_BUTTON_PUBLIC_ADDRESS})
     })
   })
 }

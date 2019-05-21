@@ -73,7 +73,7 @@ payments.stream({
   },
 
   onerror: function(error) {
-    console.error(error);
+    //console.error(error);
   }
 });
 

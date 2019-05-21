@@ -1,7 +1,32 @@
 <h1>Login</h1>
-<form action='/auth/signin'>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+     crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        $("#loginForm").submit(
+            (event) => {
+                event.preventDefault()
+                $.post({
+                    url: '/auth/signin',
+                    // contentType: 'application/x-www-form-urlencoded'
+                    data: {username: document.getElementById('username').value, password: document.getElementById('password').value},
+                    success: function(res) {
+                        localStorage.setItem('loveButtonAuthToken', res.token)
+                        window.location.replace('/fundMyAccount')
+                    },
+                    error: function() {
+                        console.log("Login failed")
+                        alert('Please check password')
+                    }
+                })
+            }
+        )
+    })
+</script>
+<form id="loginForm">
     <label>Username</label>
-    <input name="username" type="text">
+    <input name="username" id="username" type="text">
     <label>Password</label>
-    <input name="password" type="text">
+    <input name="password" id="password" type="password">
+    <button id="submitBtn" type="submit">Submit</button>
 </form>

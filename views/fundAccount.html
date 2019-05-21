@@ -1,8 +1,16 @@
-<h1>Fund Your Tipping Account</h1>
-<h4>Send Stellar Lumens to your love-button tipping account</h4>
-<label>Address to send to:</label>
-<input type="text" value="{{loveButtonPublicAddress}}">
-<label>Memo (REQUIRED):</label>
-<input type="text" value="{{userMemo}}">
-<button type="button" id="updateBalanceBtn">Update Balance</button>
-<label>Balance:</label><p id="balance">{{curBal}}</p>
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+        <script src="../js/fundAccount.js"></script>
+    </head>
+    <body>
+        <h1>Fund Your Tipping Account</h1>
+        <h4>Send Stellar Lumens to your love-button tipping account</h4>
+        <label>Address to send to:</label>
+        <input type="text" id="loveButtonPubAddr" value="loading...">
+        <label>Memo (REQUIRED):</label>
+        <input type="text" id="memo" value="loading...">
+        <label>Balance:</label><p id="balance">loading...</p>
+    </body>
+</html>
