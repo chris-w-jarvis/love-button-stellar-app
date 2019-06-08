@@ -15,19 +15,15 @@ Account.init({
 
 // login methods
 Account.prototype.comparePassword = function(candidate, cb) {
-    console.log("COMPARING PASSWORD")
     bcrypt.compare(candidate, this.password, function(err, res) {
         if (err) return cb(err);
-        console.log(candidate, res)
         return cb(null, res);
       })
   };
 // make sure to catch this err when calling create, promisify
 Account.addHook('beforeCreate', (account) => {
-    console.log("BEFORE CREATE HOOK", account.password)
     return new Promise((resolve, reject) => {
         bcrypt.hash(account.password, 10, function(err, encrypted) {
-            console.log("\nhashed",encrypted)
             if (err) reject(err)
             account.password = encrypted;
             resolve()

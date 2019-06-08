@@ -1,13 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	 crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+	 crossorigin="anonymous">
+	</script>
+	<link rel="shortcut icon" type="image/ico" href="../favicon.ico"/>
+	<style>
+		.bg-love {
+              background-color: #d21717;
+          }
+	  </style>
+	  <!-- NEED IN PROD <script>
+                if (location.protocol !== "https:") {
+                    location.protocol = "https:";
+                }
+                </script> -->
+</head>
+<body>
 <h1>love-button</h1>
-<h3>{{NameOrTextForPage}}</h3>
-<label>Currency:</label>{{CURRENCY SELECTOR}}
+<h3 id="nameOrText">{{name}}</h3>
+<p id="destKey">{{key}}</p>
+<p id="memo">Memo:{{memo}}</p>
+<label>Currency:</label>
+<select class="custom-select" id="selectedCurrency">
+    <option value="xlm" selected>XLM(Stellar Lumens)</option>
+    <option value="usd">USD (converted to XLM)</option>
+</select>
 <label>Amount:</label><input id="amount" type="text">
 <br>
 <button type="button" id="defaultBtn">Default (N xlm)</button>
 <button type="button" id="sendPaymentBtn">Send Payment</button>
 <br>
-<label>Xlm Price:</label><p>{{xlmPrice}} USD</p>
-<label>Your account balance:</label><p>{{curBal}} Xlm</p>
+<label>Xlm Price:</label><p id="xlmPrice">loading...</p>
+<label>Your account balance:</label><p id="curBal">loading...</p>
+<div id="paymentStatusDiv"></div>
 <a href="/">WHAT IS THIS?</a>
 <button type="button" id="optionsBtn">Show Options</button>
 <section id="optionsDiv">
@@ -31,7 +60,7 @@
                             <option value="xlm" selected>XLM(Stellar Lumens)</option>
                             <option value="usd">USD (converted to XLM)</option>
                         </select>
-                        <button  id="defaultBtn" type="button">Save</button>
+                        <button  id="saveDefaultsBtn" type="button">Save</button>
                     </div>
                 </div>
             </div>
@@ -43,3 +72,6 @@
 
     </div>
 </section>
+</body>
+<script src="../js/index.js"></script>
+</html>

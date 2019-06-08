@@ -57,7 +57,56 @@ const sendPayment = function(destinationId, lumensAmount) {
     })
 }
 
+const testPayer = function(srcKey, memo, lumensAmount) {
+  return new Promise((resolve, reject) => {
+      var sourceKeys = StellarSdk.Keypair.fromSecret(srcKey);
+      var transaction;
+  
+      server.loadAccount(process.env.LOVE_BUTTON_PUBLIC_ADDRESS)
+      .catch(err => {
+        throw new Error('The destination account does not exist!');
+      })
+      .then(function() {
+        return server.loadAccount(sourceKeys.publicKey());
+      })
+      .then(function(sourceAccount) {
+        transaction = new StellarSdk.TransactionBuilder(sourceAccount)
+          .addOperation(StellarSdk.Operation.payment({
+            destination: process.env.LOVE_BUTTON_PUBLIC_ADDRESS,
+            asset: StellarSdk.Asset.native(),
+            amount: lumensAmount
+          }))
+          .addMemo(StellarSdk.Memo.text(memo))
+          .build();
+        transaction.sign(sourceKeys);
+        return server.submitTransaction(transaction);
+      })
+      .then(function(result) {
+        resolve(result);
+      })
+      .catch(function(error) {
+        reject(error);
+      });
+    })
+}
+
+const testBalanceChecker = function(src) {
+  return new Promise((resolve, reject) => {
+    console.log(src)
+    var sourceKeys = StellarSdk.Keypair.fromSecret(src);
+    server.loadAccount(sourceKeys.publicKey()).then(function(account) {
+      account.balances.forEach(function(balance) {
+        if (balance.asset_type === 'native') resolve(balance.balance)
+      })
+      // no stellar balance
+      resolve('0')
+    }).catch(err => reject(err))
+  })
+}
+
 module.exports = {
   priceCheck: priceCheck,
-  sendPayment: sendPayment
+  sendPayment: sendPayment,
+  testPayer: testPayer,
+  testBalanceChecker: testBalanceChecker
 }

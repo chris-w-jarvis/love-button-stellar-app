@@ -7,6 +7,7 @@ const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config()
 const viewController = require('./controllers/view-controller')
+const validationService = require('./services/validations')
 
 const Auth = require('./controllers/authentication');
 // this code just needs to run, its not used in this file but it sets up passport
@@ -33,9 +34,9 @@ app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Blu
 const generalLimiter = rateLimit(
   {
     store: new RedisStore({
-      client: client
+      client: client,
+      prefix: 'grl'
     }),
-    windowMs: 60000, // 1 minute window
     max: 60,
     message: "General rate limiter: 60 times per minute."
   }
@@ -81,24 +82,15 @@ app.get('/get-my-link', function(request, response) {
   response.sendFile(__dirname + '/views/getLink.html');
 });
 
-// TODO: remove
-app.get('/userId', requireAuth, function(req, res) {
-    res.send({id: req.user.accountBalanceId})
-})
-
 // render html for each url on /give
 app.get('/give/:pageId', viewController)
 
 // passport checks for correct username and password before auth controller gives you a token
-app.post('/auth/signin', requireSignin, Auth.signin);
-app.post('/auth/signup', Auth.signup);
+app.post('/auth/signin', validationService.trim, requireSignin, Auth.signin);
+app.post('/auth/signup', validationService.trim, validationService.signUp, Auth.signup);
 
 // send all other requests to api router
 Api(app)
-
-// app.get('/get-my-link', function(req, res) {
-//   res.send('getmy link')
-// })
 
 // turn on transaction listener
 const stellarAccountListener = require('./listeners/fund-account-listener')

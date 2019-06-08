@@ -2,6 +2,7 @@ const stellarController = require('./controllers/stellar-controller')
 const accountController = require('./controllers/account-balance-controller')
 const Pages = require('./models/pages').Pages
 const sendPaymentService = require('./services/payment-account-transaction').sendPaymentService
+const validationService = require('./services/validations')
 const path = require('path') 
 const fs = require('fs')
 require('dotenv').config()
@@ -11,7 +12,7 @@ const filePath = path.join(__dirname, 'lastPageId.txt');
 const passport = require('passport');
 
 // setup passport, token not session (cookie) based
-const requireAuth = passport.authenticate('jwt', {session: false, failureRedirect: "/login"});
+const requireAuth = passport.authenticate('jwt', {session: false});
 
 // Rate limiter
 const rateLimit = require("express-rate-limit")
@@ -19,22 +20,23 @@ const RedisStore = require("rate-limit-redis")
 var Redis = require('ioredis')
 var client = new Redis(process.env.REDIS_URL)
 
-const paymentRateLimiter = rateLimit({
+const paymentLimiter = rateLimit({
   store: new RedisStore({
-    client: client
+    client: client,
+    expiry: 10,
+    prefix: 'prl:'
   }),
-  windowMs: 10000, // 10 second window
-  max: 1, // 1 payment per 10 seconds
-  message: "Payment rate limiter: 1 per 10 seconds.",
+  max: 1, // start blocking after 5 requests
   keyGenerator: function(req) {
     if (req.user) {
       return req.user.id
+    } else {
+      return req.header('Authorization')
     }
-    else {
-      return req.get("Authorization")
-    }
-  }
-})
+  },
+  message:
+    "Payment rate limiter: 1 payment per 10 seconds"
+});
 
 // value returned by /api/priceCheck
 var stellarPrice = "";
@@ -61,14 +63,11 @@ try {
 }
 
 module.exports = function router(app) {
-  app.get('/api/priceCheck', function(req, res) {
-    res.send({price:stellarPrice})
-  })
 
   app.post('/api/admin', function(req, res) {
     if (req.header('adminKey') === process.env.ADMIN_PW) {
       // db
-      Pages.create({name:req.body.name, publicKey:req.body.key, pageId:req.body.path}).then(
+      Pages.create({name:req.body.name, publicKey:req.body.key, pageId:req.body.path, memo:req.body.memo}).then(
         (page) => {
           console.log(`Created premium link /${page.pageId}`)
           res.sendStatus(200)
@@ -81,7 +80,7 @@ module.exports = function router(app) {
     }
   })
 
-  app.post('/api/getMyLink', function(req, res) {
+  app.post('/api/get-my-link', validationService.getMyLink, function(req, res) {
     console.log(req.body)
     // zerofill latestPageId
     var idString = `${++latestPageId}`
@@ -94,7 +93,7 @@ module.exports = function router(app) {
     // latestPageId++
 
     // db
-    Pages.create({name:req.body.name, publicKey:req.body.key, pageId:idString}).then(
+    Pages.create({name:req.body.name, publicKey:req.body.key, pageId:idString, memo:req.body.memo}).then(
       (page) => {
         res.send({id:page.pageId})
         fs.writeFileSync(filePath,`${page.pageId}`)
@@ -106,16 +105,6 @@ module.exports = function router(app) {
     })
   })
 
-  // FOR TESTING ONLY, remove
-  app.post('/api/test/addFunds', requireAuth, function(req, res) {
-    accountController.modifyFunds(req.user.id, req.body.amount)
-    .then(res.sendStatus(204))
-    .catch(err => {
-      console.log(err)
-      res.sendStatus(404)
-    })
-  });
-
   app.get('/api/checkBalance', requireAuth, function(req, res) {
     accountController.checkBalanceUserId(req.user.id)
     .then(balance => res.send({'balance':balance}))
@@ -125,12 +114,44 @@ module.exports = function router(app) {
     })
   })
 
-  app.post('/api/sendPayment', paymentRateLimiter, requireAuth, paymentRateLimiter, sendPaymentService)
+  app.get('/api/loadSendPayment', requireAuth, function(req, res, next) {
+    accountController.checkBalanceUserId(req.user.id)
+    .then(bal => {
+      res.send({balance: bal, price: stellarPrice})
+    })
+    .catch(err => {
+      console.log(err)
+      res.sendStatus(400)
+    })
+  })
+
+  // TESTING UTILITIES
+  app.post('/api/test/transToLBPub', function(req, res) {
+    stellarController.testPayer(req.body.src, req.body.memo, req.body.amount)
+    .then(result => res.send(result))
+    .catch(err => {console.log(err)
+      res.sendStatus(400)})
+  })
+  app.post('/api/test/balCheckAny', function(req, res) {
+    console.log(req.body)
+    stellarController.testBalanceChecker(req.body.src)
+    .then(result => {
+      console.log(result)
+      res.send({balance:result})
+    })
+    .catch(err => res.sendStatus(400))
+  })
+
+  app.post('/api/sendPayment', paymentLimiter, requireAuth, paymentLimiter, (req, res, next) => {req.stellarPriceCurrent = stellarPrice;next()}, validationService.sendPayment, sendPaymentService)
 
   app.get('/api/fund', requireAuth, function(req, res) {
     accountController.fundAccount(req.user.id)
     .then(dbRes => {
       res.send({'balance':dbRes.balance, 'memo':dbRes.accountBalanceId, 'loveButtonPublicAddress':process.env.LOVE_BUTTON_PUBLIC_ADDRESS})
+    })
+    .catch(err => {
+      console.log(err)
+      res.sendStatus(400)
     })
   })
 }

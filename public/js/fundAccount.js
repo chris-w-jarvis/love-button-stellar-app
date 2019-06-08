@@ -41,7 +41,7 @@ $( document ).ready(function () {
                             }
                         }
                     )
-                }, 3000)
+                }, 8000)
             },
             error: function() {
                 console.log("Fund account request failed")

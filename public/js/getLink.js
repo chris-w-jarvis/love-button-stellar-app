@@ -17,13 +17,13 @@ $( document ).ready(function () {
         }
         if (document.getElementById("memo").value != '') request['memo'] = document.getElementById("memo").value
         if (document.getElementById("emailInput").value != '') request['emailInput'] = document.getElementById("emailInput").value
-        $.post({url:`${host}api/getMyLink`,
+        $.post({url:`${host}api/get-my-link`,
             data:request,
             success: function(res) {
-                document.getElementById('link').value = `${host}pages/${res.id}`
+                document.getElementById('link').value = `${host}give/${res.id}`
             },
-            error: function() {
-                alert('Request failed, try again later, sorry...');
+            error: function(res) {
+                alert(JSON.parse(res.responseText).msg);
             }
         })
     }

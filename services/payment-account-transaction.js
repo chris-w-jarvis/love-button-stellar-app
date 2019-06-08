@@ -46,6 +46,7 @@ const sendPayment = function(req, res) {
                   })
                   .catch(err => {
                       console.log("Transaction failed in Stellar, rolling back")
+                      res.status(500).send({msg: "Payment failed in Stellar network"})
                       throw err
                   })
               })
