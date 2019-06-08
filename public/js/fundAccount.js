@@ -18,7 +18,7 @@ $( document ).ready(function () {
                 memo.value = res.memo
                 balance.innerHTML = res.balance
                 var oldBal = parseInt(balance.innerHTML)
-
+                document.getElementById('accountInfoDiv').innerHTML = `<p>Logged in as: ${res.username}`
                 const stopTrigger = setInterval(() => {
                     // check balance after 3 seconds
                     console.log('checking')
