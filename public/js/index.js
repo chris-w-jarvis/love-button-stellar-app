@@ -41,6 +41,7 @@ function loadUser() {
                 xlmPrice.innerText = `1 Stellar(XLM) is worth ${res.price} USD`
                 stellarPrice = res.price
                 accountBalance.innerHTML = res.balance
+                document.getElementById('accountInfoDiv').innerHTML = `<p>Logged in as: ${res.username}`
             },
             error: function() {
                 console.log("redirecting to login")
