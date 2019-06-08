@@ -1,13 +1,51 @@
 <h1>Sign up</h1>
-<form action="/auth/signup">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+     crossorigin="anonymous"></script>
+<script>
+    // let host = 'https://www.love-button.org/'
+    let host = 'http://localhost:8080/'
+
+    function confirmPassword(candidate, dup) {
+        console.log(candidate, dup)
+        return candidate === dup
+    }
+
+    $(document).ready(function() {
+        $("#signupForm").submit(
+            (event) => {
+                event.preventDefault()
+                const candidate = document.getElementById('password').value
+                const dup = document.getElementById('confirmPassword').value
+                if (confirmPassword(candidate, dup)) {
+                    $.post({
+                        url: `${host}auth/signup`,
+                        data: {username: document.getElementById('username').value.trim(), password: candidate, email: document.getElementById('email').value.trim()},
+                        success: function(res) {
+                            localStorage.setItem('loveButtonAuthToken', res.token)
+                            window.location.replace(`${host}fundMyAccount`)
+                        },
+                        error: function(res) {
+                            console.log(res)
+                            alert('Please check password')
+                        }
+                    })
+                } else {
+                    alert('Passwords don\'t match')
+                }
+            }
+        )
+    })
+</script>
+<form id="signupForm">
     <label>Username</label>
-    <input name="username" id="username" type="text">
+    <input id="username" type="text">
     <label>Password</label>
-    <input name="password" type="password">
+    <input id="password" type="password">
     <label>Confirm Password</label>
     <input id="confirmPassword" type="password">
     <label>Email</label>
-    <input name="email" type="text" placeholder="(for account recovery only)">
+    <input id="email" type="text" placeholder="(for account recovery only)">
+    <button type="submit">Submit</button>
 </form>
 
 <!-- maybe captcha here? -->

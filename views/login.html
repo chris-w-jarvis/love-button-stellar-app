@@ -2,12 +2,14 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
      crossorigin="anonymous"></script>
 <script>
+    // let host = 'https://www.love-button.org/'
+    let host = 'http://localhost:8080/'
     $(document).ready(function() {
         $("#loginForm").submit(
             (event) => {
                 event.preventDefault()
                 $.post({
-                    url: '/auth/signin',
+                    url: `${host}auth/signin`,
                     // contentType: 'application/x-www-form-urlencoded'
                     data: {username: document.getElementById('username').value, password: document.getElementById('password').value},
                     success: function(res) {

@@ -1,16 +1,17 @@
 // let host = 'https://www.love-button.org/'
-let host = 'http://localhost:8080/'
+let host = 'http://localhost:8080/api/'
 
 $( document ).ready(function () {
 
     let lBPublicAddr = document.getElementById('loveButtonPubAddr')
     let memo = document.getElementById('memo')
     let balance = document.getElementById('balance')
+    let paymentStatusDiv = document.getElementById('paymentStatusDiv')
 
     // load user details
     if (localStorage.getItem('loveButtonAuthToken')) {
         token = localStorage.getItem('loveButtonAuthToken')
-        $.get({url:`${host}api/fund`,
+        $.get({url:`${host}fund`,
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token);},
             success: function(res) {
                 lBPublicAddr.value = res.loveButtonPublicAddress
@@ -23,13 +24,14 @@ $( document ).ready(function () {
                     console.log('checking')
                     $.get(
                         {
-                            url: '/api/checkBalance',
+                            url: `${host}checkBalance`,
                             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token);},
                             success: function(res) {
                                 console.log(res)
                                 if (parseInt(res.balance) > oldBal) {
-                                    alert("Stellar recieved!")
                                     balance.innerHTML = res.balance
+                                    paymentStatusDiv.innerHTML = `<p>Success, received ${parseInt(res.balance) - oldBal} XLM</p>`
+                                    paymentStatusDiv.style.backgroundColor = "#28a745";
                                     clearInterval(stopTrigger)
                                 } else if (parseInt(res.balance) < oldBal) {
                                     oldBal = parseInt(res.balance)
@@ -41,7 +43,7 @@ $( document ).ready(function () {
                             }
                         }
                     )
-                }, 8000)
+                }, 5000)
             },
             error: function() {
                 console.log("Fund account request failed")

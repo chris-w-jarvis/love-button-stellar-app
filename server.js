@@ -78,6 +78,10 @@ app.get('/login', function(req, res) {
     res.sendFile(__dirname + '/views/login.html')
 })
 
+app.get('/signup', function(req, res) {
+  res.sendFile(__dirname + '/views/signup.html')
+})
+
 app.get('/get-my-link', function(request, response) {
   response.sendFile(__dirname + '/views/getLink.html');
 });
