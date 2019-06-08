@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+        <script>
+        // let host = 'https://www.love-button.org/'
+        let host = 'http://localhost:8080/api/'
+        $(document).ready(function() {
+            var token
+            if (localStorage.getItem('loveButtonAuthToken')) {
+                console.log("logged in")
+                token = localStorage.getItem('loveButtonAuthToken')
+            } else {
+                console.log("redirecting to login")
+                window.location.replace('/login')
+            }
+
+            $.get(
+            {
+                url: `${host}loadAccount`,
+                beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token)},
+                success: function(res) {
+                    document.getElementById('username').innerHTML = res.username,
+                    document.getElementById('email').innerHTML = res.email,
+                    document.getElementById('memo').innerHTML = res.memo,
+                    document.getElementById('balance').innerHTML = res.balance,
+                    document.getElementById('createdAt').innerHTML = res.createdAt
+                },
+                error: function() {
+                    console.log("redirecting to login")
+                    window.location.replace('/login')
+                }
+            }
+        )
+    })
+    </script>
+    </head>
+    <body>
+        <h1>Account Info Page</h1>
+        <h4 id="username">loading...</h4>
+        <label>Email:</label>
+        <p id="email">loading...</p>
+        <label>Memo (Account number):</label>
+        <p id="memo">loading...</p>
+        <label>Tipping balance:</label>
+        <p id="balance">loading...</p>
+        <label>Created On:</label>
+        <p id="createdAt">loading...</p>
+    </body>
+</html>

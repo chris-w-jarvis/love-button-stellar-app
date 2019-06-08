@@ -142,6 +142,17 @@ module.exports = function router(app) {
     .catch(err => res.sendStatus(400))
   })
 
+  app.get('/api/loadAccount', requireAuth, function(req, res) {
+    const user = req.user
+    res.status(200).send({
+      username: user.username,
+      email: user.email,
+      memo: user.accountBalanceId,
+      balance: user.balance,
+      createdAt: user.createdAt
+    })
+  })
+
   app.post('/api/sendPayment', paymentLimiter, requireAuth, paymentLimiter, (req, res, next) => {req.stellarPriceCurrent = stellarPrice;next()}, validationService.sendPayment, sendPaymentService)
 
   app.get('/api/fund', requireAuth, function(req, res) {
