@@ -21,6 +21,7 @@ $( document ).ready(function () {
             data:request,
             success: function(res) {
                 document.getElementById('link').value = `${host}give/${res.id}`
+                document.getElementById('copyLinkSection').style.display = 'block'
             },
             error: function(res) {
                 alert(JSON.parse(res.responseText).msg);
