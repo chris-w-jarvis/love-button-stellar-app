@@ -12,8 +12,6 @@
 		.bg-love {
 			background-color: #d21717;
 		}
-
-
     </style>
     <!-- NEED IN PROD <script>
                 if (location.protocol !== "https:") {
@@ -34,15 +32,12 @@
     <!--TODO: these should not be sent to the input. sessionStorage is one solution. need to figure out-->
     <p id="destKey" class="d-none">{{key}}</p>
     <p id="memo" class="d-none">Memo:{{memo}}</p>
-
     <div class="row mb-2">
         <div class="col">Conversion Rate: <span id="xlmPrice">loading...</span></div>
     </div>
-
     <div class="row mb-2">
         <div class="col">Your current balance is: <span id="curBal">loading... </span></div>
     </div>
-
     <div class="row">
         <div class="col-12">
             <div class="input-group">
@@ -58,7 +53,6 @@
             </div>
         </div>
     </div>
-
     <br>
     <div class="row">
         <div class="col">
@@ -67,22 +61,18 @@
         </div>
     </div>
     <br>
-
     <div class="row">
         <div id="paymentStatusDiv" class="col-12"></div>
     </div>
-
     <button type="button" id="optionsBtn" class="btn secondary-btn float right">Show Options</button>
 </section>
 
 <section id="optionsDiv" class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6"
          style="display:none;">
-    <div>
         <hr>
         <div class="row">
             <h4 class="col">Options</h4>
         </div>
-
         <div class="row">
             <div class="col-12">
                 <label for="defaultAmt">Set a default amount to send to creators.</label>
@@ -99,20 +89,16 @@
                 </div>
             </div>
         </div>
-
         <div class="row mt-3">
             <div class="col">
                 <button id="saveDefaultsBtn" type="button" class="btn float-right">Set Default</button>
             </div>
         </div>
-
         <div class="row">
             <div class="col">
                 <button id="clearDefaultBtn" class="btn" type="button">Remove Default</button>
             </div>
         </div>
-    </div>
-
 </section>
 
 <div id="accountInfoDiv" class="row">
