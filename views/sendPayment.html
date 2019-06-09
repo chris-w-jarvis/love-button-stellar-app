@@ -2,79 +2,106 @@
 <html>
 
 <head>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-	 crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-	 crossorigin="anonymous">
-	</script>
-	<link rel="shortcut icon" type="image/ico" href="../favicon.ico"/>
-	<style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous">
+    </script>
+    <link rel="shortcut icon" type="image/ico" href="../favicon.ico"/>
+    <style>
 		.bg-love {
-              background-color: #d21717;
-          }
-	  </style>
-	  <!-- NEED IN PROD <script>
+			background-color: #d21717;
+		}
+
+
+
+
+    </style>
+    <!-- NEED IN PROD <script>
                 if (location.protocol !== "https:") {
                     location.protocol = "https:";
                 }
                 </script> -->
 </head>
+
 <body>
-<h1>love-button</h1>
-<h3 id="nameOrText">{{name}}</h3>
-<p id="destKey">{{key}}</p>
-<p id="memo">Memo:{{memo}}</p>
-<label>Currency:</label>
-<select class="custom-select" id="selectedCurrency">
-    <option value="xlm" selected>XLM(Stellar Lumens)</option>
-    <option value="usd">USD (converted to XLM)</option>
-</select>
-<label>Amount:</label><input id="amount" type="text">
-<br>
-<button type="button" id="defaultBtn">Default (N xlm)</button>
-<button type="button" id="sendPaymentBtn">Send Payment</button>
-<br>
-<label>Xlm Price:</label><p id="xlmPrice">loading...</p>
-<label>Your account balance:</label><p id="curBal">loading...</p>
-<div id="paymentStatusDiv"></div>
-<a href="/">WHAT IS THIS?</a>
-<button type="button" id="optionsBtn">Show Options</button>
-<section id="optionsDiv">
-    <div >
+<header class="row bg-love mb-3">
+    <h1 class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 text-white">
+        love-button</h1>
+</header>
+<section class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 ">
+    <div class="row">
+        <h3 id="nameOrText" class="col">Sending love to {{name}}</h3>
+    </div>
+    <!--TODO: these should not be sent to the input. sessionStorage is one solution. need to figure out-->
+    <p id="destKey" class="d-none">{{key}}</p>
+    <p id="memo" class="d-none">Memo:{{memo}}</p>
+
+    <div class="row mb-2">
+        <div class="col">Conversion Rate: <span id="xlmPrice">loading...</span></div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col">Your current balance is: <span id="curBal">loading... </span></div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Currency</span>
+                    <select class="custom-select" id="selectedCurrency">
+                        <option value="xlm" selected>XLM(Stellar Lumens)</option>
+                        <option value="usd">USD (converted to XLM)</option>
+                    </select>
+                </div>
+                <input id="amount" type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
+                       placeholder="Payment amount">
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <button type="button" id="defaultBtn" class="btn">Default (N xlm)</button>
+        <button type="button" id="sendPaymentBtn" class="btn">Send Payment</button>
+    </div>
+    <br>
+
+    <div id="paymentStatusDiv"></div>
+
+    <a href="/">WHAT IS THIS?</a>
+    <button type="button" id="optionsBtn">Show Options</button>
+</section>
+<section id="optionsDiv" class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+    <div>
 
         <hr>
-        <div >
-            <h4 >Options</h4>
+        <div>
+            <h4>Options</h4>
         </div>
 
-        <div >
-            <div >
-                <div >
-                    <div >
-                        <label >Select Default Amount</label>
-                    </div>
-                    <input id="defaultAmt" type="text"  placeholder="Default amount" aria-label="Username"
-                     aria-describedby="basic-addon1">
-                    <div >
-                        <select  id="selectedCurrencyDefault">
-                            <option value="xlm" selected>XLM(Stellar Lumens)</option>
-                            <option value="usd">USD (converted to XLM)</option>
-                        </select>
-                        <button  id="saveDefaultsBtn" type="button">Save</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-                    <button id="clearKeyBtn"  type="button">Clear Storage</button>
-                </div>
-            </div>
-        </div>
+        <div>
 
+            <label>Select Default Amount</label>
+        </div>
+        <input id="defaultAmt" type="text" placeholder="Default amount" aria-label="Username"
+               aria-describedby="basic-addon1">
+        <div>
+            <select id="selectedCurrencyDefault">
+                <option value="xlm" selected>XLM(Stellar Lumens)</option>
+                <option value="usd">USD (converted to XLM)</option>
+            </select>
+            <button id="saveDefaultsBtn" type="button">Save</button>
+
+        </div>
+        <button id="clearKeyBtn" type="button">Clear Storage</button>
     </div>
 </section>
-<div id="accountInfoDiv">
-    <p>logged in as: loading...</p> 
+<div id="accountInfoDiv" class="row">
+    <p class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">logged in as: loading...</p>
 </div>
 </body>
 <script src="../js/index.js"></script>
+
 </html>
