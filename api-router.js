@@ -115,9 +115,10 @@ module.exports = function router(app) {
   })
 
   app.get('/api/loadSendPayment', requireAuth, function(req, res, next) {
-    accountController.checkBalanceUserId(req.user.id)
+    const user = req.user
+    accountController.checkBalanceUserId(user.id)
     .then(bal => {
-      res.send({balance: bal, price: stellarPrice})
+      res.send({balance: bal, price: stellarPrice, username: user.username})
     })
     .catch(err => {
       console.log(err)
@@ -142,12 +143,24 @@ module.exports = function router(app) {
     .catch(err => res.sendStatus(400))
   })
 
+  app.get('/api/loadAccount', requireAuth, function(req, res) {
+    const user = req.user
+    res.status(200).send({
+      username: user.username,
+      email: user.email,
+      memo: user.accountBalanceId,
+      balance: user.balance,
+      createdAt: user.createdAt
+    })
+  })
+
   app.post('/api/sendPayment', paymentLimiter, requireAuth, paymentLimiter, (req, res, next) => {req.stellarPriceCurrent = stellarPrice;next()}, validationService.sendPayment, sendPaymentService)
 
   app.get('/api/fund', requireAuth, function(req, res) {
-    accountController.fundAccount(req.user.id)
+    const user = req.user
+    accountController.fundAccount(user.id)
     .then(dbRes => {
-      res.send({'balance':dbRes.balance, 'memo':dbRes.accountBalanceId, 'loveButtonPublicAddress':process.env.LOVE_BUTTON_PUBLIC_ADDRESS})
+      res.send({'balance':dbRes.balance, 'memo':dbRes.accountBalanceId, 'loveButtonPublicAddress':process.env.LOVE_BUTTON_PUBLIC_ADDRESS, username: user.username})
     })
     .catch(err => {
       console.log(err)

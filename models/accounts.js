@@ -7,7 +7,7 @@ class Account extends Model {}
 Account.init({
   username: Sequelize.STRING,
   password: Sequelize.STRING,
-  email: {type: Sequelize.STRING, validate : {isEmail: true}, defaultValue: null},
+  email: {type: Sequelize.STRING, defaultValue: 'NOT_SET'},
   balance: Sequelize.STRING,
   id: {type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true},
   accountBalanceId: {type: Sequelize.BIGINT, autoIncrement: true}
