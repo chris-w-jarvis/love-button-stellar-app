@@ -1,0 +1,28 @@
+<html>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <body>
+        <label>Email:</label>
+        <input type="text" id="email">
+        <button type="button" id="submitBtn">Send Recovery Email</button>
+        <div id="sendStatusDiv"></div>
+    </body>
+    <script>
+        // let host = 'https://www.love-button.org/'
+        let host = 'http://localhost:8080/'
+        $('#submitBtn').click(
+            e => {
+                $.post({
+                    url: `${host}api/recoveryEmail`,
+                    data: {email: document.getElementById('email').value.trim()},
+                    success: function(res) {
+                        document.getElementById('sendStatusDiv').innerHTML = "<p>Email being sent.</p>"
+                    },
+                    error: function() {
+                        alert('Email not found.')
+                    }
+                })
+            }
+        )
+    </script>
+</html>

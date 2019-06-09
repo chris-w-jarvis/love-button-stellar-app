@@ -1,4 +1,6 @@
 const Accounts = require('../models/accounts')
+const AccountRecovery = require('../models/accountRecovery')
+const EmailService = require('../services/sendgrid')
 // TODO: make this DRYer
 const checkBalance = function(balanceId) {
     return new Promise((resolve, reject) => {
@@ -65,10 +67,39 @@ const checkBalance = function(balanceId) {
     })
   }
 
+  const accountRecoverySendEmail = function(email) {
+    return new Promise((resolve, reject) => {
+      Accounts.findOne({
+        attributes: ['email', 'username'],
+        where: {
+          email: email
+        }
+      }).then(dbRes => {
+        AccountRecovery.findOrCreate({
+          where: {email: dbRes.email},
+          defaults: {
+            email: dbRes.email
+          }
+        })
+        .then((arRes) => {
+          EmailService.sendAccountRecoveryEmail(arRes[0].dataValues.token, dbRes.email, dbRes.username)
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  }
+
   module.exports = {
     checkBalance: checkBalance,
     checkBalanceUserId: checkBalanceUserId,
     modifyFunds: modifyFunds,
     modifyFundsUserId: modifyFundsUserId,
-    fundAccount: fundAccount
+    fundAccount: fundAccount,
+    accountRecoverySendEmail: accountRecoverySendEmail
   }

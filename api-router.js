@@ -1,5 +1,6 @@
 const stellarController = require('./controllers/stellar-controller')
-const accountController = require('./controllers/account-balance-controller')
+const accountController = require('./controllers/account-controller')
+const recoveryController = require('./controllers/recoveryController')
 const Pages = require('./models/pages').Pages
 const sendPaymentService = require('./services/payment-account-transaction').sendPaymentService
 const validationService = require('./services/validations')
@@ -36,6 +37,17 @@ const paymentLimiter = rateLimit({
   },
   message:
     "Payment rate limiter: 1 payment per 10 seconds"
+});
+
+const accountRecoveryLimiter = rateLimit({
+  store: new RedisStore({
+    client: client,
+    expiry: 3600,
+    prefix: 'arrl:'
+  }),
+  max: 1, // start blocking after 1
+  message:
+    "Account recovery rate limiter: 1 request per hour"
 });
 
 // value returned by /api/priceCheck
@@ -153,6 +165,10 @@ module.exports = function router(app) {
       createdAt: user.createdAt
     })
   })
+
+  app.post('/api/recoveryEmail', recoveryController.sendEmail)
+
+  app.post('/api/recover', recoveryController.recover)
 
   app.post('/api/sendPayment', paymentLimiter, requireAuth, paymentLimiter, (req, res, next) => {req.stellarPriceCurrent = stellarPrice;next()}, validationService.sendPayment, sendPaymentService)
 

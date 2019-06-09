@@ -10,7 +10,6 @@
                 event.preventDefault()
                 $.post({
                     url: `${host}auth/signin`,
-                    // contentType: 'application/x-www-form-urlencoded'
                     data: {username: document.getElementById('username').value, password: document.getElementById('password').value},
                     success: function(res) {
                         localStorage.setItem('loveButtonAuthToken', res.token)
@@ -32,3 +31,4 @@
     <input name="password" id="password" type="password">
     <button id="submitBtn" type="submit">Submit</button>
 </form>
+<a href="/accountRecovery">Forgot Password?</a>

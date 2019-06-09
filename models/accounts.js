@@ -7,7 +7,7 @@ class Account extends Model {}
 Account.init({
   username: Sequelize.STRING,
   password: Sequelize.STRING,
-  email: {type: Sequelize.STRING, defaultValue: 'NOT_SET'},
+  email: {type: Sequelize.STRING, defaultValue: 'NOT_SET', unique: true},
   balance: Sequelize.STRING,
   id: {type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true},
   accountBalanceId: {type: Sequelize.BIGINT, autoIncrement: true}
@@ -20,6 +20,7 @@ Account.prototype.comparePassword = function(candidate, cb) {
         return cb(null, res);
       })
   };
+  
 // make sure to catch this err when calling create, promisify
 Account.addHook('beforeCreate', (account) => {
     return new Promise((resolve, reject) => {

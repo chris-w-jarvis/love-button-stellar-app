@@ -7,6 +7,7 @@ const app = express();
 const bodyParser = require('body-parser');
 require('dotenv').config()
 const viewController = require('./controllers/view-controller')
+const recoveryController = require('./controllers/recoveryController')
 const validationService = require('./services/validations')
 
 const Auth = require('./controllers/authentication');
@@ -86,12 +87,19 @@ app.get('/account', function(req, res) {
   res.sendFile(__dirname + '/views/account.html')
 })
 
+app.get('/accountRecovery', function(req, res) {
+  res.sendFile(__dirname + '/views/accountRecovery.html')
+})
+
 app.get('/get-my-link', function(request, response) {
   response.sendFile(__dirname + '/views/getLink.html');
-});
+})
 
 // render html for each url on /give
 app.get('/give/:pageId', viewController)
+
+// render html for recovery url
+app.get('/reset/:token', recoveryController.renderPage)
 
 // passport checks for correct username and password before auth controller gives you a token
 app.post('/auth/signin', validationService.trim, requireSignin, Auth.signin);

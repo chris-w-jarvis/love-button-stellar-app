@@ -5,7 +5,7 @@ const path = require('path')
 const filePath = path.join(__dirname, 'lastPagingToken.txt');
 var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
 
-const accountController = require('../controllers/account-balance-controller')
+const accountController = require('../controllers/account-controller')
 // Create an API call to query payments involving the account.
 var accountId = process.env.LOVE_BUTTON_PUBLIC_ADDRESS;
 var payments = server.payments().forAccount(accountId);
