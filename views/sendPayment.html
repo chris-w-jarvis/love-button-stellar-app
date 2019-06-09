@@ -12,6 +12,7 @@
 		.bg-love {
 			background-color: #d21717;
 		}
+    
     </style>
     <!-- NEED IN PROD <script>
                 if (location.protocol !== "https:") {
@@ -25,50 +26,51 @@
     <h1 class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 text-white">
         love-button</h1>
 </header>
-<section class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 ">
-    <div class="row">
-        <h3 id="nameOrText" class="col">Sending love to {{name}}</h3>
-    </div>
-    <!--TODO: these should not be sent to the input. sessionStorage is one solution. need to figure out-->
-    <p id="destKey" class="d-none">{{key}}</p>
-    <p id="memo" class="d-none">Memo:{{memo}}</p>
-    <div class="row mb-2">
-        <div class="col">Conversion Rate: <span id="xlmPrice">loading...</span></div>
-    </div>
-    <div class="row mb-2">
-        <div class="col">Your current balance is: <span id="curBal">loading... </span></div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="input-group">
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Currency</span>
-                    <select class="custom-select" id="selectedCurrency">
-                        <option value="xlm" selected>XLM(Stellar Lumens)</option>
-                        <option value="usd">USD (converted to XLM)</option>
-                    </select>
+<div class="row">
+    <section class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 ">
+        <div class="row">
+            <h3 id="nameOrText" class="col">Sending love to {{name}}</h3>
+        </div>
+        <!--TODO: these should not be sent to the input. sessionStorage is one solution. need to figure out-->
+        <p id="destKey" class="d-none">{{key}}</p>
+        <p id="memo" class="d-none">Memo:{{memo}}</p>
+        <div class="row mb-2">
+            <div class="col">Conversion Rate: <span id="xlmPrice">loading...</span></div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">Your current balance is: <span id="curBal">loading... </span></div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Currency</span>
+                        <select class="custom-select" id="selectedCurrency">
+                            <option value="xlm" selected>XLM(Stellar Lumens)</option>
+                            <option value="usd">USD (converted to XLM)</option>
+                        </select>
+                    </div>
+                    <input id="amount" type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
+                           placeholder="Payment amount">
                 </div>
-                <input id="amount" type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
-                       placeholder="Payment amount">
             </div>
         </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col">
-            <button type="button" id="sendPaymentBtn" class="btn btn-secondary float-right">Send Payment</button>
-            <button type="button" id="defaultBtn" class="btn btn-secondary">Send Default (N xlm)</button>
+        <br>
+        <div class="row">
+            <div class="col">
+                <button type="button" id="sendPaymentBtn" class="btn btn-secondary float-right">Send Payment</button>
+                <button type="button" id="defaultBtn" class="btn btn-secondary">Send Default (N xlm)</button>
+            </div>
         </div>
-    </div>
-    <br>
-    <div class="row">
-        <div id="paymentStatusDiv" class="col-12"></div>
-    </div>
-    <button type="button" id="optionsBtn" class="btn secondary-btn float right">Show Options</button>
-</section>
+        <br>
+        <div class="row">
+            <div id="paymentStatusDiv" class="col-12"></div>
+        </div>
+        <button type="button" id="optionsBtn" class="btn secondary-btn float right">Show Options</button>
+    </section>
 
-<section id="optionsDiv" class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6"
-         style="display:none;">
+    <section id="optionsDiv" class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6"
+             style="display:none;">
         <hr>
         <div class="row">
             <h4 class="col">Options</h4>
@@ -99,8 +101,8 @@
                 <button id="clearDefaultBtn" class="btn" type="button">Remove Default</button>
             </div>
         </div>
-</section>
-
+    </section>
+</div>
 <div id="accountInfoDiv" class="row">
     <p class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">logged in as:
         loading...</p>
