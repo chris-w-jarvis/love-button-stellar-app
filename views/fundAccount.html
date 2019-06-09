@@ -1,20 +1,62 @@
 <html>
-    <head>
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
-        <script src="../js/fundAccount.js"></script>
-    </head>
-    <body>
-        <h1>Fund Your Tipping Account</h1>
-        <h4>Send Stellar Lumens to your love-button tipping account</h4>
-        <label>Address to send to:</label>
-        <input type="text" id="loveButtonPubAddr" value="loading...">
-        <label>Memo (REQUIRED):</label>
-        <input type="text" id="memo" value="loading...">
-        <label>Balance:</label><p id="balance">loading...</p>
-        <div id="paymentStatusDiv"></div>
-        <div id="accountInfoDiv">
-            <p>logged in as: loading...</p> 
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script src="../js/fundAccount.js"></script>
+    <style>
+        .bg-orange {
+            background-color: #d21717;
+        }
+    </style>
+</head>
+<body class="container-fluid">
+<header class="row bg-orange">
+    <h1 class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 text-white">Fund Your
+        Tipping Account</h1>
+</header>
+<div class="row">
+    <section class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 mt-3">
+        <div class="row">
+            <h4 class="col">Send Stellar Lumens to your love-button tipping account</h4>
         </div>
-    </body>
+
+        <!--TODO: update the link to the proper page-->
+        <div class="row">
+            <p class="col">Use this information to send money from your wallet to love-button. <br/><a href="/">Click here for more information.</a></p>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="loveButtonPubAddr-label">Address to send to:</span>
+            </div>
+            <input type="text" class="form-control" id="loveButtonPubAddr" value="loading...">
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="memo-label">Memo (Required)</span>
+            </div>
+            <input type="text" class="form-control" id="memo" value="loading...">
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="balance-label">Current Balance:</span>
+            </div>
+            <input type="text" class="form-control" id="balance" value="loading...">
+        </div>
+
+        <div class="row">
+            <div id="paymentStatusDiv"></div>
+        </div>
+        <div class="row">
+            <div id="accountInfoDiv" class="col">Logged in as: loading...</div>
+        </div>
+    </section>
+</div>
+</body>
 </html>
