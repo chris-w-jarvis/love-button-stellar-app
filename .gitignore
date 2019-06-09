@@ -1,3 +1,5 @@
 dump.rdb
 node_modules/
 .env
+lastPageId.txt
+listeners/lastPagingToken.txt
