@@ -14,8 +14,6 @@
 		}
 
 
-
-
     </style>
     <!-- NEED IN PROD <script>
                 if (location.protocol !== "https:") {
@@ -63,43 +61,63 @@
 
     <br>
     <div class="row">
-        <button type="button" id="defaultBtn" class="btn">Default (N xlm)</button>
-        <button type="button" id="sendPaymentBtn" class="btn">Send Payment</button>
+        <div class="col">
+            <button type="button" id="sendPaymentBtn" class="btn btn-secondary float-right">Send Payment</button>
+            <button type="button" id="defaultBtn" class="btn btn-secondary">Send Default (N xlm)</button>
+        </div>
     </div>
     <br>
 
-    <div id="paymentStatusDiv"></div>
-
-    <a href="/">WHAT IS THIS?</a>
-    <button type="button" id="optionsBtn">Show Options</button>
-</section>
-<section id="optionsDiv" class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">
-    <div>
-
-        <hr>
-        <div>
-            <h4>Options</h4>
-        </div>
-
-        <div>
-
-            <label>Select Default Amount</label>
-        </div>
-        <input id="defaultAmt" type="text" placeholder="Default amount" aria-label="Username"
-               aria-describedby="basic-addon1">
-        <div>
-            <select id="selectedCurrencyDefault">
-                <option value="xlm" selected>XLM(Stellar Lumens)</option>
-                <option value="usd">USD (converted to XLM)</option>
-            </select>
-            <button id="saveDefaultsBtn" type="button">Save</button>
-
-        </div>
-        <button id="clearKeyBtn" type="button">Clear Storage</button>
+    <div class="row">
+        <div id="paymentStatusDiv" class="col-12"></div>
     </div>
+
+    <button type="button" id="optionsBtn" class="btn secondary-btn float right">Show Options</button>
 </section>
+
+<section id="optionsDiv" class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6"
+         style="display:none;">
+    <div>
+        <hr>
+        <div class="row">
+            <h4 class="col">Options</h4>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <label for="defaultAmt">Set a default amount to send to creators.</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Currency</span>
+                        <select class="custom-select" id="selectedCurrencyDefault">
+                            <option value="xlm" selected>XLM(Stellar Lumens)</option>
+                            <option value="usd">USD (converted to XLM)</option>
+                        </select>
+                    </div>
+                    <input id="defaultAmt" type="text" class="form-control" aria-label="Amount (to the nearest dollar)"
+                           placeholder="Payment amount">
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col">
+                <button id="saveDefaultsBtn" type="button" class="btn float-right">Set Default</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <button id="clearDefaultBtn" class="btn" type="button">Remove Default</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
 <div id="accountInfoDiv" class="row">
-    <p class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">logged in as: loading...</p>
+    <p class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">logged in as:
+        loading...</p>
 </div>
 </body>
 <script src="../js/index.js"></script>
