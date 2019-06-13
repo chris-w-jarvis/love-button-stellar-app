@@ -8,9 +8,15 @@ const LocalStrategy = require('passport-local');
 // passport strategy (ExtractJwt) verify with JWT
 // passport strategy (local) authenticate with username and password (using bcrypt as middleware)
 
-const localLogin = new LocalStrategy(function(username, password, done) {
+const localOptions = {
+  usernameField: 'email',
+  passwordField: 'password',
+  session: false
+}
+
+const localLogin = new LocalStrategy(localOptions, function(email, password, done) {
     // verify, call done with user or call done with false
-    Account.findOne({where: {username: username}}).then(account => {
+    Account.findOne({where: {email: email}}).then(account => {
       if (!account) return done(null, false);
       // compare passwords using bcrypt underneath
       return account.comparePassword(password, function(err, isMatch) {

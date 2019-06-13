@@ -102,8 +102,8 @@ app.get('/give/:pageId', viewController)
 app.get('/reset/:token', recoveryController.renderPage)
 
 // passport checks for correct username and password before auth controller gives you a token
-app.post('/auth/signin', validationService.trim, requireSignin, Auth.signin);
-app.post('/auth/signup', validationService.trim, validationService.signUp, Auth.signup);
+app.post('/auth/signin', validationService.preSignin, requireSignin, Auth.signin);
+app.post('/auth/signup', validationService.preSignup, validationService.signUp, Auth.signup);
 
 // send all other requests to api router
 Api(app)

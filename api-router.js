@@ -1,6 +1,7 @@
 const stellarController = require('./controllers/stellar-controller')
 const accountController = require('./controllers/account-controller')
 const recoveryController = require('./controllers/recoveryController')
+const countersController = require('./controllers/counters-controller')
 const Pages = require('./models/pages').Pages
 const sendPaymentService = require('./services/payment-account-transaction').sendPaymentService
 const validationService = require('./services/validations')
@@ -39,17 +40,6 @@ const paymentLimiter = rateLimit({
     "Payment rate limiter: 1 payment per 10 seconds"
 });
 
-const accountRecoveryLimiter = rateLimit({
-  store: new RedisStore({
-    client: client,
-    expiry: 3600,
-    prefix: 'arrl:'
-  }),
-  max: 1, // start blocking after 1
-  message:
-    "Account recovery rate limiter: 1 request per hour"
-});
-
 // value returned by /api/priceCheck
 var stellarPrice = "";
 const stellarPriceCheck = function() {
@@ -67,11 +57,14 @@ stellarPriceCheck()
 setInterval(stellarPriceCheck, 294000)
 
 // on startup get last page id
-var latestPageId 
+var latestPageId
 try {
-  latestPageId = parseInt(fs.readFileSync(filePath,{ encoding: 'utf8' }))
-} catch (err) {
-  latestPageId = 0
+  countersController.incrLastPageId((err, lpi) => {
+    if (err) console.log('Error loading last page id: ', err)
+    latestPageId = lpi
+  })
+} catch(err) {
+  console.log('Error reading last page id: ', err)
 }
 
 module.exports = function router(app) {
@@ -95,20 +88,19 @@ module.exports = function router(app) {
   app.post('/api/get-my-link', validationService.getMyLink, function(req, res) {
     console.log(req.body)
     // zerofill latestPageId
-    var idString = `${++latestPageId}`
+    var idString = `${latestPageId++}`
     if (idString.length < 6) {
       var idLen = idString.length
       for (i = 0; i < 6-idLen; i++) {
         idString = `0${idString}`
       }
     }
-    // latestPageId++
 
     // db
     Pages.create({name:req.body.name, publicKey:req.body.key, pageId:idString, memo:req.body.memo}).then(
       (page) => {
         res.send({id:page.pageId})
-        fs.writeFileSync(filePath,`${page.pageId}`)
+        countersController.incrLastPageId((err) => {if (err) console.log('Error writing last page id: ',err)})
       }
     )
     .catch(err => {
@@ -146,10 +138,8 @@ module.exports = function router(app) {
       res.sendStatus(400)})
   })
   app.post('/api/test/balCheckAny', function(req, res) {
-    console.log(req.body)
     stellarController.testBalanceChecker(req.body.src)
     .then(result => {
-      console.log(result)
       res.send({balance:result})
     })
     .catch(err => res.sendStatus(400))
@@ -160,7 +150,7 @@ module.exports = function router(app) {
     res.status(200).send({
       username: user.username,
       email: user.email,
-      memo: user.accountBalanceId,
+      memo: user.id,
       balance: user.balance,
       createdAt: user.createdAt
     })
@@ -176,7 +166,7 @@ module.exports = function router(app) {
     const user = req.user
     accountController.fundAccount(user.id)
     .then(dbRes => {
-      res.send({'balance':dbRes.balance, 'memo':dbRes.accountBalanceId, 'loveButtonPublicAddress':process.env.LOVE_BUTTON_PUBLIC_ADDRESS, username: user.username})
+      res.send({'balance':dbRes.balance, 'memo':dbRes.id, 'loveButtonPublicAddress':process.env.LOVE_BUTTON_PUBLIC_ADDRESS, username: user.username})
     })
     .catch(err => {
       console.log(err)

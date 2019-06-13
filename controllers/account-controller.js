@@ -7,7 +7,7 @@ const checkBalance = function(balanceId) {
       Accounts.findOne({
         attributes: ['balance'],
         where: {
-          accountBalanceId: balanceId
+          id: balanceId
         }
       }).then(res => resolve(res.balance))
       .catch(err => reject(err))
@@ -34,7 +34,7 @@ const checkBalance = function(balanceId) {
           balance: parseFloat(curBal)+parseFloat(amount)
         }, {
           where: {
-            accountBalanceId: balanceId
+            id: balanceId
           }
         }).then(res => resolve(res[0]))
         .catch(err => {throw err})
@@ -42,23 +42,23 @@ const checkBalance = function(balanceId) {
     })
   }
 
-  const modifyFundsUserId = function(userId, newBal) {
-    return new Promise((resolve, reject) => {
-        Accounts.update({
-            balance: newBal
-        }, {
-            where: {
-                id: userId
-            }
-        }).then(res => resolve(res[0]))
-        .catch(err => reject(err))
-    })
-  }
+  // const modifyFundsUserId = function(userId, newBal) {
+  //   return new Promise((resolve, reject) => {
+  //       Accounts.update({
+  //           balance: newBal
+  //       }, {
+  //           where: {
+  //               id: userId
+  //           }
+  //       }).then(res => resolve(res[0]))
+  //       .catch(err => reject(err))
+  //   })
+  // }
 
   const fundAccount = function(userId) {
     return new Promise((resolve, reject) => {
       Accounts.findOne({
-        attributes: ['accountBalanceId', 'balance'],
+        attributes: ['id', 'balance'],
         where : {
           id: userId
         }
@@ -99,7 +99,7 @@ const checkBalance = function(balanceId) {
     checkBalance: checkBalance,
     checkBalanceUserId: checkBalanceUserId,
     modifyFunds: modifyFunds,
-    modifyFundsUserId: modifyFundsUserId,
+    // modifyFundsUserId: modifyFundsUserId,
     fundAccount: fundAccount,
     accountRecoverySendEmail: accountRecoverySendEmail
   }

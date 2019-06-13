@@ -19,6 +19,9 @@ module.exports = {
               email: email
             }
           }).then(dbRes => {
+            if (dbRes.email === 'NOT_SET') {
+                return res.status(404).send({msg:'You didn\'t provide an email... Sorry.'})
+            }
             AccountRecovery.findOrCreate({
               where: {email: dbRes.email},
               defaults: {
@@ -58,24 +61,19 @@ module.exports = {
           )
     },
     recover: function(req, res) {
-        console.log(req.body)
         const token = req.body.token
         const pw = req.body.password
-
         AccountRecovery.findOne({
             where: {
                 token: token
             }
         })
         .then(ar => {
-            console.log('email:',ar.email)
-            console.log('new pass:', pw)
             bcrypt.hash(pw, 10, function(err, encrypted) {
                 if (err) {
                     console.log(err)
                     return res.sendStatus(400)
                 }
-                console.log('encrypted:',encrypted)
                 Accounts.update({
                     password: encrypted 
                     }, {
@@ -83,7 +81,13 @@ module.exports = {
                         email: ar.email
                     }
                 })
-                .then((final) => {console.log(final);res.sendStatus(200)})
+                .then(() => {
+                    AccountRecovery.destroy({
+                        where: {token: token}
+                    })
+                    .catch(err => console.log(err))
+                    res.sendStatus(200)
+                })
                 .catch(err => {console.log(err);res.sendStatus(500)})
             })
         })

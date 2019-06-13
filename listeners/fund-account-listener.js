@@ -6,28 +6,25 @@ const filePath = path.join(__dirname, 'lastPagingToken.txt');
 var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
 
 const accountController = require('../controllers/account-controller')
+const countersController = require('../controllers/counters-controller')
 // Create an API call to query payments involving the account.
 var accountId = process.env.LOVE_BUTTON_PUBLIC_ADDRESS;
 var payments = server.payments().forAccount(accountId);
 
 // If some payments have already been handled, start the results from the
 // last seen payment. (See below in `handlePayment` where it gets saved.)
-var lastToken
-try {
-    lastToken = loadLastPagingToken()
-} catch (err) {
-    lastToken = null
-}
-if (lastToken) {
+countersController.readPagingToken()
+  .then(lastToken => {
   payments.cursor(lastToken);
-}
 
 // `stream` will send each recorded payment, one by one, then keep the
 // connection open and continue to send you new payments as they occur.
 payments.stream({
   onmessage: function(payment) {
     // Record the paging token so we can start from here next time.
-    savePagingToken(payment.paging_token);
+    countersController.writePagingToken(payment.paging_token)
+    .then()
+    .catch(err => console.log('Error writing paging token: ', err))
 
     // The payments stream includes both sent and received payments. We only
     // want to process received payments here.
@@ -45,23 +42,20 @@ payments.stream({
     //   asset = payment.asset_code + ':' + payment.asset_issuer;
     // }
     if (payment.asset_type != 'native') return
-    console.log(payment)
     // read memo from payment
     payment.transaction().then(res => {
-        console.log(res)
         var memoText = res.memo
         // read amount
         const payAmt = payment.amount
         // increase account balance in db
-        console.log(`Updating balance in db: memo ${memoText}, amount: ${payAmt}`)
         accountController.modifyFunds(memoText, payAmt)
         .then(res => {
             if (res === 0) {
                 // ERROR
-                console.log('No account updated, bad accountBalanceId?')
+                console.log('No account updated, bad id?')
             } else if (res > 1) {
                 // BIG ERROR
-                console.log(`More than one account updated! Audit for accountBalanceId: ${memoText}`)
+                console.log(`More than one account updated! Audit for id: ${memoText}`)
             } else {
                 // res == 1, what we want
                 // send event here or something to show updated balance in ui?
@@ -73,9 +67,11 @@ payments.stream({
   },
 
   onerror: function(error) {
-    //console.error(error);
+    console.error(error);
   }
 });
+  })
+  
 
 function savePagingToken(token) {
   // In most cases, you should save this to a local database or file so that
