@@ -5,12 +5,7 @@ const countersController = require('./controllers/counters-controller')
 const Pages = require('./models/pages').Pages
 const sendPaymentService = require('./services/payment-account-transaction').sendPaymentService
 const validationService = require('./services/validations')
-const path = require('path') 
-const fs = require('fs')
 require('dotenv').config()
-
-const filePath = path.join(__dirname, 'lastPageId.txt');
-
 const passport = require('passport');
 
 // setup passport, token not session (cookie) based

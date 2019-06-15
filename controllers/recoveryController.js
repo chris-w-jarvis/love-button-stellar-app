@@ -1,14 +1,7 @@
-const Mustache = require('mustache')
-const fs = require('fs')
-
 const AccountRecovery = require('../models/accountRecovery')
 const Accounts = require('../models/accounts')
 const EmailService = require('../services/sendgrid')
 const bcrypt = require('bcrypt')
-
-// read html file to memory
-var htmlTemplate = '';
-fs.readFile('./views/resetPassword.html', 'utf8', function(err, data) {htmlTemplate = data});
 
 module.exports = {
     sendEmail : function(req, res) {
@@ -50,7 +43,7 @@ module.exports = {
             }
           }).then(
             () => {
-              res.send(Mustache.render(htmlTemplate, {token:token}))
+              res.render('resetPassword', {token:token})
             }
           )
           .catch(

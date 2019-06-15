@@ -11,6 +11,14 @@ client.on("error", function (err) {
 });
 
 module.exports = {
+    incrTransactionNumber: async function() {
+        return new Promise((res, rej) => {
+            return client.incr("transactionNumber", (err, tr) => {
+                if (err) rej(err)
+                else res(tr)
+            })
+        })
+    },
     incrLastPageId : function(cb) {
         return client.incr("lastPageId", cb)
     },

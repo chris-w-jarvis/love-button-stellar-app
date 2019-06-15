@@ -1,9 +1,16 @@
 require('dotenv').config()
 const stellarController = require('../controllers/stellar-controller')
+const countersController = require('../controllers/counters-controller')
 const sequelize = require('../models/connection')
 const Account = require('../models/accounts')
 
-var transactionNumber = 0
+var transactionNumber
+countersController.incrTransactionNumber()
+  .then(tr => transactionNumber = tr)
+  .catch(err => {
+    console.log("Error loading transaction number from redis: ",err)
+    transactionNumber = 0
+  })
 const LB_TRANSACTION_FEE = parseFloat(process.env.TRANSACTION_FEE)
 const LB_TRANSACTION_FEE_ADDR = process.env.LB_TRANSACTION_FEE_ADDR
 const LB_TRANSACTION_FEE_MEMO = process.env.LB_TRANSACTION_FEE_MEMO
@@ -24,7 +31,6 @@ const sendPayment = function(req, res) {
     if (bal <= (pmt + LB_TRANSACTION_FEE + STELLAR_TRANSACTION_FEE)) {
         return res.status(400).send({msg: "Not enough money in account"})
     }
-    transactionNumber++
     var fee = 0.0
     if (transactionNumber % 10 === 0) {
       fee = LB_TRANSACTION_FEE
@@ -62,12 +68,23 @@ const sendPayment = function(req, res) {
             throw err
           })
         });
-    
     }).then(() => {
       console.log('transactionNumber ',transactionNumber, ' committed.')
+      countersController.incrTransactionNumber()
+        .then(tr => transactionNumber = tr)
+        .catch(err => {
+          console.log("Error loading transaction number from redis: ",err)
+          transactionNumber++
+        })
     })
     .catch(err => {
       console.log('Transaction failed: ',err)
+      countersController.incrTransactionNumber()
+        .then(tr => transactionNumber = tr)
+        .catch(err => {
+          console.log("Error loading transaction number from redis: ",err)
+          transactionNumber++
+        })
       // Transaction has been rolled back
       // err is whatever rejected the promise chain returned to the transaction callback
     });

@@ -51,6 +51,12 @@ app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
+// Setup template engine
+const Mustache = require('mustache-express')
+app.engine('html', Mustache())
+app.set('views', __dirname + '/views')
+app.set('view engine', 'html')
+
 // VIEWS
 app.get('/', function(req, res) {
   res.redirect('/about')
@@ -60,11 +66,11 @@ app.get('/about', function(req, res) {
 })
 
 app.get('/getStellarLumens', function(req, res) {
-  res.sendFile(__dirname + '/views/getStellarLumens.html')
+  res.render('getStellarLumens')
 })
 
 app.get('/getStartedCreators', function(req, res) {
-  res.sendFile(__dirname + '/views/getStartedCreators.html')
+  res.render('getStartedCreators')
 })
 
 app.get('/get-my-link/premium', function(req, res) {
@@ -72,27 +78,27 @@ app.get('/get-my-link/premium', function(req, res) {
 })
 
 app.get('/fundMyAccount', function(req, res) {
-  res.sendFile(__dirname + '/views/fundAccount.html')
+  res.render('fundAccount')
 })
 
 app.get('/login', function(req, res) {
-    res.sendFile(__dirname + '/views/login.html')
+  res.render('login')
 })
 
 app.get('/signup', function(req, res) {
-  res.sendFile(__dirname + '/views/signup.html')
+  res.render('/signup')
 })
 
 app.get('/account', function(req, res) {
-  res.sendFile(__dirname + '/views/account.html')
+  res.render('account')
 })
 
 app.get('/accountRecovery', function(req, res) {
-  res.sendFile(__dirname + '/views/accountRecovery.html')
+  res.render('accountRecovery')
 })
 
-app.get('/get-my-link', function(request, response) {
-  response.sendFile(__dirname + '/views/getLink.html');
+app.get('/get-my-link', function(req, res) {
+  res.render('getLink');
 })
 
 // render html for each url on /give

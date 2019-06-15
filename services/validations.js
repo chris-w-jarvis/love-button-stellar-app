@@ -10,18 +10,15 @@ module.exports = {
 
         // validate email
         if (!validator.isEmail(email) || (email.length < 4 || email.length > 128)) {
-            res.status(400).send({msg:'Bad email, between 4 and 128 chars'})
-            return
+            return res.status(400).send({msg:'Bad email, between 4 and 128 chars'})
         }
         // validate username
         if (un.length > 24 || un.length < 8) {
-            res.status(400).send({msg:'Username must be between 8 and 24 chars'})
-            return
+            return res.status(400).send({msg:'Username must be between 8 and 24 chars'})
         }
         // validate password
         if (pw.length > 56 || pw.length < 8) {
-            res.status(400).send({msg:'Password must be between 8 and 56 chars'})
-            return
+            return res.status(400).send({msg:'Password must be between 8 and 56 chars'})
         }
         next()
     },
@@ -30,7 +27,7 @@ module.exports = {
         const email = req.body.email
 
         if (!pw || !email) {
-            res.status(400).send({msg:'Email, and password required for login'})
+            return res.status(400).send({msg:'Email, and password required for login'})
         }
         req.body.email = validator.trim(email)
         next()
@@ -41,7 +38,7 @@ module.exports = {
         const email = req.body.email
 
         if (!un || !pw || !email) {
-            res.status(400).send({msg:'Username, email, and password all required'})
+            return res.status(400).send({msg:'Username, email, and password all required'})
         }
         req.body.username = validator.trim(un)
         req.body.email = validator.trim(email)
@@ -60,18 +57,15 @@ module.exports = {
         const txt = req.body.name
         const key = validator.trim(req.body.key)
         if (txt.length > 255) {
-            res.status(400).send({msg:'Name or text max length 255'})
-            return
+            return res.status(400).send({msg:'Name or text max length 255'})
         }
         if (!validator.isAlphanumeric(key) || key.length != 56) {
-            res.status(400).send({msg:'Key is 56 alphanumeric chars'})
-            return
+            return res.status(400).send({msg:'Key is 56 alphanumeric chars'})
         }
         if (req.body.memo) {
             const memo = validator.trim(req.body.memo)
             if (!validator.isNumeric(memo) || memo.length > 28) {
-                res.status(400).send({msg:'Memo is all numbers and max length 28 chars'})
-                return
+                return res.status(400).send({msg:'Memo is all numbers and max length 28 chars'})
             }
         }
         next()
@@ -83,16 +77,14 @@ module.exports = {
         const memo = req.body.memo ? validator.trim(req.body.memo) : null
         const maxPaymentAmtXLM = (maxPaymentAmtUSD / parseFloat(req.stellarPriceCurrent)) + TRANSACTION_FEE
         if (!validator.isAlphanumeric(key) || key.length != 56) {
-            res.status(400).send({msg:'Key is 56 alphanumeric chars'})
-            return
+            return res.status(400).send({msg:'Key is 56 alphanumeric chars'})
         }
         if ((!validator.isInt(amt) && !validator.isFloat(amt)) || parseFloat(amt) > maxPaymentAmtXLM) {
-            res.status(400).send({msg:'Amount must be a number and max payment size is 5 USD'})
-            return
+            return res.status(400).send({msg:'Amount must be a number and max payment size is 5 USD'})
         }
-        if (memo != null && memo != 'not_set') {
+        if (memo != null && memo != 'no_memo') {
             if (!validator.isNumeric(memo) || memo.length > 28) {
-                res.status(400).send({msg:'Memo is numeric and up to 28 chars in length'})
+                return res.status(400).send({msg:'Memo is numeric and up to 28 chars in length'})
             }
         }
         next()
