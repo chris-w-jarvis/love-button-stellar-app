@@ -24,45 +24,53 @@ const sendPayment = function(req, res) {
     if (bal <= (pmt + LB_TRANSACTION_FEE + STELLAR_TRANSACTION_FEE)) {
         return res.status(400).send({msg: "Not enough money in account"})
     }
-            transactionNumber++
-            var fee = 0.0
-            if (transactionNumber % 10 === 0) {
-              fee = LB_TRANSACTION_FEE
-            }
-            sequelize.transaction(t => {
-              return Account.update({
-                balance: bal-(pmt+LB_TRANSACTION_FEE+STELLAR_TRANSACTION_FEE)
-              }, {
-                where: {
-                  id: req.user.id
-                }
-              }, {transaction: t})
-              .then(updateRes => {
-                  if (updateRes[0] != 1) {
-                      res.status(500).send({msg: "Error updating account balance"})
-                      throw new Error()
-                  }
-                  // send payment
-                  stellarController.sendPayment(req.body.destination, req.body.amount, req.body.memo)
-                  .then(pmtRes => {
-                    // successful transaction
-                    res.status(201).send({url: `${stellarLedgerUrl}${pmtRes.hash}`})
-                    console.log('transactionNumber:',transactionNumber)
-                  })
-                  .catch(err => {
-                      console.log("Transaction failed in Stellar, rolling back")
-                      res.status(500).send({msg: "Payment failed in Stellar network"})
-                      throw err
-                  })
-                  // transaction fee
-                  if (fee != 0) {
-                    stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee, LB_TRANSACTION_FEE_MEMO)
-                    .catch((err) => {
-                      console.log('Failed on transaction fee for transaction ', transactionNumber, err)
-                    })
-                  }
+    transactionNumber++
+    var fee = 0.0
+    if (transactionNumber % 10 === 0) {
+      fee = LB_TRANSACTION_FEE
+    }
+
+    return sequelize.transaction(t => {
+
+      // chain all your queries here. make sure you return them.
+      return Account.update({
+        balance: bal-(pmt+LB_TRANSACTION_FEE+STELLAR_TRANSACTION_FEE)
+      }, {where: {
+        id: req.user.id
+      }, transaction: t})
+        .then(updateResult => {
+          if (updateResult[0] != 1) {
+            res.status(500).send({msg: "Error updating account balance"})
+            throw new Error()
+          }
+          console.log(1)
+          // send payment
+          return stellarController.sendPayment(req.body.destination, req.body.amount, req.body.memo)
+          .then(pmtRes => {
+            // successful transaction
+            res.status(201).send({url: `${stellarLedgerUrl}${pmtRes.hash}`})
+            // transaction fee
+            if (fee != 0) {
+              stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee, LB_TRANSACTION_FEE_MEMO)
+              .catch((err) => {
+                console.log('Failed on transaction fee for transaction ', transactionNumber, err)
               })
+            }
           })
+          .catch(err => {
+            res.status(500).send({msg: `Payment failed in Stellar network, does the address exist?`})
+            throw err
+          })
+        });
+    
+    }).then(() => {
+      console.log('transactionNumber ',transactionNumber, ' committed.')
+    })
+    .catch(err => {
+      console.log('Transaction failed: ',err)
+      // Transaction has been rolled back
+      // err is whatever rejected the promise chain returned to the transaction callback
+    });
 }
 
 module.exports = {
