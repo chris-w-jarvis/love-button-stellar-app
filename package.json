@@ -7,7 +7,7 @@
   "description": "A simple Node app built on Express, instantly up and running.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "pm2 start server.js -i max"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
@@ -26,6 +26,7 @@
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "pg": "^6.4.2",
+    "pm2": "^3.5.1",
     "rate-limit-redis": "^1.6.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
