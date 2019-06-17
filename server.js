@@ -5,6 +5,9 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const compression = require('compression')
+const logger = require('./services/winston-logger')
+
 require('dotenv').config()
 const viewController = require('./controllers/view-controller')
 const recoveryController = require('./controllers/recoveryController')
@@ -13,14 +16,13 @@ const validationService = require('./services/validations')
 const Auth = require('./controllers/authentication');
 // this code just needs to run, its not used in this file but it sets up passport
 // run before api router imports passport
-const PassportService = require('./services/passport');
+require('./services/passport');
 
 const Api = require('./api-router')
 
 const passport = require('passport');
 
 // setup passport, token not session (cookie) based
-const requireAuth = passport.authenticate('jwt', {session: false, failureRedirect: "/login"});
 const requireSignin = passport.authenticate('local', {session: false});
 
 // General Rate Limiter
@@ -50,6 +52,7 @@ app.use(generalLimiter);
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(compression())
 
 // Setup template engine
 const Mustache = require('mustache-express')
@@ -115,9 +118,9 @@ app.post('/auth/signup', validationService.preSignup, validationService.signUp, 
 Api(app)
 
 // turn on transaction listener
-const stellarAccountListener = require('./listeners/fund-account-listener')
+require('./listeners/fund-account-listener')
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function() {
-  console.log('Your app is listening on port ' + listener.address().port);
+  logger.log('info','Your app is listening on port '+ listener.address().port);
 });

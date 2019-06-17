@@ -2,6 +2,7 @@ const AccountRecovery = require('../models/accountRecovery')
 const Accounts = require('../models/accounts')
 const EmailService = require('../services/sendgrid')
 const bcrypt = require('bcrypt')
+const logger = require('../services/winston-logger')
 
 module.exports = {
     sendEmail : function(req, res) {
@@ -26,12 +27,12 @@ module.exports = {
               res.sendStatus(201)
             })
             .catch(err => {
-              console.log(err)
+              logger.log('info',err)
               res.sendStatus(404)
             })
           })
           .catch(err => {
-            console.log(err)
+            logger.log('info',err)
             res.sendStatus(404)
           })
     },
@@ -49,7 +50,7 @@ module.exports = {
           .catch(
             (err) => {
               res.sendStatus(404)
-              console.log(err)
+              logger.log('info',err)
             }
           )
     },
@@ -64,7 +65,7 @@ module.exports = {
         .then(ar => {
             bcrypt.hash(pw, 10, function(err, encrypted) {
                 if (err) {
-                    console.log(err)
+                    logger.log('info',err)
                     return res.sendStatus(400)
                 }
                 Accounts.update({
@@ -78,14 +79,14 @@ module.exports = {
                     AccountRecovery.destroy({
                         where: {token: token}
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => logger.log('info',err))
                     res.sendStatus(200)
                 })
-                .catch(err => {console.log(err);res.sendStatus(500)})
+                .catch(err => {logger.log('info',err);res.sendStatus(500)})
             })
         })
         .catch(err => {
-            console.log(err)
+            logger.log('info',err)
             res.sendStatus(404)
         })
     }

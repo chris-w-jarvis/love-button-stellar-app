@@ -1,5 +1,6 @@
 // let host = 'https://www.love-button.org/'
 let host = 'http://localhost:8080/api/'
+const logger = require('../services/winston-logger')
 
 $( document ).ready(function () {
 
@@ -21,7 +22,6 @@ $( document ).ready(function () {
                 document.getElementById('accountInfoDiv').innerHTML = `<p>Logged in as: ${res.username}`
                 const stopTrigger = setInterval(() => {
                     // check balance after 3 seconds
-                    console.log('checking')
                     $.get(
                         {
                             url: `${host}checkBalance`,

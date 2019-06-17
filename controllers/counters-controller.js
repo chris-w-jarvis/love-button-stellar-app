@@ -1,4 +1,5 @@
 require('dotenv').config()
+const logger = require('../services/winston-logger')
 
 // storing lastPageId and lastPagingToken in redis
 var redis = require("redis"),
@@ -7,7 +8,7 @@ var redis = require("redis"),
 // if you'd like to select database 3, instead of 0 (default), call
 // client.select(3, function() { /* ... */ });
 client.on("error", function (err) {
-    console.log("Redis error " + err)
+    logger.log('info',"Redis error " + err)
 });
 
 module.exports = {

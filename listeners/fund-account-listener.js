@@ -1,4 +1,5 @@
 var StellarSdk = require('stellar-sdk');
+const logger = require('../services/winston-logger')
 const fs = require('fs')
 require('dotenv').config()
 const path = require('path')   
@@ -24,7 +25,7 @@ payments.stream({
     // Record the paging token so we can start from here next time.
     countersController.writePagingToken(payment.paging_token)
     .then()
-    .catch(err => console.log('Error writing paging token: ', err))
+    .catch(err => logger.log('info','Error writing paging token: '+ err))
 
     // The payments stream includes both sent and received payments. We only
     // want to process received payments here.
@@ -52,17 +53,17 @@ payments.stream({
         .then(res => {
             if (res === 0) {
                 // ERROR
-                console.log('No account updated, bad id?')
+                logger.log('info','No account updated, bad id?')
             } else if (res > 1) {
                 // BIG ERROR
-                console.log(`More than one account updated! Audit for id: ${memoText}`)
+                logger.log('info',`More than one account updated! Audit for id: ${memoText}`)
             } else {
                 // res == 1, what we want
                 // send event here or something to show updated balance in ui?
                 return
             }
         })
-        .catch(err => console.log(err))
+        .catch(err => logger.log('info',err))
     })
   },
 

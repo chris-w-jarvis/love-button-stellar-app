@@ -3,12 +3,13 @@ const stellarController = require('../controllers/stellar-controller')
 const countersController = require('../controllers/counters-controller')
 const sequelize = require('../models/connection')
 const Account = require('../models/accounts')
+const logger = require('../services/winston-logger')
 
 var transactionNumber
 countersController.incrTransactionNumber()
-  .then(tr => transactionNumber = tr)
+  .then(tr => transactionNumber = tr-1)
   .catch(err => {
-    console.log("Error loading transaction number from redis: ",err)
+    logger.log('info',"Error loading transaction number from redis: "+err)
     transactionNumber = 0
   })
 const LB_TRANSACTION_FEE = parseFloat(process.env.TRANSACTION_FEE)
@@ -27,12 +28,12 @@ const sendPayment = function(req, res) {
     // check account balance
     const bal = parseFloat(req.user.balance)
     const pmt = parseFloat(req.body.amount)
-    console.log('BALANCE BEFORE TRANS:',bal)
+    logger.log('info','BALANCE BEFORE TRANS:'+bal)
     if (bal <= (pmt + LB_TRANSACTION_FEE + STELLAR_TRANSACTION_FEE)) {
         return res.status(400).send({msg: "Not enough money in account"})
     }
     var fee = 0.0
-    if (transactionNumber % 10 === 0) {
+    if (transactionNumber % 10 == 0) {
       fee = LB_TRANSACTION_FEE
     }
 
@@ -49,7 +50,6 @@ const sendPayment = function(req, res) {
             res.status(500).send({msg: "Error updating account balance"})
             throw new Error()
           }
-          console.log(1)
           // send payment
           return stellarController.sendPayment(req.body.destination, req.body.amount, req.body.memo)
           .then(pmtRes => {
@@ -57,32 +57,40 @@ const sendPayment = function(req, res) {
             res.status(201).send({url: `${stellarLedgerUrl}${pmtRes.hash}`})
             // transaction fee
             if (fee != 0) {
-              stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee, LB_TRANSACTION_FEE_MEMO)
+              stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee+"0", LB_TRANSACTION_FEE_MEMO)
               .catch((err) => {
-                console.log('Failed on transaction fee for transaction ', transactionNumber, err)
+                logger.log('info','Failed on transaction fee for transaction '+ transactionNumber +err)
               })
             }
           })
           .catch(err => {
             res.status(500).send({msg: `Payment failed in Stellar network, does the address exist?`})
+            // transaction fee
+            if (fee != 0) {
+              stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee+"0", LB_TRANSACTION_FEE_MEMO)
+              .catch((err) => {
+                logger.log('info','Failed on transaction fee for transaction '+ transactionNumber+ err)
+              })
+            }
             throw err
           })
         });
     }).then(() => {
-      console.log('transactionNumber ',transactionNumber, ' committed.')
+      logger.log('info','transactionNumber '+transactionNumber+ ' committed.')
       countersController.incrTransactionNumber()
         .then(tr => transactionNumber = tr)
         .catch(err => {
-          console.log("Error loading transaction number from redis: ",err)
+          logger.log('info',"Error loading transaction number from redis: "+err)
           transactionNumber++
         })
     })
     .catch(err => {
-      console.log('Transaction failed: ',err)
+      logger.log('info', 'HERE')
+      logger.log('info','transactionNumber '+transactionNumber+ ' failed: '+ err)
       countersController.incrTransactionNumber()
         .then(tr => transactionNumber = tr)
         .catch(err => {
-          console.log("Error loading transaction number from redis: ",err)
+          logger.log('info',"Error loading transaction number from redis: "+err)
           transactionNumber++
         })
       // Transaction has been rolled back

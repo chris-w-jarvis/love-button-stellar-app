@@ -1,6 +1,8 @@
 // using Twilio SendGrid's v3 Node.js Library
 // https://github.com/sendgrid/sendgrid-nodejs
 const sgMail = require('@sendgrid/mail');
+const logger = require('../services/winston-logger')
+
 require('dotenv').config()
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
@@ -18,7 +20,7 @@ module.exports = {
           try {
             sgMail.send(msg);
           } catch (err) {
-              console.log('Error sending account recovery email: '+err)
+              logger.log('info','Error sending account recovery email: '+err)
           }
     }
 }
