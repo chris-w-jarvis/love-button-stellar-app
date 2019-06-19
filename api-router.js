@@ -59,8 +59,8 @@ const requireAdmin = function(req, res, next) {
 
 stellarPriceCheck()
 
-// QUERY STELLAR PRICE, run this every 4.9 minutes
-setInterval(stellarPriceCheck, 294000)
+// QUERY STELLAR PRICE, run this every 4.9 minutes * number of processes
+setInterval(stellarPriceCheck, 294000 * parseInt(process.env.WEB_CONCURRENCY))
 
 // on startup get last page id
 var latestPageId
