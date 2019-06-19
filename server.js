@@ -5,21 +5,24 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const compression = require('compression')
+const logger = require('./services/winston-logger')
+
 require('dotenv').config()
 const viewController = require('./controllers/view-controller')
+const recoveryController = require('./controllers/recoveryController')
 const validationService = require('./services/validations')
 
 const Auth = require('./controllers/authentication');
 // this code just needs to run, its not used in this file but it sets up passport
 // run before api router imports passport
-const PassportService = require('./services/passport');
+require('./services/passport');
 
 const Api = require('./api-router')
 
 const passport = require('passport');
 
 // setup passport, token not session (cookie) based
-const requireAuth = passport.authenticate('jwt', {session: false, failureRedirect: "/login"});
 const requireSignin = passport.authenticate('local', {session: false});
 
 // General Rate Limiter
@@ -49,6 +52,13 @@ app.use(generalLimiter);
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(compression())
+
+// Setup template engine
+const Mustache = require('mustache-express')
+app.engine('html', Mustache())
+app.set('views', __dirname + '/views')
+app.set('view engine', 'html')
 
 // VIEWS
 app.get('/', function(req, res) {
@@ -59,11 +69,11 @@ app.get('/about', function(req, res) {
 })
 
 app.get('/getStellarLumens', function(req, res) {
-  res.sendFile(__dirname + '/views/getStellarLumens.html')
+  res.render('getStellarLumens')
 })
 
 app.get('/getStartedCreators', function(req, res) {
-  res.sendFile(__dirname + '/views/getStartedCreators.html')
+  res.render('getStartedCreators')
 })
 
 app.get('/get-my-link/premium', function(req, res) {
@@ -71,39 +81,46 @@ app.get('/get-my-link/premium', function(req, res) {
 })
 
 app.get('/fundMyAccount', function(req, res) {
-  res.sendFile(__dirname + '/views/fundAccount.html')
+  res.render('fundAccount')
 })
 
 app.get('/login', function(req, res) {
-    res.sendFile(__dirname + '/views/login.html')
+  res.render('login')
 })
 
 app.get('/signup', function(req, res) {
-  res.sendFile(__dirname + '/views/signup.html')
+  res.render('/signup')
 })
 
 app.get('/account', function(req, res) {
-  res.sendFile(__dirname + '/views/account.html')
+  res.render('account')
 })
 
-app.get('/get-my-link', function(request, response) {
-  response.sendFile(__dirname + '/views/getLink.html');
-});
+app.get('/accountRecovery', function(req, res) {
+  res.render('accountRecovery')
+})
+
+app.get('/get-my-link', function(req, res) {
+  res.render('getLink');
+})
 
 // render html for each url on /give
 app.get('/give/:pageId', viewController)
 
+// render html for recovery url
+app.get('/reset/:token', recoveryController.renderPage)
+
 // passport checks for correct username and password before auth controller gives you a token
-app.post('/auth/signin', validationService.trim, requireSignin, Auth.signin);
-app.post('/auth/signup', validationService.trim, validationService.signUp, Auth.signup);
+app.post('/auth/signin', validationService.preSignin, requireSignin, Auth.signin);
+app.post('/auth/signup', validationService.preSignup, validationService.signUp, Auth.signup);
 
 // send all other requests to api router
 Api(app)
 
 // turn on transaction listener
-const stellarAccountListener = require('./listeners/fund-account-listener')
+require('./listeners/fund-account-listener')
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function() {
-  console.log('Your app is listening on port ' + listener.address().port);
+  logger.log('info','Your app is listening on port '+ listener.address().port);
 });

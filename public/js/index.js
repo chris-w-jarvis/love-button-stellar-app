@@ -93,11 +93,11 @@ clearKeyBtn.onclick = function(e) {
     localStorage.clear()
 }
 
-function sendPaymentToStellar(destination, amount) {
+function sendPaymentToStellar(destination, amount, memoTxt) {
     return new Promise((resolve, reject) => {
         $.post({url:`${host}sendPayment`,
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token);},
-            data: {destination: destination, amount: amount},
+            data: {destination: destination, amount: amount, memo: memoTxt},
             success: function(res) {
                 resolve(res)
             },
@@ -118,7 +118,7 @@ function sendPayment(amount) {
         return
     }
     paymentStatusDiv.innerHTML = '<p>Waiting...</p>'
-    sendPaymentToStellar(destKeyElement.innerHTML, amount)
+    sendPaymentToStellar(destKeyElement.innerHTML, amount, memo.innerHTML)
         .then( res => {
             paymentStatusDiv.innerHTML = `<p>Success, sent ${amount} XLM\nSee this transaction on Stellar public ledger: ${stellarLedgerUrl}${res.url}</p>`
             paymentStatusDiv.style.backgroundColor = "#28a745";
@@ -135,7 +135,7 @@ sendPaymentBtn.onclick = function (e) {
     var regex = /[A-Z0-9]{56}/;
     if (destKeyElement.innerHTML.match(regex)) {
         if (paymentAmount.value.match(/[a-z]/i) || !paymentAmount.value.match(/[0-9]/)) {
-            alert('Numbers only and not empty')
+            alert('Destination key not set correctly for this link')
             return
         }
         // determine amount

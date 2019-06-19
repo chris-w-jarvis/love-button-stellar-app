@@ -8,12 +8,13 @@ function tokenForUser(user) {
 }
 
 module.exports.signup = function (req, res, next) {
-  const username = req.body.username;
-  const password = req.body.password;
-  if (!username || !password) return res.status(400).send({error:"username and password required"});
+  const username = req.body.username
+  const email = req.body.email
+  const password = req.body.password
   // check if user already exists, otherwise create
-  Account.findOrCreate({where: {username: username}, defaults: {
-    email: req.body.email,
+  Account.findOrCreate({where: {email: email}, defaults: {
+    email: email,
+    username: username,
     password: password,
     balance: '0.0'
   }})

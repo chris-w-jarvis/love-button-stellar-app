@@ -1,11 +1,13 @@
 const Accounts = require('../models/accounts')
+const AccountRecovery = require('../models/accountRecovery')
+const EmailService = require('../services/sendgrid')
 // TODO: make this DRYer
 const checkBalance = function(balanceId) {
     return new Promise((resolve, reject) => {
       Accounts.findOne({
         attributes: ['balance'],
         where: {
-          accountBalanceId: balanceId
+          id: balanceId
         }
       }).then(res => resolve(res.balance))
       .catch(err => reject(err))
@@ -32,7 +34,7 @@ const checkBalance = function(balanceId) {
           balance: parseFloat(curBal)+parseFloat(amount)
         }, {
           where: {
-            accountBalanceId: balanceId
+            id: balanceId
           }
         }).then(res => resolve(res[0]))
         .catch(err => {throw err})
@@ -40,23 +42,23 @@ const checkBalance = function(balanceId) {
     })
   }
 
-  const modifyFundsUserId = function(userId, newBal) {
-    return new Promise((resolve, reject) => {
-        Accounts.update({
-            balance: newBal
-        }, {
-            where: {
-                id: userId
-            }
-        }).then(res => resolve(res[0]))
-        .catch(err => reject(err))
-    })
-  }
+  // const modifyFundsUserId = function(userId, newBal) {
+  //   return new Promise((resolve, reject) => {
+  //       Accounts.update({
+  //           balance: newBal
+  //       }, {
+  //           where: {
+  //               id: userId
+  //           }
+  //       }).then(res => resolve(res[0]))
+  //       .catch(err => reject(err))
+  //   })
+  // }
 
   const fundAccount = function(userId) {
     return new Promise((resolve, reject) => {
       Accounts.findOne({
-        attributes: ['accountBalanceId', 'balance'],
+        attributes: ['id', 'balance'],
         where : {
           id: userId
         }
@@ -65,10 +67,39 @@ const checkBalance = function(balanceId) {
     })
   }
 
+  const accountRecoverySendEmail = function(email) {
+    return new Promise((resolve, reject) => {
+      Accounts.findOne({
+        attributes: ['email', 'username'],
+        where: {
+          email: email
+        }
+      }).then(dbRes => {
+        AccountRecovery.findOrCreate({
+          where: {email: dbRes.email},
+          defaults: {
+            email: dbRes.email
+          }
+        })
+        .then((arRes) => {
+          EmailService.sendAccountRecoveryEmail(arRes[0].dataValues.token, dbRes.email, dbRes.username)
+          resolve()
+        })
+        .catch(err => {
+          reject(err)
+        })
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  }
+
   module.exports = {
     checkBalance: checkBalance,
     checkBalanceUserId: checkBalanceUserId,
     modifyFunds: modifyFunds,
-    modifyFundsUserId: modifyFundsUserId,
-    fundAccount: fundAccount
+    // modifyFundsUserId: modifyFundsUserId,
+    fundAccount: fundAccount,
+    accountRecoverySendEmail: accountRecoverySendEmail
   }

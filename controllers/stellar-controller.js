@@ -24,7 +24,7 @@ const priceCheck = function() {
   })
 }
 
-const sendPayment = function(destinationId, lumensAmount) {
+const sendPayment = function(destinationId, lumensAmount, memo) {
   return new Promise((resolve, reject) => {
       var sourceKeys = StellarSdk.Keypair.fromSecret(privateSourceKey);
       var transaction;
@@ -43,7 +43,7 @@ const sendPayment = function(destinationId, lumensAmount) {
             asset: StellarSdk.Asset.native(),
             amount: lumensAmount
           }))
-          .addMemo(StellarSdk.Memo.text('From love-button'))
+          .addMemo(memo ? StellarSdk.Memo.text(memo) : StellarSdk.Memo.text("Love, love-button"))
           .build();
         transaction.sign(sourceKeys);
         return server.submitTransaction(transaction);
@@ -92,7 +92,6 @@ const testPayer = function(srcKey, memo, lumensAmount) {
 
 const testBalanceChecker = function(src) {
   return new Promise((resolve, reject) => {
-    console.log(src)
     var sourceKeys = StellarSdk.Keypair.fromSecret(src);
     server.loadAccount(sourceKeys.publicKey()).then(function(account) {
       account.balances.forEach(function(balance) {

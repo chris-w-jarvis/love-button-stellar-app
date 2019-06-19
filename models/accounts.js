@@ -5,13 +5,22 @@ const Model = Sequelize.Model
 
 class Account extends Model {}
 Account.init({
-  username: Sequelize.STRING,
+  username: {type: Sequelize.STRING, validate: {
+    len: [4, 64]
+  }},
   password: Sequelize.STRING,
-  email: {type: Sequelize.STRING, defaultValue: 'NOT_SET'},
+  email: {type: Sequelize.STRING, allowNull: true, unique: true, validate: {
+    isEmail: true,
+    len: [4, 128]
+  }},
   balance: Sequelize.STRING,
-  id: {type: Sequelize.UUID, defaultValue: Sequelize.UUIDV4, primaryKey: true},
-  accountBalanceId: {type: Sequelize.BIGINT, autoIncrement: true}
-}, { sequelize, modelName: 'Account' });
+  id: {type: Sequelize.BIGINT, autoIncrement: true, primaryKey: true}
+}, { indexes: [
+  {
+    unique: true,
+    fields: ['id', 'email']
+  }
+], sequelize, modelName: 'Account' });
 
 // login methods
 Account.prototype.comparePassword = function(candidate, cb) {
@@ -20,6 +29,7 @@ Account.prototype.comparePassword = function(candidate, cb) {
         return cb(null, res);
       })
   };
+  
 // make sure to catch this err when calling create, promisify
 Account.addHook('beforeCreate', (account) => {
     return new Promise((resolve, reject) => {
