@@ -1,7 +1,15 @@
-<h1>Sign up</h1>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-     crossorigin="anonymous"></script>
-<script>
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script>
     // let host = 'https://www.love-button.org/'
     let host = 'http://localhost:8080/'
 
@@ -34,17 +42,44 @@
             }
         )
     })
-</script>
-<form id="signupForm">
-    <label>Username</label>
-    <input id="username" type="text">
-    <label>Password</label>
-    <input id="password" type="password">
-    <label>Confirm Password</label>
-    <input id="confirmPassword" type="password">
-    <label>Email</label>
-    <input id="email" type="text" placeholder="(for account recovery only)">
-    <button type="submit">Submit</button>
-</form>
+
+    </script>
+    <style>
+        .bg-orange {
+            background-color: #d21717;
+        }
+    </style>
+</head>
+<body class="container-fluid">
+<header class="row bg-orange">
+    <h1 class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 text-white">love-button</h1>
+</header>
+<div class="row">
+    <h3 class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">Sign up</h3>
+</div>
+<section class="row">
+    <form id="signupForm" class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" id="username" placeholder="Username">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+        </div>
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Create Account</button>
+    </form>
+</section>
+
 
 <!-- maybe captcha here? -->
+</body>

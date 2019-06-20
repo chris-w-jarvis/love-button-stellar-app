@@ -1,7 +1,14 @@
-<h1>Login</h1>
-<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-     crossorigin="anonymous"></script>
-<script>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+    <script>
     // let host = 'https://www.love-button.org/'
     let host = 'http://localhost:8080/'
     $(document).ready(function() {
@@ -23,12 +30,63 @@
             }
         )
     })
-</script>
-<form id="loginForm">
-    <label>Username</label>
-    <input name="username" id="username" type="text">
-    <label>Password</label>
-    <input name="password" id="password" type="password">
-    <button id="submitBtn" type="submit">Submit</button>
-</form>
-<a href="/accountRecovery">Forgot Password?</a>
+
+
+
+
+    </script>
+    <!-- NEED IN PROD <script>
+            if (location.protocol !== "https:") {
+                location.protocol = "https:";
+            }
+            </script> -->
+    <link rel="shortcut icon" type="image/ico" href="../favicon.ico"/>
+    <style>
+        .bg-orange {
+            background-color: #d21717;
+        }
+    </style>
+</head>
+
+<body class="container-fluid">
+<header class="row bg-orange">
+    <h1 class="col-xs-12 offset-sm-1 col-sm-10 text-white">love-button</h1>
+</header>
+
+<div class="row">
+    <section class="col-xs-12 offset-sm-1 col-sm-10">
+        <div class="row my-2">
+            <h3 class="col">Login</h3>
+        </div>
+
+        <div class="row">
+            <form id="loginForm" class="col-xs-12 col-md-6">
+                <div class="form-group row">
+                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username" placeholder="Email">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password" class="col-sm-2 col-form-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password" placeholder="Password">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <button id="submitBtn" type="submit" class="btn btn-primary float-right">Sign in</button>
+                    </div>
+                </div>
+            </form>
+            <div class="col-xs-12 col-md-6">
+                <div class="row">
+                    <div class="col">Wondering why you're here?</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+</body>
+</html>
