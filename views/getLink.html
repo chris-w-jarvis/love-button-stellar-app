@@ -18,20 +18,38 @@
                     location.protocol = "https:";
                 }
                 </script> -->
+
+	<script>
+
+	function copyLoveLink() {
+	  /* Get the text field */
+	  var copyText = document.getElementById("link1");
+
+	  /* Select the text field */
+	  copyText.select();
+
+	  /* Copy the text inside the text field */
+	  document.execCommand("copy");
+
+	  /* Alert the copied text */
+	  alert("Copied the text: " + copyText.value);
+	}
+
+	</script>
 </head>
 <div class="container-fluid">
 	<header class="row pt-4 pb-3 bg-orange">
-		<h1 class="offset-1 col-10 text-white">Get your link</h1>
+		<h1 class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 offset-xl-4 col-xl-4 text-white">Get your link</h1>
 	</header>
 	<section>
 		<div class="row mt-3">
-			<p class="offset-1 col-10">Paste your Stellar public address (public key) here, in your wallet there will be an option to Receive Payment 
+			<p class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 offset-xl-4 col-xl-4 px-xs-4 px-sm-3 px-md-2 px-lg-1">Paste your Stellar public address (public key) here, in your wallet there will be an option to Receive Payment
 				that will expose this address. More instructions <a href="/getStartedCreators">here</a>.
 			</p>
 		</div>
 	</section>
 
-	<section class="offset-1 col-10 p-0">
+	<section class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 offset-xl-4 col-xl-4 p-0">
 		<div class="input-group input-group-sm mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text" id="inputGroup-sizing-sm">Your public key:</span>
@@ -46,34 +64,35 @@
 			</div>
 		<div class="input-group input-group-sm mb-3">
 			<div class="input-group-prepend">
-				<span class="input-group-text" id="inputGroup-sizing-sm">Name or text to display with your key:</span>
+				<span class="input-group-text" id="inputGroup-sizing-sm">Text to display with your key:</span>
 			</div>
-			<input type="text" class="form-control" id="name" placeholder="name">
+			<input type="text" class="form-control" id="name" placeholder="text">
 		</div>
 		<div class="input-group input-group-sm mb-3">
 			<div class="input-group-prepend">
-				<span class="input-group-text" id="inputGroup-sizing-sm">[OPTIONAL] email to get news about love-button:</span>
+				<span class="input-group-text" id="inputGroup-sizing-sm">Subscribe to love-button:</span>
 			</div>
 			<input type="email" class="form-control" id="emailInput"placeholder="you@example.com">
 		</div>
 
 		<div class="row">
-			<button type="button" class="btn btn-primary offset-4 col-4" id="getLinkSubmitBtn">Generate Link</button>
+			<div class="offset-sm-2 col-sm-8 offset-md-3 col-md-6">
+				<button type="button" class="btn btn-primary w-100" id="getLinkSubmitBtn">Generate Link</button>
+			</div>
 		</div>
-
-		<br>
-		<br>
+	</section>
+	<section id="copyLinkSection" class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 offset-xl-4 col-xl-4 p-0" style="display:none">
+		<hr>
 		<div class="input-group input-group-sm mb-3">
 			<div class="input-group-prepend">
-				<span class="input-group-text" id="inputGroup-sizing-sm">Your love-button link:</span>
+				<button class="btn btn-secondary" id="inputGroup-sizing-sm" onclick="copyLoveLink()" data-toggle="tooltip" data-placement="top" title="Copy to clipboard">Copy your love-button link</span>
 			</div>
 			<input type="text" class="form-control" id="link" placeholder="Enter your info and click the button to get your link">
 		</div>
 		<div class="row">
-			<p class="offset-1 col-10">
+			<p class="col-xs-12 offset-sm-1 col-sm-10 offset-lg-0 col-xl-12">
 				Paste your link anywhere people see your content! </p>
 		</div>
-
 	</section>
 </div>
 

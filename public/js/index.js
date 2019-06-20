@@ -10,7 +10,7 @@ let paymentAmount = document.getElementById('amount')
 let defaultPaymentBtn = document.getElementById('defaultBtn')
 let saveDefaultPaymentBtn = document.getElementById('saveDefaultsBtn')
 let showOptionsDivBtn = document.getElementById('optionsBtn')
-let clearKeyBtn = document.getElementById('clearKeyBtn')
+let clearDefaultBtn = document.getElementById('clearDefaultBtn')
 let paymentStatusDiv = document.getElementById('paymentStatusDiv')
 let saveKeyInBrowserBtn = document.getElementById('saveKeyInBrowserBtn')
 let saveKeyPassphraseInput = document.getElementById("saveKeyPassphraseInput")
@@ -41,7 +41,7 @@ function loadUser() {
                 xlmPrice.innerText = `1 Stellar(XLM) is worth ${res.price} USD`
                 stellarPrice = res.price
                 accountBalance.innerHTML = res.balance
-                document.getElementById('accountInfoDiv').innerHTML = `<p>Logged in as: ${res.username}`
+                document.getElementById('accountInfoDiv').innerHTML = `<p class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">Logged in as: ${res.username}`
             },
             error: function() {
                 console.log("redirecting to login")
@@ -57,9 +57,9 @@ function loadDefaultBtn() {
     const defCur = localStorage.getItem("defaultCurrency")
     const defAmt = localStorage.getItem("defaultAmt")
     if (defCur && defAmt) {
-        defaultPaymentBtn.innerHTML = `Default (${defAmt+defCur})`
+        defaultPaymentBtn.innerHTML = `Default Amount (${defAmt+defCur})`
     } else {
-        defaultPaymentBtn.innerHTML = "Default (not set)"
+        defaultPaymentBtn.innerHTML = "Default Amount (not set)"
     }
 }
 
@@ -89,8 +89,11 @@ showOptionsDivBtn.onclick = function(e) {
     document.getElementById("optionsDiv").style.display = "block"
 }
 
-clearKeyBtn.onclick = function(e) {
-    localStorage.clear()
+clearDefaultBtn.onclick = function(e) {
+    console.log(localStorage)
+    localStorage.clear();
+    localStorage.defaultAmt = "";
+    localStorage.defaultCurrency = "";
 }
 
 function sendPaymentToStellar(destination, amount, memoTxt) {
@@ -120,13 +123,14 @@ function sendPayment(amount) {
     paymentStatusDiv.innerHTML = '<p>Waiting...</p>'
     sendPaymentToStellar(destKeyElement.innerHTML, amount, memo.innerHTML)
         .then( res => {
-            paymentStatusDiv.innerHTML = `<p>Success, sent ${amount} XLM\nSee this transaction on Stellar public ledger: ${stellarLedgerUrl}${res.url}</p>`
-            paymentStatusDiv.style.backgroundColor = "#28a745";
+            paymentStatusDiv.innerHTML = '<div class="alert alert-success" role="alert">Success, sent ${amount} XLM\nSee this transaction on Stellar public ledger: ${stellarLedgerUrl}${res.url}</div>'
             loadUser()
         })
         .catch(msg => {
-            paymentStatusDiv.innerHTML = `<p>Failed, message from server: ${msg} </p>`
-            paymentStatusDiv.style.backgroundColor = "red";
+            paymentStatusDiv.innerHTML = `<div class="alert alert-danger" role="alert">
+                                            Failed, to send: ${msg}
+                                          </div>`
+
         })
 }
 

@@ -2,82 +2,100 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous">
-        </script>
-        <!-- NEED IN PROD <script>
-                if (location.protocol !== "https:") {
-                    location.protocol = "https:";
-                }
-                </script> -->
-        <link rel="shortcut icon" type="image/ico" href="../favicon.ico"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous">
+    </script>
+    <!-- NEED IN PROD <script>
+            if (location.protocol !== "https:") {
+                location.protocol = "https:";
+            }
+            </script> -->
+    <link rel="shortcut icon" type="image/ico" href="../favicon.ico"/>
     <style>
         .bg-orange {
             background-color: #d21717;
         }
+
     </style>
 </head>
 
 <body class="container-fluid">
-    <header class="row pt-4 pb-3 bg-orange">
-        <h1 class="offset-1 col-10 text-white">Getting Started Page - Content Creators</h1>
-    </header>
-    <div class="row mt-3">
-        <h3 class="offset-1 col-10">Why am I on this page?</h3>
-    </div>
-    <div class="row">
-        <p class="offset-1 col-10">To make a love-button link that your fans can use to send you tips with a 
-            cryptocurrency called Lumens.
-        </p>
-    </div>
-    <div class="row mt-3">
-        <h3 class="offset-1 col-10">I already have Stellar Lumens and know how to use them.</h3>
-    </div>
-    <div class="row">
-        <p class="offset-1 col-10"><a href="/get-my-link">GET YOUR LINK</a> and post it wherever fans see your content!</p>
-    </div>
-    <div class="row">
-        <h3 class="offset-1 col-10">What are Stellar Lumens?</h3>
-    </div>
-    <div class="row">
-        <p class="offset-1 col-10">Stellar is global payment network built on the blockchain and powered by a cryptocurrency called
-            Lumens (also abbreviated as XLM). Learn more about the amazing project: <a href="https://www.stellar.org/">stellar.org</a>.
-            We are using Stellar because the ultra-low transaction fees make micro-tipping possible.
-    </div>
+<header class="row pt-4 pb-3 bg-orange">
+    <h1 class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 text-white">Getting Started Page - Content Creators</h1>
+</header>
+<div class="row">
+    <section class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+        <div class="row mt-3">
+            <h3 class="col">Why am I on this page?</h3>
+        </div>
+        <div class="row">
+            <p class="col">To make a love-button link that your fans can use to send you tips with a
+                cryptocurrency called Lumens.
+            </p>
+        </div>
+        <div class="row mt-3">
+            <h3 class="col">I already have Stellar Lumens and know how to use them.</h3>
+        </div>
+        <div class="row">
+            <p class="col"><a href="/get-my-link">GET YOUR LINK</a> and post it wherever fans see your
+                content!</p>
+        </div>
+        <div class="row">
+            <h3 class="col">What are Stellar Lumens?</h3>
+        </div>
+        <div class="row">
+            <p class="col">Stellar is global payment network built on the blockchain and powered by a
+                cryptocurrency called
+                Lumens (also abbreviated as XLM). Learn more about the amazing project: <a
+                        href="https://www.stellar.org/">stellar.org</a>.
+                We are using Stellar because the ultra-low transaction fees make micro-tipping possible.
+        </div>
 
-    <div class="row">
-        <h3 class="offset-1 col-10">How do I accept tips with love-button?</h3>
-    </div>
-    <div class="row">
-        <p class="offset-1 col-10">This part is pretty easy! First get a wallet to store the Stellar you make on here, you can check out 
-            the ones Stellar recommends here: <a href="https://www.stellar.org/lumens/wallets/">Wallets</a>. But I would highly recommend 
-        choosing the <a href="https://lobstr.co/">LOBSTR</a> wallet (which is on that list) because they will take care of funding your account's 
-    required minimum balance (needed for activity on Stellar network) for you. Other wallets do this too, but I've been happy with their service in my personal use.</p>
-    </div>
-    <div class="row">
-        <p class="offset-1 col-10">You can watch a 2 minute screencast of this whole process if anything is confusing to you: <a href="https://youtu.be/QYxyooToC2k">Getting love-button link</a></p>
-    </div>
-    <div class="row">
-        <h3 class="offset-1 col-10">Now that you have your wallet setup you can make a love-button link to paste wherever 
-            your fans see your content.
-        </h3>
-    </div>
-    <div class="row">
-        <p class="offset-1 col-10">Your wallet will have an option to receive payment. This will
-            expose your public "Stellar address" that <span>love-button</span> users will send money to. Make sure
-            you choose "Stellar address" not "federation address". Your Stellar address should be a 56
-            character string of alphanumeric characters, not anything that looks like a url. You will copy this address
-            and paste it into the public key input on this page: <a href="/get-my-link">Get my link.</a></p>
-    </div>
-    <div class="row">
-        <p class="offset-1 col-10">Post this anywhere people see your content and they can click it to send
-            some love your way. If any of this was confusing check out the <a href="https://youtu.be/QYxyooToC2k">video</a> referenced above. The default links will just have a number ("/pages/00001") but if you want a
-            specialized link ("/pages/YOUR_NAME_HERE") you can follow the steps on <a href="/get-my-link/premium">Premium
-                Links</a>.
-        </p>
-    </div>
+        <div class="row">
+            <h3 class="col">How do I accept tips with love-button?</h3>
+        </div>
+        <div class="row">
+            <p class="col">This part is pretty easy! First get a wallet to store the Stellar you make on
+                here, you can check out
+                the ones Stellar recommends here: <a href="https://www.stellar.org/lumens/wallets/">Wallets</a>. But I
+                would highly recommend
+                choosing the <a href="https://lobstr.co/">LOBSTR</a> wallet (which is on that list) because they will
+                take care of funding your account's
+                required minimum balance (needed for activity on Stellar network) for you. Other wallets do this too,
+                but I've been happy with their service in my personal use.</p>
+        </div>
+        <div class="row">
+            <p class="col">You can watch a 2 minute screencast of this whole process if anything is
+                confusing to you: <a href="https://youtu.be/QYxyooToC2k">Getting love-button link</a></p>
+        </div>
+        <div class="row">
+            <h3 class="col">Now that you have your wallet setup you can make a love-button link to paste
+                wherever
+                your fans see your content.
+            </h3>
+        </div>
+        <div class="row">
+            <p class="col">Your wallet will have an option to receive payment. This will
+                expose your public "Stellar address" that <span>love-button</span> users will send money to. Make sure
+                you choose "Stellar address" not "federation address". Your Stellar address should be a 56
+                character string of alphanumeric characters, not anything that looks like a url. You will copy this
+                address
+                and paste it into the public key input on this page: <a href="/get-my-link">Get my link.</a></p>
+        </div>
+        <div class="row">
+            <p class="col">Post this anywhere people see your content and they can click it to send
+                some love your way. If any of this was confusing check out the <a href="https://youtu.be/QYxyooToC2k">video</a>
+                referenced above. The default links will just have a number ("/pages/00001") but if you want a
+                specialized link ("/pages/YOUR_NAME_HERE") you can follow the steps on <a href="/get-my-link/premium">Premium
+                    Links</a>.
+            </p>
+        </div>
+    </section>
+</div>
 </body>
 
 </html>

@@ -68,7 +68,7 @@ payments.stream({
   },
 
   onerror: function(error) {
-    console.error(error);
+    logger.log('info',error);
   }
 });
   })
