@@ -15,7 +15,7 @@ module.exports = function(req, res, next) {
   .catch(
     (err) => {
       res.sendStatus(404)
-      logger.log('info',err)
+      logger.log('info',`page ${req.params.pageId} not found`)
     }
   )
 }

@@ -7,8 +7,8 @@
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
     <script>
-        // let host = 'https://www.love-button.org/'
-        let host = 'http://localhost:8080/api/'
+         let host = 'https://www.love-button.org/'
+        //let host = 'http://localhost:8080/api/'
         $(document).ready(function() {
             var token
             if (localStorage.getItem('loveButtonAuthToken')) {
@@ -24,9 +24,6 @@
                 url: `${host}loadAccount`,
                 beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token)},
                 success: function(res) {
-                    console.log("success!")
-                    console.log(document.getElementById('email'))
-                    console.log(res)
                     document.getElementById('username').innerHTML = res.username,
                     document.getElementById('email').innerHTML = res.email,
                     document.getElementById('memo').innerHTML = res.memo,

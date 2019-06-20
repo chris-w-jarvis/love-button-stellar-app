@@ -89,7 +89,7 @@ app.get('/login', function(req, res) {
 })
 
 app.get('/signup', function(req, res) {
-  res.render('/signup')
+  res.render('signup')
 })
 
 app.get('/account', function(req, res) {

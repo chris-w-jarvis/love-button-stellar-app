@@ -8,16 +8,21 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
+            <script>
+                    if (location.protocol !== "https:") {
+                        location.protocol = "https:";
+                    }
+                    </script>
     <script>
-    // let host = 'https://www.love-button.org/'
-    let host = 'http://localhost:8080/'
+     let host = 'https://www.love-button.org/'
+    // let host = 'http://localhost:8080/'
     $(document).ready(function() {
         $("#loginForm").submit(
             (event) => {
                 event.preventDefault()
                 $.post({
                     url: `${host}auth/signin`,
-                    data: {username: document.getElementById('username').value, password: document.getElementById('password').value},
+                    data: {email: document.getElementById('username').value, password: document.getElementById('password').value},
                     success: function(res) {
                         localStorage.setItem('loveButtonAuthToken', res.token)
                         window.location.replace('/fundMyAccount')
@@ -35,11 +40,6 @@
 
 
     </script>
-    <!-- NEED IN PROD <script>
-            if (location.protocol !== "https:") {
-                location.protocol = "https:";
-            }
-            </script> -->
     <link rel="shortcut icon" type="image/ico" href="../favicon.ico"/>
     <style>
         .bg-orange {
@@ -62,7 +62,7 @@
         <div class="row">
             <form id="loginForm" class="col-xs-12 col-md-6">
                 <div class="form-group row">
-                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                    <label for="username" class="col-sm-2 col-form-label">Email</label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control" id="username" placeholder="Email">
                     </div>

@@ -18,8 +18,8 @@ let accountBalance = document.getElementById('curBal')
 let memo = document.getElementById('memo')
 
 let stellarLedgerUrl = 'http://testnet.stellarchain.io/tx/'
-// let host = 'https://www.love-button.org/api/'
-let host = 'http://localhost:8080/api/'
+ let host = 'https://www.love-button.org/api/'
+// let host = 'http://localhost:8080/api/'
 let stellarPrice
 let token
 

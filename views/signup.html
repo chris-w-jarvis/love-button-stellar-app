@@ -9,9 +9,14 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
+            <script>
+                    if (location.protocol !== "https:") {
+                        location.protocol = "https:";
+                    }
+                    </script>
     <script>
-    // let host = 'https://www.love-button.org/'
-    let host = 'http://localhost:8080/'
+     let host = 'https://www.love-button.org/'
+    // let host = 'http://localhost:8080/'
 
     function confirmPassword(candidate, dup) {
         return candidate === dup

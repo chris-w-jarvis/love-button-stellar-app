@@ -1,6 +1,5 @@
-// let host = 'https://www.love-button.org/'
-let host = 'http://localhost:8080/api/'
-const logger = require('../services/winston-logger')
+ let host = 'https://www.love-button.org/'
+// let host = 'http://localhost:8080/api/'
 
 $( document ).ready(function () {
 
