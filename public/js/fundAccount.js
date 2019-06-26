@@ -37,20 +37,23 @@ $( document ).ready(function () {
                                     balance.innerHTML = res.balance
                                 }
                             },
-                            error: function() {
+                            error: function(err) {
+                                console.log(err)
                                 console.log("Check balance request failed")
                             }
                         }
                     )
                 }, 5000)
             },
-            error: function() {
+            error: function(err) {
+                console.log(err)
                 console.log("Fund account request failed")
-                window.location.replace('/login')
+                //window.location.replace('/login')
             }
         })
     } // test if it will redirect the whole app or just the api request
     else {
-        window.location.replace('/login')
+        console.log("no auth token")
+        //window.location.replace('/login')
     }
 })
