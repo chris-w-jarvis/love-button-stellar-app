@@ -1,4 +1,4 @@
- let host = 'https://www.love-button.org/'
+ let host = 'https://www.love-button.org/api/'
 // let host = 'http://localhost:8080/api/'
 
 $( document ).ready(function () {
@@ -38,7 +38,6 @@ $( document ).ready(function () {
                                 }
                             },
                             error: function(err) {
-                                console.log(err)
                                 console.log("Check balance request failed")
                             }
                         }
@@ -46,14 +45,13 @@ $( document ).ready(function () {
                 }, 5000)
             },
             error: function(err) {
-                console.log(err)
                 console.log("Fund account request failed")
-                //window.location.replace('/login')
+                window.location.replace('/login')
             }
         })
     } // test if it will redirect the whole app or just the api request
     else {
         console.log("no auth token")
-        //window.location.replace('/login')
+        window.location.replace('/login')
     }
 })
