@@ -3,7 +3,9 @@ const Accounts = require('../models/accounts')
 const EmailService = require('../services/sendgrid')
 const bcrypt = require('bcrypt')
 const logger = require('../services/winston-logger')
-
+require('dotenv').config()
+const env = process.env.LOVE_BUTTON_RUNTIME_ENV
+if (!env) throw new Error("No LOVE_BUTTON_RUNTIME_ENV")
 module.exports = {
     sendEmail : function(req, res) {
         const email = req.body.email
@@ -44,7 +46,7 @@ module.exports = {
             }
           }).then(
             () => {
-              res.render('resetPassword', {token:token})
+              res.render('resetPassword', {token:token, env:env})
             }
           )
           .catch(

@@ -9,11 +9,6 @@
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous">
     </script>
-    <script>
-            if (location.protocol !== "https:") {
-                location.protocol = "https:";
-            }
-            </script>
     <link rel="shortcut icon" type="image/ico" href="../favicon.ico"/>
     <style>
         .bg-orange {
@@ -96,6 +91,24 @@
         </div>
     </section>
 </div>
+<div id="env" style="display:none">{{env}}</div>
 </body>
-
+<script>
+    // configure env
+    let env = document.getElementById('env').innerHTML
+    let host
+    function loadEnv() {
+        if (env === 'PROD') {
+            host = 'https://www.love-button.org/api/'
+        } else if (env === 'TEST') {
+            host = 'https://www.test.love-button.org/api/'
+        } else {
+            host = 'http://localhost:8080/api/'
+        }
+    }
+    loadEnv()
+    if (env != "DEV" && location.protocol !== "https:") {
+        location.protocol = "https:";
+    }
+                </script>
 </html>

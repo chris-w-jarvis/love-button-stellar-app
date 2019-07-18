@@ -4,7 +4,13 @@ const fs = require('fs')
 require('dotenv').config()
 const path = require('path')   
 const filePath = path.join(__dirname, 'lastPagingToken.txt');
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+// configure stellar network connection
+var server
+if (process.env.LOVE_BUTTON_RUNTIME_ENV === 'PROD') {
+  server = new StellarSdk.Server('https://horizon.stellar.org')
+} else {
+  server = new StellarSdk.Server('https://horizon-testnet.stellar.org')
+}
 
 const accountController = require('../controllers/account-controller')
 const countersController = require('../controllers/counters-controller')

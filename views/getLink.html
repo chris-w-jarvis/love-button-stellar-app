@@ -14,12 +14,6 @@
       }
 	</style>
 	<script>
-                if (location.protocol !== "https:") {
-                    location.protocol = "https:";
-                }
-                </script>
-
-	<script>
 
 	function copyLoveLink() {
 	  /* Get the text field */
@@ -52,21 +46,27 @@
 	<section class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 offset-xl-4 col-xl-4 p-0">
 		<div class="input-group input-group-sm mb-3">
 			<div class="input-group-prepend">
-				<span class="input-group-text" id="inputGroup-sizing-sm">Your public key:</span>
+				<span class="input-group-text" id="inputGroup-sizing-sm">Wallet Address:</span>
 			</div>
 			<input type="text" class="form-control" id="publicKey"placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
 		</div>
 		<div class="input-group input-group-sm mb-3">
 				<div class="input-group-prepend">
-					<span class="input-group-text" id="inputGroup-sizing-sm">Your memo:</span>
+					<span class="input-group-text" id="inputGroup-sizing-sm">XLM Memo ID:</span>
 				</div>
-				<input type="text" class="form-control" id="memo"placeholder="Needed for Coinbase users">
-			</div>
+				<input type="text" class="form-control" id="memo"placeholder="Needed for Coinbase users!">
+		</div>
 		<div class="input-group input-group-sm mb-3">
 			<div class="input-group-prepend">
-				<span class="input-group-text" id="inputGroup-sizing-sm">Text to display with your key:</span>
+				<span class="input-group-text" id="inputGroup-sizing-sm">Name for link:</span>
 			</div>
-			<input type="text" class="form-control" id="name" placeholder="text">
+			<input type="text" class="form-control" id="name" placeholder="name, max 128 chars">
+		</div>
+		<div class="input-group input-group-sm mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text" id="inputGroup-sizing-sm">Description/Text to display with your key:</span>
+			</div>
+			<input type="text" class="form-control" id="description" placeholder="text, max 512 chars">
 		</div>
 		<div class="input-group input-group-sm mb-3">
 			<div class="input-group-prepend">
@@ -95,5 +95,5 @@
 		</div>
 	</section>
 </div>
-
+<div id="env" style="display:none">{{env}}</div> 
 </html>

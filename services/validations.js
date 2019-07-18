@@ -54,8 +54,12 @@ module.exports = {
     //     }
     // }
     getMyLink: function(req, res, next) {
+        if (!req.body.name || !req.body.description || !req.body.key) {
+            return res.status(400).send({msg:'Need name, description, and key'})
+        }
         const txt = req.body.name
         const key = validator.trim(req.body.key)
+        const desc = req.body.description
         if (txt.length > 255) {
             return res.status(400).send({msg:'Name or text max length 255'})
         }
@@ -66,6 +70,15 @@ module.exports = {
             const memo = validator.trim(req.body.memo)
             if (!validator.isNumeric(memo) || memo.length > 28) {
                 return res.status(400).send({msg:'Memo is all numbers and max length 28 chars'})
+            }
+        }
+        if (desc.length > 512) {
+            return res.status(400).send({msg:'Description must be 512 chars or less'})
+        }
+        if (req.body.email) {
+            const email = validator.trim(req.body.email)
+            if (!validator.isEmail(email) || email.length > 128) {
+                return res.status(400).send({msg:'Bad email, must be 128 chars or less'})
             }
         }
         next()
@@ -88,5 +101,5 @@ module.exports = {
             }
         }
         next()
-    }
+    },
 }

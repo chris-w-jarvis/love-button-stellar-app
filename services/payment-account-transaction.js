@@ -12,16 +12,16 @@ countersController.incrTransactionNumber()
     logger.log('info',"Error loading transaction number from redis: "+err)
     transactionNumber = 0
   })
-const LB_TRANSACTION_FEE = parseFloat(process.env.TRANSACTION_FEE)
-const LB_TRANSACTION_FEE_ADDR = process.env.LB_TRANSACTION_FEE_ADDR
-const LB_TRANSACTION_FEE_MEMO = process.env.LB_TRANSACTION_FEE_MEMO
+// const LB_TRANSACTION_FEE = parseFloat(process.env.TRANSACTION_FEE)
+// const LB_TRANSACTION_FEE_ADDR = process.env.LB_TRANSACTION_FEE_ADDR
+// const LB_TRANSACTION_FEE_MEMO = process.env.LB_TRANSACTION_FEE_MEMO
 const STELLAR_TRANSACTION_FEE = parseFloat(process.env.STELLAR_TRANSACTION_FEE)
 
 let stellarLedgerUrl
-if (process.env.RUNTIME_ENV === "TEST") {
-    stellarLedgerUrl = 'http://testnet.stellarchain.io/tx/'
+if (process.env.LOVE_BUTTON_RUNTIME_ENV === 'PROD') {
+  stellarLedgerUrl = 'http://stellarchain.io/tx/'
 } else {
-    throw new Error("Need mainnet url")
+  stellarLedgerUrl = 'http://testnet.stellarchain.io/tx/'
 }
 
 const sendPayment = function(req, res) {
@@ -29,19 +29,24 @@ const sendPayment = function(req, res) {
     const bal = parseFloat(req.user.balance)
     const pmt = parseFloat(req.body.amount)
     logger.log('info','BALANCE BEFORE TRANS:'+bal)
-    if (bal <= (pmt + LB_TRANSACTION_FEE + STELLAR_TRANSACTION_FEE)) {
-        return res.status(400).send({msg: "Not enough money in account"})
+    if (bal <= (pmt + STELLAR_TRANSACTION_FEE)) {
+      return res.status(400).send({msg: "Not enough money in account"})
     }
-    var fee = 0.0
-    if (transactionNumber % 10 == 0) {
-      fee = LB_TRANSACTION_FEE
-    }
+    // if (bal <= (pmt + LB_TRANSACTION_FEE + STELLAR_TRANSACTION_FEE)) {
+    //     return res.status(400).send({msg: "Not enough money in account"})
+    // }
+    // var fee = 0.0
+    // if (transactionNumber % 10 == 0) {
+    //   fee = LB_TRANSACTION_FEE
+    // }
 
     return sequelize.transaction(t => {
 
       // chain all your queries here. make sure you return them.
       return Account.update({
-        balance: bal-(pmt+LB_TRANSACTION_FEE+STELLAR_TRANSACTION_FEE)
+        // this is a bug lol
+        // balance: bal-(pmt+LB_TRANSACTION_FEE+STELLAR_TRANSACTION_FEE)
+        balance: bal-(pmt+STELLAR_TRANSACTION_FEE)
       }, {where: {
         id: req.user.id
       }, transaction: t})
@@ -56,22 +61,22 @@ const sendPayment = function(req, res) {
             // successful transaction
             res.status(201).send({url: `${stellarLedgerUrl}${pmtRes.hash}`})
             // transaction fee
-            if (fee != 0) {
-              stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee+"0", LB_TRANSACTION_FEE_MEMO)
-              .catch((err) => {
-                logger.log('info','Failed on transaction fee for transaction '+ transactionNumber +err)
-              })
-            }
+            // if (fee != 0) {
+            //   stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee+"0", LB_TRANSACTION_FEE_MEMO)
+            //   .catch((err) => {
+            //     logger.log('info','Failed on transaction fee for transaction '+ transactionNumber +err)
+            //   })
+            // }
           })
           .catch(err => {
             res.status(500).send({msg: `Payment failed in Stellar network, does the address exist?`})
             // transaction fee
-            if (fee != 0) {
-              stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee+"0", LB_TRANSACTION_FEE_MEMO)
-              .catch((err) => {
-                logger.log('info','Failed on transaction fee for transaction '+ transactionNumber+ err)
-              })
-            }
+            // if (fee != 0) {
+            //   stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee+"0", LB_TRANSACTION_FEE_MEMO)
+            //   .catch((err) => {
+            //     logger.log('info','Failed on transaction fee for transaction '+ transactionNumber+ err)
+            //   })
+            // }
             throw err
           })
         });
@@ -85,7 +90,6 @@ const sendPayment = function(req, res) {
         })
     })
     .catch(err => {
-      logger.log('info', 'HERE')
       logger.log('info','transactionNumber '+transactionNumber+ ' failed: '+ err)
       countersController.incrTransactionNumber()
         .then(tr => transactionNumber = tr)

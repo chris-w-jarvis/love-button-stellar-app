@@ -1,8 +1,16 @@
 require('dotenv').config()
 const rp = require('request-promise')
 const StellarSdk = require('stellar-sdk');
-StellarSdk.Network.useTestNetwork();
-var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+
+// configure stellar network connection
+var server
+if (process.env.LOVE_BUTTON_RUNTIME_ENV === 'PROD') {
+  StellarSdk.Network.usePublicNetwork()
+  server = new StellarSdk.Server('https://horizon.stellar.org')
+} else {
+  StellarSdk.Network.useTestNetwork()
+  server = new StellarSdk.Server('https://horizon-testnet.stellar.org')
+}
 const privateSourceKey = process.env.LOVE_BUTTON_PRIVATE_KEY
 
 const priceCheck = function() {

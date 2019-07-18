@@ -30,7 +30,10 @@ const rateLimit = require("express-rate-limit")
 const RedisStore = require("rate-limit-redis")
 var Redis = require('ioredis')
 var client = new Redis(process.env.REDIS_URL)
- 
+
+// configure env for html pages
+const env = process.env.LOVE_BUTTON_RUNTIME_ENV
+if (!env) throw new Error("No LOVE_BUTTON_RUNTIME_ENV")
 
 app.enable("trust proxy"); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
  
@@ -69,11 +72,11 @@ app.get('/about', function(req, res) {
 })
 
 app.get('/getStellarLumens', function(req, res) {
-  res.render('getStellarLumens')
+  res.render('getStellarLumens', {env:env})
 })
 
 app.get('/getStartedCreators', function(req, res) {
-  res.render('getStartedCreators')
+  res.render('getStartedCreators', {env:env})
 })
 
 app.get('/get-my-link/premium', function(req, res) {
@@ -81,27 +84,27 @@ app.get('/get-my-link/premium', function(req, res) {
 })
 
 app.get('/fundMyAccount', function(req, res) {
-  res.render('fundAccount')
+  res.render('fundAccount', {env:env})
 })
 
 app.get('/login', function(req, res) {
-  res.render('login')
+  res.render('login', {env:env})
 })
 
 app.get('/signup', function(req, res) {
-  res.render('signup')
+  res.render('signup', {env:env})
 })
 
 app.get('/account', function(req, res) {
-  res.render('account')
+  res.render('account', {env:env})
 })
 
 app.get('/accountRecovery', function(req, res) {
-  res.render('accountRecovery')
+  res.render('accountRecovery', {env:env})
 })
 
 app.get('/get-my-link', function(req, res) {
-  res.render('getLink');
+  res.render('getLink', {env:env});
 })
 
 // render html for each url on /give

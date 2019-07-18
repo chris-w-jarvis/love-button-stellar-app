@@ -4,9 +4,22 @@ const Model = Sequelize.Model
 
 class Pages extends Model {}
 Pages.init({
-  name: {type: Sequelize.STRING, allowNull: false},
-  publicKey: {type: Sequelize.STRING, allowNull: false},
-  memo: {type: Sequelize.STRING, defaultValue: "no_memo"},
+  name: {type: Sequelize.STRING, allowNull: false, validate: {
+    max: 128
+  }},
+  publicKey: {type: Sequelize.STRING, allowNull: false, validate: {
+    len: [56]
+  }},
+  memo: {type: Sequelize.STRING, defaultValue: "no_memo", validate: {
+    len: [1,28]
+  }},
+  description: {type: Sequelize.STRING, allowNull: false, validate: {
+    max: 512
+  }},
+  email: {type: Sequelize.STRING, validate: {
+    isEmail: true,
+    max: 128
+  }},
   // put index on this
   pageId: {type: Sequelize.STRING, primaryKey: true}
 }, { indexes: [

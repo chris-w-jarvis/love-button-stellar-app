@@ -1,18 +1,37 @@
 $( document ).ready(function () {
     let getLinkBtn = document.getElementById('getLinkSubmitBtn')
-     let host = 'https://www.love-button.org/'
-    // let host = 'http://localhost:8080/'
+    // configure env
+    let env = document.getElementById('env').innerHTML
+    let host
+    function loadEnv() {
+        if (env === 'PROD') {
+            host = 'https://www.love-button.org/'
+        } else if (env === 'TEST') {
+            host = 'https://www.test.love-button.org/'
+        } else {
+            host = 'http://localhost:8080/'
+        }
+    }
+    loadEnv()
+    if (env != "DEV" && location.protocol !== "https:") {
+        location.protocol = "https:";
+    }
 
     getLinkBtn.onclick = function() {
         var request = {}
-        if (document.getElementById("publicKey").value != '') request['key'] = document.getElementById("publicKey").value
+        if (document.getElementById("publicKey").value != '' && document.getElementById("publicKey").value.length == 56) request['key'] = document.getElementById("publicKey").value
         else {
-            alert("Need public key")
+            alert("Need 56 character public key")
             return
         }
         if (document.getElementById("name").value != '') request['name'] = document.getElementById("name").value
         else {
-            alert("Need a name or some text")
+            alert("Need a name (can't be blank)")
+            return
+        }
+        if (document.getElementById("description").value != '') request['description'] = document.getElementById("description").value
+        else {
+            alert("Need a description(can't be blank)")
             return
         }
         if (document.getElementById("memo").value != '') request['memo'] = document.getElementById("memo").value

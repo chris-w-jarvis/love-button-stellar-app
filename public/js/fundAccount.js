@@ -1,7 +1,22 @@
- let host = 'https://www.love-button.org/'
-// let host = 'http://localhost:8080/api/'
-
 $( document ).ready(function () {
+
+    // configure env
+    let env = document.getElementById('env').innerHTML
+    let host
+    function loadEnv() {
+        if (env === 'PROD') {
+            host = 'https://www.love-button.org/api/'
+        } else if (env === 'TEST') {
+            host = 'https://www.test.love-button.org/api/'
+        } else {
+            host = 'http://localhost:8080/api/'
+        }
+    }
+
+    loadEnv()
+    if (env != "DEV" && location.protocol !== "https:") {
+        location.protocol = "https:";
+    }
 
     let lBPublicAddr = document.getElementById('loveButtonPubAddr')
     let memo = document.getElementById('memo')
@@ -20,7 +35,7 @@ $( document ).ready(function () {
                 var oldBal = parseInt(balance.innerHTML)
                 document.getElementById('accountInfoDiv').innerHTML = `<p>Logged in as: ${res.username}`
                 const stopTrigger = setInterval(() => {
-                    // check balance after 3 seconds
+                    // check balance after 5 seconds
                     $.get(
                         {
                             url: `${host}checkBalance`,
@@ -49,7 +64,7 @@ $( document ).ready(function () {
                 window.location.replace('/login')
             }
         })
-    } // test if it will redirect the whole app or just the api request
+    }
     else {
         window.location.replace('/login')
     }

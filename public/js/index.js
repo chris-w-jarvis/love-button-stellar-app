@@ -17,11 +17,25 @@ let saveKeyPassphraseInput = document.getElementById("saveKeyPassphraseInput")
 let accountBalance = document.getElementById('curBal')
 let memo = document.getElementById('memo')
 
-let stellarLedgerUrl = 'http://testnet.stellarchain.io/tx/'
- let host = 'https://www.love-button.org/api/'
-// let host = 'http://localhost:8080/api/'
 let stellarPrice
 let token
+
+// configure env
+let env = document.getElementById('env').innerHTML
+let host
+function loadEnv() {
+    if (env === 'PROD') {
+        host = 'https://www.love-button.org/api/'
+    } else if (env === 'TEST') {
+        host = 'https://www.test.love-button.org/api/'
+    } else {
+        host = 'http://localhost:8080/api/'
+    }
+}
+loadEnv()
+if (env != "DEV" && location.protocol !== "https:") {
+    location.protocol = "https:";
+}
 
 if (localStorage.getItem("loveButtonAuthToken")) {
     console.log("logged in")
@@ -122,8 +136,8 @@ function sendPayment(amount) {
     }
     paymentStatusDiv.innerHTML = '<p>Waiting...</p>'
     sendPaymentToStellar(destKeyElement.innerHTML, amount, memo.innerHTML)
-        .then( res => {
-            paymentStatusDiv.innerHTML = '<div class="alert alert-success" role="alert">Success, sent ${amount} XLM\nSee this transaction on Stellar public ledger: ${stellarLedgerUrl}${res.url}</div>'
+        .then(res => {
+            paymentStatusDiv.innerHTML = `<div class="alert alert-success" role="alert">Success, sent ${amount} XLM\nSee this transaction on Stellar public ledger: ${res.url}</div>`
             loadUser()
         })
         .catch(msg => {

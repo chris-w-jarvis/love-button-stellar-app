@@ -14,11 +14,6 @@
 		}
 
     </style>
-    <script>
-                if (location.protocol !== "https:") {
-                    location.protocol = "https:";
-                }
-                </script>
 </head>
 
 <body>
@@ -29,11 +24,12 @@
 <div class="row">
     <section class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 ">
         <div class="row">
-            <h3 id="nameOrText" class="col">Sending love to {{name}}</h3>
+            <h3 id="nameOrText" class="col">Sending money to {{name}}</h3>
+            <p id="description" class="col">{{description}}</p>
         </div>
         <!--TODO: these should not be sent to the input. sessionStorage is one solution. need to figure out-->
         <p id="destKey" class="d-none">{{key}}</p>
-        <p id="memo" class="d-none">Memo:{{memo}}</p>
+        <p id="memo" class="d-none">{{memo}}</p>
         <div class="row mb-2">
             <div class="col">Conversion Rate: <span id="xlmPrice">loading...</span></div>
         </div>
@@ -107,6 +103,7 @@
     <p class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">logged in as:
         loading...</p>
 </div>
+<div id="env" style="display:none">{{env}}</div> 
 </body>
 <script src="../js/index.js"></script>
 

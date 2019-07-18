@@ -86,7 +86,14 @@ module.exports = function router(app) {
     }
 
     // db
-    Pages.create({name:req.body.name, publicKey:req.body.key, pageId:idString, memo:req.body.memo}).then(
+    Pages.create({
+      name:req.body.name, 
+      publicKey:req.body.key, 
+      pageId:idString, 
+      memo:req.body.memo,
+      description: req.body.description,
+      email: req.body.emailInput
+    }).then(
       (page) => {
         res.send({id:page.pageId})
         countersController.incrLastPageId((err) => {if (err) logger.log('info','Error writing last page id: '+err)})

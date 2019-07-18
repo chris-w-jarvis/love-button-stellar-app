@@ -9,20 +9,28 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
-            <script>
-                    if (location.protocol !== "https:") {
-                        location.protocol = "https:";
-                    }
-                    </script>
     <script>
-     let host = 'https://www.love-button.org/'
-    // let host = 'http://localhost:8080/'
-
     function confirmPassword(candidate, dup) {
         return candidate === dup
     }
 
     $(document).ready(function() {
+        // configure env
+let env = document.getElementById('env').innerHTML
+let host
+function loadEnv() {
+    if (env === 'PROD') {
+        host = 'https://www.love-button.org/api/'
+    } else if (env === 'TEST') {
+        host = 'https://www.test.love-button.org/api/'
+    } else {
+        host = 'http://localhost:8080/api/'
+    }
+}
+loadEnv()
+if (env != "DEV" && location.protocol !== "https:") {
+    location.protocol = "https:";
+}
         $("#signupForm").submit(
             (event) => {
                 event.preventDefault()
@@ -84,7 +92,6 @@
         <button type="submit" class="btn btn-primary">Create Account</button>
     </form>
 </section>
-
-
+<div id="env" style="display:none">{{env}}</div>
 <!-- maybe captcha here? -->
 </body>
