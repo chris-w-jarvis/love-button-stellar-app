@@ -5,7 +5,7 @@ const Model = Sequelize.Model
 class Pages extends Model {}
 Pages.init({
   name: {type: Sequelize.STRING, allowNull: false, validate: {
-    max: 128
+    len: [1,128]
   }},
   publicKey: {type: Sequelize.STRING, allowNull: false, validate: {
     len: [56]
@@ -14,11 +14,11 @@ Pages.init({
     len: [1,28]
   }},
   description: {type: Sequelize.STRING, allowNull: false, validate: {
-    max: 512
+    len: [1, 512]
   }},
   email: {type: Sequelize.STRING, validate: {
     isEmail: true,
-    max: 128
+    len: [1, 128]
   }},
   // put index on this
   pageId: {type: Sequelize.STRING, primaryKey: true}

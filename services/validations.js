@@ -60,8 +60,8 @@ module.exports = {
         const txt = req.body.name
         const key = validator.trim(req.body.key)
         const desc = req.body.description
-        if (txt.length > 255) {
-            return res.status(400).send({msg:'Name or text max length 255'})
+        if (txt.length > 128) {
+            return res.status(400).send({msg:'Name or text max length 128'})
         }
         if (!validator.isAlphanumeric(key) || key.length != 56) {
             return res.status(400).send({msg:'Key is 56 alphanumeric chars'})
