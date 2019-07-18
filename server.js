@@ -68,7 +68,8 @@ app.get('/', function(req, res) {
   res.redirect('/about')
 })
 app.get('/about', function(req, res) {
-  res.redirect('https://love-button.launchaco.com/')
+  if (env === 'PROD') res.redirect('https://love-button.launchaco.com/')
+  else res.render('testLandingPage')
 })
 
 app.get('/getStellarLumens', function(req, res) {
