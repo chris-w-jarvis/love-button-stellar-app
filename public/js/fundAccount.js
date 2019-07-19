@@ -31,7 +31,7 @@ $( document ).ready(function () {
             success: function(res) {
                 lBPublicAddr.value = res.loveButtonPublicAddress
                 memo.value = res.memo
-                balance.innerHTML = res.balance
+                balance.value = res.balance
                 var oldBal = parseInt(balance.innerHTML)
                 document.getElementById('accountInfoDiv').innerHTML = `<p>Logged in as: ${res.username}`
                 const stopTrigger = setInterval(() => {
@@ -43,13 +43,10 @@ $( document ).ready(function () {
                             success: function(res) {
                                 console.log(res)
                                 if (parseInt(res.balance) > oldBal) {
-                                    balance.innerHTML = res.balance
+                                    balance.value = res.balance
                                     paymentStatusDiv.innerHTML = `<p>Success, received ${parseInt(res.balance) - oldBal} XLM</p>`
                                     paymentStatusDiv.style.backgroundColor = "#28a745";
                                     clearInterval(stopTrigger)
-                                } else if (parseInt(res.balance) < oldBal) {
-                                    oldBal = parseInt(res.balance)
-                                    balance.innerHTML = res.balance
                                 }
                             },
                             error: function() {
@@ -66,6 +63,7 @@ $( document ).ready(function () {
         })
     }
     else {
+        console.log("no auth token")
         window.location.replace('/login')
     }
 })
