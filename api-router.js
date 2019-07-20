@@ -6,6 +6,7 @@ const Pages = require('./models/pages').Pages
 const sendPaymentService = require('./services/payment-account-transaction').sendPaymentService
 const validationService = require('./services/validations')
 require('dotenv').config()
+const env = process.env.LOVE_BUTTON_RUNTIME_ENV
 const passport = require('passport');
 
 const logger = require('./services/winston-logger')
@@ -40,13 +41,17 @@ const paymentLimiter = rateLimit({
 // value returned by /api/priceCheck
 var stellarPrice = "";
 const stellarPriceCheck = function() {
-  stellarController.priceCheck().then((price) => {
-    stellarPrice = price
-  })
-  .catch((err)  => {
-    stellarPrice = .12
-    logger.log('info',err)
-  })
+  if (env === "PROD") {
+    stellarController.priceCheck().then((price) => {
+      stellarPrice = price
+    })
+    .catch((err)  => {
+      stellarPrice = .12
+      logger.log('info',err)
+    })
+  } else {
+    stellarPrice = "0.10"
+  }
 }
 
 const requireAdmin = function(req, res, next) {
