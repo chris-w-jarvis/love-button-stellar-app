@@ -66,8 +66,11 @@ setInterval(stellarPriceCheck, 294000 * parseInt(process.env.WEB_CONCURRENCY))
 var latestPageId
 try {
   countersController.incrLastPageId((err, lpi) => {
-    if (err) logger.log('info','Error loading last page id: '+ err)
-    latestPageId = lpi-1
+    if (err) {
+      logger.log('info','Error loading last page id: '+ err)
+    } else {
+      latestPageId = lpi
+    }
   })
 } catch(err) {
   logger.log('info','Error reading last page id: '+ err)
@@ -77,6 +80,11 @@ module.exports = function router(app) {
 
   app.post('/api/get-my-link', validationService.getMyLink, function(req, res) {
     // zerofill latestPageId
+    if (!latestPageId) {
+      // if this isn't loaded we can't create new links
+      logger.log("PROBLEMS LOADING latestPageId")
+      res.status(404).send({msg:'Can\'t make new link right now! We\'re working on it, sorry!'})
+    }
     var idString = `${latestPageId++}`
     if (idString.length < 6) {
       var idLen = idString.length

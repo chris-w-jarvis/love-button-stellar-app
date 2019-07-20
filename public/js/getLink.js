@@ -7,7 +7,7 @@ $( document ).ready(function () {
         if (env === 'PROD') {
             host = 'https://www.love-button.org/'
         } else if (env === 'TEST') {
-            host = 'https://www.test.love-button.org/'
+            host = 'https://www.test-love-button.herokuapp.com/'
         } else {
             host = 'http://localhost:8080/'
         }
@@ -35,7 +35,7 @@ $( document ).ready(function () {
             return
         }
         if (document.getElementById("memo").value != '') request['memo'] = document.getElementById("memo").value
-        if (document.getElementById("emailInput").value != '') request['emailInput'] = document.getElementById("emailInput").value
+        if (document.getElementById("emailInput").value != '') request['email'] = document.getElementById("emailInput").value
         $.post({url:`${host}api/get-my-link`,
             data:request,
             success: function(res) {

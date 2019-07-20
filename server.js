@@ -81,7 +81,8 @@ app.get('/getStartedCreators', function(req, res) {
 })
 
 app.get('/get-my-link/premium', function(req, res) {
-  res.send("Not setup yet, email me at chris.at.love.button@gmail.com")
+  res.send('I haven\'t automated this yet, email me at chris@love-button.org. '+
+  'In the email put all the information required in the "Get my link" page and I\'ll probably just make you one for free ;)')
 })
 
 app.get('/fundMyAccount', function(req, res) {

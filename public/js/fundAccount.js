@@ -7,7 +7,7 @@ $( document ).ready(function () {
         if (env === 'PROD') {
             host = 'https://www.love-button.org/api/'
         } else if (env === 'TEST') {
-            host = 'https://www.test.love-button.org/api/'
+            host = 'https://www.test-love-button.herokuapp.com/api/'
         } else {
             host = 'http://localhost:8080/api/'
         }
