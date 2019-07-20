@@ -25,11 +25,11 @@ let env = document.getElementById('env').innerHTML
 let host
 function loadEnv() {
     if (env === 'PROD') {
-        host = 'https://www.love-button.org/api/'
+        host = 'https://www.love-button.org/'
     } else if (env === 'TEST') {
-        host = 'https://www.test-love-button.herokuapp.com/api/'
+        host = 'https://www.test-love-button.herokuapp.com/'
     } else {
-        host = 'http://localhost:8080/api/'
+        host = 'http://localhost:8080/'
     }
 }
 loadEnv()
@@ -48,7 +48,7 @@ if (localStorage.getItem("loveButtonAuthToken")) {
 function loadUser() {
     $.get(
         {
-            url: `${host}loadSendPayment`,
+            url: `${host}api/loadSendPayment`,
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token)},
             success: function(res) {
                 console.log(res)
@@ -112,7 +112,7 @@ clearDefaultBtn.onclick = function(e) {
 
 function sendPaymentToStellar(destination, amount, memoTxt) {
     return new Promise((resolve, reject) => {
-        $.post({url:`${host}sendPayment`,
+        $.post({url:`${host}api/sendPayment`,
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token);},
             data: {destination: destination, amount: amount, memo: memoTxt},
             success: function(res) {

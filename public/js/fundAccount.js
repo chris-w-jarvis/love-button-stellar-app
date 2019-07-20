@@ -5,11 +5,11 @@ $( document ).ready(function () {
     let host
     function loadEnv() {
         if (env === 'PROD') {
-            host = 'https://www.love-button.org/api/'
+            host = 'https://www.love-button.org/'
         } else if (env === 'TEST') {
-            host = 'https://www.test-love-button.herokuapp.com/api/'
+            host = 'https://www.test-love-button.herokuapp.com/'
         } else {
-            host = 'http://localhost:8080/api/'
+            host = 'http://localhost:8080/'
         }
     }
 
@@ -26,7 +26,7 @@ $( document ).ready(function () {
     // load user details
     if (localStorage.getItem('loveButtonAuthToken')) {
         token = localStorage.getItem('loveButtonAuthToken')
-        $.get({url:`${host}fund`,
+        $.get({url:`${host}api/fund`,
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token);},
             success: function(res) {
                 lBPublicAddr.value = res.loveButtonPublicAddress
@@ -38,7 +38,7 @@ $( document ).ready(function () {
                     // check balance after 5 seconds
                     $.get(
                         {
-                            url: `${host}checkBalance`,
+                            url: `${host}api/checkBalance`,
                             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token);},
                             success: function(res) {
                                 console.log(res)

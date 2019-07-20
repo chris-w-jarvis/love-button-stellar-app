@@ -105,17 +105,6 @@
 <script>
     // configure env
     let env = document.getElementById('env').innerHTML
-    let host
-    function loadEnv() {
-        if (env === 'PROD') {
-            host = 'https://www.love-button.org/api/'
-        } else if (env === 'TEST') {
-            host = 'https://www.test-love-button.herokuapp.com/api/'
-        } else {
-            host = 'http://localhost:8080/api/'
-        }
-    }
-    loadEnv()
     if (env != "DEV" && location.protocol !== "https:") {
         location.protocol = "https:";
     }
