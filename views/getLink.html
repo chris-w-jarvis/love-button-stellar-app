@@ -9,31 +9,48 @@
 	<script src="../js/getLink.js"></script>
 	<link rel="shortcut icon" type="image/ico" href="../favicon.ico"/>
 	<style>
-		.bg-orange {
-          background-color: #d21717;
-      }
+		.bg-love {
+			background-color: #d21717;
+		}
+		.navLink {
+			color: white;
+			text-decoration: none
+		}
+		.navLink:hover {
+			color: white;
+		}
 	</style>
 	<script>
+		function copyLoveLink() {
+			/* Get the text field */
+			var copyText = document.getElementById("link1");
 
-	function copyLoveLink() {
-	  /* Get the text field */
-	  var copyText = document.getElementById("link1");
+			/* Select the text field */
+			copyText.select();
 
-	  /* Select the text field */
-	  copyText.select();
+			/* Copy the text inside the text field */
+			document.execCommand("copy");
 
-	  /* Copy the text inside the text field */
-	  document.execCommand("copy");
-
-	  /* Alert the copied text */
-	  alert("Copied the text: " + copyText.value);
-	}
-
+			/* Alert the copied text */
+			alert("Copied the text: " + copyText.value);
+		}
 	</script>
 </head>
 <div class="container-fluid">
-	<header class="row pt-4 pb-3 bg-orange">
-		<h1 class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 offset-xl-4 col-xl-4 text-white">Get your link</h1>
+	<header class="row bg-love mb-3">
+		<div class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 text-white">
+			<div class="row">
+				<h1 class="col-12">get my link</h1>
+			</div>
+			<section class="row">
+				<h5 class="col-12">
+					<a class="navLink" href="/about">about</a> &bull; 
+					<a class="navLink" href="/get-my-link">get my link</a> &bull; 
+					<a class="navLink" href="/fundMyAccount">fund account</a> &bull; 
+					<a class="navLink" href="/account">my account</a>
+				</h5>
+			</section>
+		</div>
 	</header>
 	<section>
 		<div class="row mt-3">
