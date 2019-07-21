@@ -46,7 +46,7 @@ if (env != "DEV" && location.protocol !== "https:") {
                         },
                         error: function(res) {
                             console.log(res)
-                            alert('Please check password')
+                            alert(JSON.parse(res.responseText).msg)
                         }
                     })
                 } else {

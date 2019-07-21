@@ -22,7 +22,7 @@ module.exports.signup = function (req, res, next) {
       if (created) {
         return res.json({token: tokenForUser(user)});
       } else {
-        return res.status(422).send({error: "username in use"});
+        return res.status(422).send({msg: "username in use"});
       }
   })
   .catch(err => next(err))
