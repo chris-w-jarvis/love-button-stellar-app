@@ -153,7 +153,7 @@ sendPaymentBtn.onclick = function (e) {
     var regex = /[A-Z0-9]{56}/;
     if (destKeyElement.innerHTML.match(regex)) {
         if (paymentAmount.value.match(/[a-z]/i) || !paymentAmount.value.match(/[0-9]/)) {
-            alert('Destination key not set correctly for this link')
+            alert('Payment amount needs to be a number (decimals ok)')
             return
         }
         // determine amount
@@ -163,5 +163,5 @@ sendPaymentBtn.onclick = function (e) {
         } else {
             sendPayment(parseFloat(paymentAmount.value).toFixed(6).toString())
         }
-    } else alert('Destination key or source key not loaded, bad give page? Sorry.')
+    } else alert('Destination key or source key not loaded, bad give page? Sorry')
 }

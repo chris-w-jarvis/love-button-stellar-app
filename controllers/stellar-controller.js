@@ -51,7 +51,7 @@ const sendPayment = function(destinationId, lumensAmount, memo) {
             asset: StellarSdk.Asset.native(),
             amount: lumensAmount
           }))
-          .addMemo(memo ? StellarSdk.Memo.text(memo) : StellarSdk.Memo.text("Love, love-button"))
+          .addMemo(memo ? StellarSdk.Memo.id(memo) : StellarSdk.Memo.text("Love, love-button"))
           .build();
         transaction.sign(sourceKeys);
         return server.submitTransaction(transaction);
@@ -84,7 +84,7 @@ const testPayer = function(srcKey, memo, lumensAmount) {
             asset: StellarSdk.Asset.native(),
             amount: lumensAmount
           }))
-          .addMemo(StellarSdk.Memo.text(memo))
+          .addMemo(StellarSdk.Memo.id(memo))
           .build();
         transaction.sign(sourceKeys);
         return server.submitTransaction(transaction);

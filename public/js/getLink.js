@@ -24,17 +24,20 @@ $( document ).ready(function () {
             alert("Need 56 character public key")
             return
         }
-        if (document.getElementById("name").value != '') request['name'] = document.getElementById("name").value
+        if (document.getElementById("name").value != '' && document.getElementById("name").value.length <= 128) request['name'] = document.getElementById("name").value
         else {
-            alert("Need a name (can't be blank)")
+            alert("Need a name (can't be blank) that is 128 chars or less")
             return
         }
-        if (document.getElementById("description").value != '') request['description'] = document.getElementById("description").value
+        if (document.getElementById("description").value != '' && document.getElementById("description").value.length <= 512) request['description'] = document.getElementById("description").value
         else {
-            alert("Need a description(can't be blank)")
+            alert("Need a description(can't be blank) that is 512 chars or less")
             return
         }
-        if (document.getElementById("memo").value != '') request['memo'] = document.getElementById("memo").value
+        if (document.getElementById("memo").value != '') {
+            if (document.getElementById('memo').value.length <= 19 && !document.getElementById('memo').value.match(/[a-z]/i)) request['memo'] = document.getElementById("memo").value
+            else alert("XLM Memo Id is all numbers (64 bit integer, the largest of which is 19 digits long)")
+        }
         if (document.getElementById("emailInput").value != '') request['email'] = document.getElementById("emailInput").value
         $.post({url:`${host}api/get-my-link`,
             data:request,
