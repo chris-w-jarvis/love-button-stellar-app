@@ -6,7 +6,15 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
             integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
             crossorigin="anonymous"></script>
-    <script src="../js/fundAccount.js"></script>
+    <script>
+        $(document).ready(function() {
+            // configure env
+let env = document.getElementById('env').innerHTML
+if (env != "DEV" && location.protocol !== "https:") {
+    location.protocol = "https:";
+}
+    })
+    </script>
     <style>
         .bg-love {
             background-color: #d21717;
@@ -25,7 +33,7 @@
     <header class="row bg-love mb-3">
         <div class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6 text-white">
             <div class="row">
-                <h1 class="col-12">fund your tipping account</h1>
+                <h1 class="col-12">Contact</h1>
             </div>
             <section class="row">
                 <h5 class="col-12">
@@ -40,44 +48,20 @@
     </header>
 <div class="row">
     <section class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">
-        <div class="row">
-            <h4 class="col">Send Stellar Lumens (XLM) to your love-button tipping account</h4>
-        </div>
 
-        <!--TODO: update the link to the proper page-->
-        <div class="row">
-            <p class="col">Use this information to send money from your wallet to your love-button tipping account. <br/><a href="/getStellarLumens">Click here for more information.</a></p>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="email-label">My Email:</span>
+            </div>
+            <p type="text" class="form-control" id="email">chris@love-button.org</p>
         </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" id="loveButtonPubAddr-label">Address to send to:</span>
+                <span class="input-group-text" id="memo-label">My twitter:</span>
             </div>
-            <input type="text" class="form-control" id="loveButtonPubAddr" value="loading...">
+            <p type="text" class="form-control" id="memo">@christo83574192</p>
         </div>
-
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="memo-label">Memo (Required)</span>
-            </div>
-            <input type="text" class="form-control" id="memo" value="loading...">
-        </div>
-
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text" id="balance-label">Current Balance:</span>
-            </div>
-            <input type="text" class="form-control" id="balance" value="loading...">
-        </div>
-
-        <div class="row">
-            <div id="paymentStatusDiv"></div>
-        </div>
-        <p><strong>BE WARNED, love-button is in active development! Do not transfer more money into your tipping account than 
-                you are willing to LOSE!</strong>
-        </p>
-        <div class="row">
-            <div id="accountInfoDiv" class="col">Logged in as: loading...</div>
         </div>
     </section>
 </div>

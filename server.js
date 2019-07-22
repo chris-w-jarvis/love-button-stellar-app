@@ -85,6 +85,10 @@ app.get('/get-my-link/premium', function(req, res) {
   'In the email put all the information required in the "Get my link" page and I\'ll probably just make you one for free ;)')
 })
 
+app.get('/contact', function(req, res) {
+  res.render('contact', {env:env})
+})
+
 app.get('/fundMyAccount', function(req, res) {
   res.render('fundAccount', {env:env})
 })
