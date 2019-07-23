@@ -3,7 +3,7 @@ const logger = require('../services/winston-logger')
 const fs = require('fs')
 require('dotenv').config()
 const path = require('path')   
-const filePath = path.join(__dirname, 'lastPagingToken.txt');
+//const filePath = path.join(__dirname, 'lastPagingToken.txt');
 // configure stellar network connection
 var server
 if (process.env.LOVE_BUTTON_RUNTIME_ENV === 'PROD') {
@@ -78,15 +78,14 @@ payments.stream({
   }
 });
   })
-  
 
-function savePagingToken(token) {
-  // In most cases, you should save this to a local database or file so that
-  // you can load it next time you stream new payments.
-  fs.writeFileSync(filePath,`${token}`)
-}
+// function savePagingToken(token) {
+//   // In most cases, you should save this to a local database or file so that
+//   // you can load it next time you stream new payments.
+//   fs.writeFileSync(filePath,`${token}`)
+// }
 
-function loadLastPagingToken() {
-  // Get the last paging token from a local database or file
-  return fs.readFileSync(filePath,{ encoding: 'utf8' });
-}
+// function loadLastPagingToken() {
+//   // Get the last paging token from a local database or file
+//   return fs.readFileSync(filePath,{ encoding: 'utf8' });
+// }

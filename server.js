@@ -126,6 +126,11 @@ app.post('/auth/signup', validationService.preSignup, validationService.signUp, 
 // send all other requests to api router
 Api(app)
 
+// 404 page
+app.use(function(req, res, next){
+  res.status(404).render('404_page');
+});
+
 // turn on transaction listener
 require('./listeners/fund-account-listener')
 
