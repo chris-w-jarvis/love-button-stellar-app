@@ -58,7 +58,7 @@ const requireAdmin = function(req, res, next) {
   if (req.header('Admin') === process.env.ADMIN_PW) {
     next()
   } else {
-    return res.sendStatus(200)
+    return res.sendStatus(403)
   }
 }
 
@@ -140,14 +140,14 @@ module.exports = function router(app) {
   })
 
   // ADMIN UTILITIES
-  app.post('/api/admin', requireAdmin, function(req, res) {
-    // db
-    Pages.create({name:req.body.name, publicKey:req.body.key, pageId:req.body.path, memo:req.body.memo}).then(
-      (page) => {
-        logger.log('info',`Created premium link /${page.pageId}`)
-        res.sendStatus(200)
-      })
-  })
+  // app.post('/api/admin', requireAdmin, function(req, res) {
+  //   // db
+  //   Pages.create({name:req.body.name, publicKey:req.body.key, pageId:req.body.path, memo:req.body.memo}).then(
+  //     (page) => {
+  //       logger.log('info',`Created premium link /${page.pageId}`)
+  //       res.sendStatus(200)
+  //     })
+  // })
   app.post('/api/test/transToLBPub', requireAdmin, function(req, res) {
     stellarController.testPayer(req.body.src, req.body.memo, req.body.amount)
     .then(result => res.send(result))

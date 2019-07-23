@@ -19,6 +19,7 @@ let memo = document.getElementById('memo')
 
 let stellarPrice
 let token
+let userBal
 
 // configure env
 let env = document.getElementById('env').innerHTML
@@ -54,7 +55,8 @@ function loadUser() {
                 console.log(res)
                 xlmPrice.innerText = `1 Stellar(XLM) is worth ${res.price} USD`
                 stellarPrice = res.price
-                accountBalance.innerHTML = res.balance
+                accountBalance.innerHTML = `${res.balance} xlm`
+                userBal = res.balance
                 document.getElementById('accountInfoDiv').innerHTML = `<p class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">Logged in as: ${res.username}`
             },
             error: function() {
@@ -101,6 +103,10 @@ function validateAmount(amount) {
     if ((parseFloat(stellarPrice) * amount) <= 10.0) return true
     return false
 }
+function hasEnoughMoney(amount) {
+    if (parseFloat(amount) > (parseFloat(userBal)+.00001)) return false;
+    return true;
+}
 
 showOptionsDivBtn.onclick = function(e) {
     document.getElementById("optionsDiv").style.display = "block"
@@ -133,6 +139,10 @@ function sendPayment(amount) {
         alert("Can't send 0 or negative")
         return
     }
+    if (!hasEnoughMoney(amount)) {
+        alert("Not enough money in account for that!")
+        return
+    }
     if (!validateAmount(amount)) {
         alert("Max transaction size is 10$, if you want to send more, use the Stellar account viewer")
         return
@@ -145,7 +155,7 @@ function sendPayment(amount) {
         })
         .catch(msg => {
             paymentStatusDiv.innerHTML = `<div class="alert alert-danger" role="alert">
-                                            Failed, to send: ${msg}
+                                            Transaction failed, error message: ${msg}
                                           </div>`
 
         })

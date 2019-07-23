@@ -28,7 +28,6 @@ const sendPayment = function(req, res) {
     // check account balance
     const bal = parseFloat(req.user.balance)
     const pmt = parseFloat(req.body.amount)
-    logger.log('info','BALANCE BEFORE TRANS:'+bal)
     if (bal <= (pmt + STELLAR_TRANSACTION_FEE)) {
       return res.status(400).send({msg: "Not enough money in account"})
     }
@@ -69,7 +68,7 @@ const sendPayment = function(req, res) {
             // }
           })
           .catch(err => {
-            res.status(500).send({msg: `Payment failed in Stellar network, does the address exist?`})
+            res.status(500).send({msg: `Payment failed in Stellar network, does the address exist and is that account funded?`})
             // transaction fee
             // if (fee != 0) {
             //   stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee+"0", LB_TRANSACTION_FEE_MEMO)
