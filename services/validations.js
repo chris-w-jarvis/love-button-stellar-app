@@ -89,7 +89,7 @@ module.exports = {
         next()
     },
     sendPayment: function(req, res, next) {
-        const maxPaymentAmtUSD = 5.0
+        const maxPaymentAmtUSD = 10.0
         const key = validator.trim(req.body.destination)
         const amt = validator.trim(req.body.amount)
         const memo = req.body.memo ? validator.trim(req.body.memo) : null
@@ -98,7 +98,7 @@ module.exports = {
             return res.status(400).send({msg:'Key is 56 alphanumeric chars'})
         }
         if ((!validator.isInt(amt) && !validator.isFloat(amt)) || parseFloat(amt) > maxPaymentAmtXLM) {
-            return res.status(400).send({msg:'Amount must be a number and max payment size is 5 USD'})
+            return res.status(400).send({msg:'Amount must be a number and max payment size is 10 USD'})
         }
         if (memo != null && memo != 'no_memo') {
             if (!validator.isNumeric(memo) || memo.length > 28) {

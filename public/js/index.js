@@ -98,7 +98,7 @@ saveDefaultPaymentBtn.onclick = function(e) {
 }
 
 function validateAmount(amount) {
-    if ((parseFloat(stellarPrice) * amount) <= 5.0) return true
+    if ((parseFloat(stellarPrice) * amount) <= 10.0) return true
     return false
 }
 
@@ -134,7 +134,7 @@ function sendPayment(amount) {
         return
     }
     if (!validateAmount(amount)) {
-        alert("Max transaction size is 5$, if you want to send more, use the Stellar account viewer")
+        alert("Max transaction size is 10$, if you want to send more, use the Stellar account viewer")
         return
     }
     paymentStatusDiv.innerHTML = '<p>Waiting...</p>'
