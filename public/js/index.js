@@ -73,7 +73,10 @@ function loadDefaultBtn() {
     if (defCur && defAmt) {
         defaultPaymentBtn.innerHTML = `Default Amount (${defAmt+defCur})`
     } else {
-        defaultPaymentBtn.innerHTML = "Default Amount (not set)"
+        // default "default" value
+        defaultPaymentBtn.innerHTML = `Default Amount (1xlm)`
+        localStorage.setItem("defaultCurrency", 'xlm')
+        localStorage.setItem("defaultAmt", '1')
     }
 }
 
