@@ -26,6 +26,16 @@ Bios
 "I am a Software Developer at USAA in Phoenix, AZ. I graduated from BYU-Idaho in Rexburg, Idaho. I'm a big fan of many online creators and hope to help them with this project. Here is my LinkedIn: https://www.linkedin.com/in/arturoaguila/ "
 
 
+Get My Link Page
+- "Paste your Stellar public address (public key) here. If you're using Coinbase you can find this under Accounts > XLM Wallet > Recieve. More instructions here. "
+- "Name for link: max 128 characters"
+- "Description to display with your key: max 528 characters"
+- "Email: Optional"
+
+Fund Your Tipping Account Page
+- "Send Stellar Lumens (XLM) to your love-button account"
+- The title of the page and the description underneath it seem redundent. Maybe get rid of the description? idk.
+
 
 
 
