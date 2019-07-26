@@ -28,7 +28,7 @@ Pages.init({
 ], sequelize, modelName: 'Page' })
 
 // to delete db add as argument {force:true}
-Pages.sync({force:true})
+Pages.sync()
 
 module.exports = {
   Pages: Pages
