@@ -27,9 +27,14 @@ if (process.env.LOVE_BUTTON_RUNTIME_ENV === 'PROD') {
 const sendPayment = function(req, res) {
     // check account balance
     const bal = parseFloat(req.user.balance)
-    const pmt = parseFloat(req.body.amount)
-    if (bal <= (pmt + STELLAR_TRANSACTION_FEE)) {
+    const pmt = parseFloat(req.body.amount)-STELLAR_TRANSACTION_FEE
+    logger.info("pmt amt:"+pmt+" transaction fee: "+STELLAR_TRANSACTION_FEE+" balance: "+bal)
+    if (bal <= (pmt)) {
       return res.status(400).send({msg: "Not enough money in account"})
+    }
+    if (pmt.toFixed(7) <= 0) {
+      return res.status(400).send({msg: "This payment is too small to send, including the Stellar network's .00001 "+
+    "xlm transaction fee, the transaction amount becomes <= 0"})
     }
     // if (bal <= (pmt + LB_TRANSACTION_FEE + STELLAR_TRANSACTION_FEE)) {
     //     return res.status(400).send({msg: "Not enough money in account"})
@@ -55,7 +60,8 @@ const sendPayment = function(req, res) {
             throw new Error()
           }
           // send payment
-          return stellarController.sendPayment(req.body.destination, req.body.amount, req.body.memo)
+          logger.info("before payment:"+pmt.toFixed(7).toString())
+          return stellarController.sendPayment(req.body.destination, pmt.toFixed(7).toString(), req.body.memo)
           .then(pmtRes => {
             // successful transaction
             res.status(201).send({url: `${stellarLedgerUrl}${pmtRes.hash}`})

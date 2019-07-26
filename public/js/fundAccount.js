@@ -31,8 +31,8 @@ $( document ).ready(function () {
             success: function(res) {
                 lBPublicAddr.value = res.loveButtonPublicAddress
                 memo.value = res.memo
-                balance.value = res.balance
-                var oldBal = parseInt(balance.innerHTML)
+                balance.value = parseFloat(res.balance).toFixed(4)
+                var oldBal = parseFloat(balance.value)
                 document.getElementById('accountInfoDiv').innerHTML = `<p>Logged in as: ${res.username}`
                 const stopTrigger = setInterval(() => {
                     // check balance after 5 seconds
@@ -42,9 +42,10 @@ $( document ).ready(function () {
                             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token);},
                             success: function(res) {
                                 console.log(res)
-                                if (parseInt(res.balance) > oldBal) {
-                                    balance.value = res.balance
-                                    paymentStatusDiv.innerHTML = `<p>Success, received ${parseInt(res.balance) - oldBal} XLM</p>`
+                                console.log(parseFloat(res.balance), oldBal)
+                                if (parseFloat(res.balance).toFixed(4) > oldBal) {
+                                    balance.value = parseFloat(res.balance).toFixed(4)
+                                    paymentStatusDiv.innerHTML = `<p>Success, received ${(parseFloat(res.balance) - oldBal).toFixed(4)} XLM</p>`
                                     paymentStatusDiv.style.backgroundColor = "#28a745";
                                     clearInterval(stopTrigger)
                                 }

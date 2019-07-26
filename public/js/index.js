@@ -53,10 +53,10 @@ function loadUser() {
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token)},
             success: function(res) {
                 console.log(res)
-                xlmPrice.innerText = `1 Stellar(XLM) is worth ${res.price} USD`
+                xlmPrice.innerText = `1 Stellar(XLM) is worth ${parseFloat(res.price).toFixed(4)} USD`
                 stellarPrice = res.price
-                accountBalance.innerHTML = `${res.balance} xlm`
-                userBal = res.balance
+                accountBalance.innerHTML = `${parseFloat(res.balance).toFixed(4)} xlm`
+                userBal = parseFloat(res.balance).toFixed(4)
                 document.getElementById('accountInfoDiv').innerHTML = `<p class="col-xs-12 offset-sm-1 col-sm-10 offset-md-2 col-md-8 offset-lg-3 col-lg-6">Logged in as: ${res.username}`
             },
             error: function() {
@@ -172,9 +172,9 @@ sendPaymentBtn.onclick = function (e) {
         // determine amount
         if (selectedCurrency.value === 'usd') {
             var amount = parseFloat(paymentAmount.value) / parseFloat(stellarPrice)
-            sendPayment(amount.toFixed(6).toString())
+            sendPayment(amount.toFixed(4).toString())
         } else {
-            sendPayment(parseFloat(paymentAmount.value).toFixed(6).toString())
+            sendPayment(parseFloat(paymentAmount.value).toFixed(4).toString())
         }
     } else alert('Destination key or source key not loaded, bad give page? Sorry')
 }
