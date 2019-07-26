@@ -10,9 +10,7 @@ Pages.init({
   publicKey: {type: Sequelize.STRING, allowNull: false, validate: {
     len: [56]
   }},
-  memo: {type: Sequelize.STRING, defaultValue: "no_memo", validate: {
-    len: [1,28]
-  }},
+  memo: {type: Sequelize.BIGINT, defaultValue: 0},
   description: {type: Sequelize.STRING, allowNull: false, validate: {
     len: [1, 512]
   }},
@@ -30,7 +28,7 @@ Pages.init({
 ], sequelize, modelName: 'Page' })
 
 // to delete db add as argument {force:true}
-Pages.sync()
+Pages.sync({force:true})
 
 module.exports = {
   Pages: Pages

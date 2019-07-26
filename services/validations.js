@@ -100,9 +100,9 @@ module.exports = {
         if ((!validator.isInt(amt) && !validator.isFloat(amt)) || parseFloat(amt) > maxPaymentAmtXLM) {
             return res.status(400).send({msg:'Amount must be a number and max payment size is 10 USD'})
         }
-        if (memo != null && memo != 'no_memo') {
-            if (!validator.isNumeric(memo) || memo.length > 28) {
-                return res.status(400).send({msg:'Memo is numeric and up to 28 chars in length'})
+        if (memo != null) {
+            if (!validator.isNumeric(memo) || memo.length >= 19) {
+                return res.status(400).send({msg:'Memo is numeric and up to 19 chars in length'})
             }
         }
         next()
