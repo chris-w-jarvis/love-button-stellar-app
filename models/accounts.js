@@ -5,7 +5,7 @@ const Model = Sequelize.Model
 
 class Account extends Model {}
 Account.init({
-  username: {type: Sequelize.STRING, validate: {
+  username: {type: Sequelize.STRING, unique: true, validate: {
     len: [4, 64]
   }},
   password: Sequelize.STRING,
