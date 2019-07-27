@@ -1,1 +1,1 @@
-love-button-stellar-app.herokuapp.com
+https://love-button.org
