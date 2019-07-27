@@ -96,6 +96,10 @@ module.exports = {
         const maxPaymentAmtXLM = (maxPaymentAmtUSD / parseFloat(req.stellarPriceCurrent)) + TRANSACTION_FEE
         if (!validator.isAlphanumeric(key) || key.length != 56) {
             return res.status(400).send({msg:'Key is 56 alphanumeric chars'})
+        } else {
+            if (!StrKey.isValidEd25519PublicKey(key)) {
+                return res.status(400).send({msg:'Stellar says this public key is invalid, double check your wallet?'})
+            }
         }
         if ((!validator.isInt(amt) && !validator.isFloat(amt)) || parseFloat(amt) > maxPaymentAmtXLM) {
             return res.status(400).send({msg:'Amount must be a number and max payment size is 10 USD'})

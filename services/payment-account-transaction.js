@@ -72,7 +72,7 @@ const sendPayment = function(req, res) {
             // }
           })
           .catch(err => {
-            res.status(500).send({msg: `Payment failed in Stellar network, does the address exist and is that account funded?`})
+            res.status(400).send({msg: `Payment failed in Stellar network, does the address exist and is that account funded?`})
             // transaction fee
             // if (fee != 0) {
             //   stellarController.sendPayment(LB_TRANSACTION_FEE_ADDR, fee+"0", LB_TRANSACTION_FEE_MEMO)
