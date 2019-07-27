@@ -36,6 +36,8 @@ const sendPayment = function(destinationId, lumensAmount, memo) {
   return new Promise((resolve, reject) => {
       var sourceKeys = StellarSdk.Keypair.fromSecret(privateSourceKey);
       var transaction;
+
+      console.log("memo:",memo)
   
       server.loadAccount(destinationId)
       .catch(err => {
