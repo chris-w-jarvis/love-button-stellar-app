@@ -1,8 +1,6 @@
 var StellarSdk = require('stellar-sdk');
-const logger = require('../services/winston-logger')
-const fs = require('fs')
-require('dotenv').config()
-const path = require('path')   
+const logger = require('./winston-logger')
+require('dotenv').config() 
 //const filePath = path.join(__dirname, 'lastPagingToken.txt');
 // configure stellar network connection
 var server

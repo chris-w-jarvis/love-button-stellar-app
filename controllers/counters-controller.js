@@ -20,10 +20,13 @@ module.exports = {
             })
         })
     },
-    incrLastPageId : function(cb) {
+    incrLastPageId: function(cb) {
         return client.incr("lastPageId", cb)
     },
-    readPagingToken : function() {
+    readLastPageId: function(cb) {
+        return client.get("lastPageId", cb)
+    },
+    readPagingToken: function() {
         return new Promise((resolve, reject) => {
             client.get('pagingToken', (err, res) => {
                 if (err) reject(err)
@@ -31,9 +34,20 @@ module.exports = {
             })
         })
     },
-    writePagingToken : function(newVal) {
+    writePagingToken: function(newVal) {
         return new Promise((resolve, reject) => {
             client.set('pagingToken', newVal, (err, res) => {
+                if (err) reject(err)
+                resolve(res)
+            })
+        })
+    },
+    saveStellarPrice: function(price, cb) {
+        return client.set('stellarPrice', price, cb)
+    },
+    readStellarPrice: function() {
+        return new Promise((resolve, reject) => {
+            client.get('stellarPrice', (err, res) => {
                 if (err) reject(err)
                 resolve(res)
             })

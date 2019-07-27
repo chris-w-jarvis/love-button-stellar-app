@@ -6,7 +6,6 @@ const Pages = require('./models/pages').Pages
 const sendPaymentService = require('./services/payment-account-transaction').sendPaymentService
 const validationService = require('./services/validations')
 require('dotenv').config()
-const env = process.env.LOVE_BUTTON_RUNTIME_ENV
 const passport = require('passport');
 
 const logger = require('./services/winston-logger')
@@ -41,17 +40,15 @@ const paymentLimiter = rateLimit({
 // value returned by /api/priceCheck
 var stellarPrice = "";
 const stellarPriceCheck = function() {
-  if (env === "PROD") {
-    stellarController.priceCheck().then((price) => {
-      stellarPrice = price
-    })
-    .catch((err)  => {
-      stellarPrice = .12
-      logger.log('info',err)
-    })
-  } else {
+  countersController.readStellarPrice()
+  .then((price) => {
+    if (price) stellarPrice =  price
+    else stellarPrice = "0.10"
+  })
+  .catch((err)  => {
     stellarPrice = "0.10"
-  }
+    logger.log('info',err)
+  })
 }
 
 const requireAdmin = function(req, res, next) {
@@ -61,60 +58,52 @@ const requireAdmin = function(req, res, next) {
     return res.sendStatus(403)
   }
 }
-
-stellarPriceCheck()
+setTimeout(stellarPriceCheck, 2000)
 
 // QUERY STELLAR PRICE, run this every 4.9 minutes * number of processes
-setInterval(stellarPriceCheck, 294000 * parseInt(process.env.WEB_CONCURRENCY))
-
-// on startup get last page id
-var latestPageId
-try {
-  countersController.incrLastPageId((err, lpi) => {
-    if (err) {
-      logger.log('info','Error loading last page id: '+ err)
-    } else {
-      latestPageId = lpi
-    }
-  })
-} catch(err) {
-  logger.log('info','Error reading last page id: '+ err)
-}
+setInterval(stellarPriceCheck, 294000)
 
 module.exports = function router(app) {
 
   app.post('/api/get-my-link', validationService.getMyLink, function(req, res) {
     // zerofill latestPageId
-    if (!latestPageId) {
-      // if this isn't loaded we can't create new links
-      logger.log("PROBLEMS LOADING latestPageId")
-      res.status(404).send({msg:'Can\'t make new link right now! We\'re working on it, sorry!'})
-    }
-    var idString = `${latestPageId++}`
-    if (idString.length < 6) {
-      var idLen = idString.length
-      for (i = 0; i < 6-idLen; i++) {
-        idString = `0${idString}`
-      }
-    }
+    var latestPageId
+    countersController.readLastPageId((err, lpi) => {
+      if (err) {
+        logger.log('info','Error loading last page id: '+ err)
+        return res.status(500).send({msg:'Can\'t make new link right now, sorry!'})
+      } else {
+        countersController.incrLastPageId((err) => {if (err) logger.log('info','Error incrementing last page id: '+err)})
+        latestPageId = lpi
+        if (!latestPageId) {
+          logger.log('error', 'Latestpageid came back null')
+          return res.status(500).send({msg:'Can\'t make new link right now, sorry!'})
+        }
+        var idString = `${latestPageId}`
+        if (idString.length < 6) {
+          var idLen = idString.length
+          for (i = 0; i < 6-idLen; i++) {
+            idString = `0${idString}`
+          }
+        }
 
-    // db
-    Pages.create({
-      name:req.body.name, 
-      publicKey:req.body.key, 
-      pageId:idString, 
-      memo:req.body.memo,
-      description: req.body.description,
-      email: req.body.emailInput
-    }).then(
-      (page) => {
-        res.send({id:page.pageId})
-        countersController.incrLastPageId((err) => {if (err) logger.log('info','Error writing last page id: '+err)})
+        Pages.create({
+          name:req.body.name, 
+          publicKey:req.body.key, 
+          pageId:idString, 
+          memo:req.body.memo,
+          description: req.body.description,
+          email: req.body.emailInput
+        }).then(
+          (page) => {
+            res.send({id:page.pageId})
+          }
+        )
+        .catch(err => {
+          logger.log('info',err)
+          res.sendStatus(400)
+        })
       }
-    )
-    .catch(err => {
-      logger.log('info',err)
-      res.sendStatus(400)
     })
   })
 
