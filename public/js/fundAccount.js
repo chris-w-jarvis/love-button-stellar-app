@@ -31,7 +31,7 @@ $( document ).ready(function () {
             success: function(res) {
                 lBPublicAddr.value = res.loveButtonPublicAddress
                 memo.value = res.memo
-                balance.value = res.balance
+                balance.value = parseFloat(res.balance).toFixed(4)
                 var oldBal = parseFloat(balance.value)
                 document.getElementById('accountInfoDiv').innerHTML = `<p>Logged in as: ${res.username}`
                 const stopTrigger = setInterval(() => {

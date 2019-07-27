@@ -45,7 +45,7 @@ const sendPayment = function(req, res) {
 
     return sequelize.transaction(t => {
 
-      logger.log('info', `Investigation: ${bal} - (${pmt} + ${STELLAR_TRANSACTION_FEE}) = ${bal-(pmt+STELLAR_TRANSACTION_FEE)}`)
+      //logger.log('info', `Investigation: ${bal} - (${pmt} + ${STELLAR_TRANSACTION_FEE}) = ${bal-(pmt+STELLAR_TRANSACTION_FEE)}`)
       // chain all your queries here. make sure you return them.
       return Account.update({
         balance: bal-(pmt+STELLAR_TRANSACTION_FEE)
