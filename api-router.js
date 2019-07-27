@@ -68,42 +68,42 @@ module.exports = function router(app) {
   app.post('/api/get-my-link', validationService.getMyLink, function(req, res) {
     // zerofill latestPageId
     var latestPageId
-    try {
-      countersController.readLastPageId((err, lpi) => {
-        if (err) {
-          logger.log('info','Error loading last page id: '+ err)
+    countersController.readLastPageId((err, lpi) => {
+      if (err) {
+        logger.log('info','Error loading last page id: '+ err)
+        return res.status(500).send({msg:'Can\'t make new link right now, sorry!'})
+      } else {
+        countersController.incrLastPageId((err) => {if (err) logger.log('info','Error incrementing last page id: '+err)})
+        latestPageId = lpi
+        if (!latestPageId) {
+          logger.log('error', 'Latestpageid came back null')
           return res.status(500).send({msg:'Can\'t make new link right now, sorry!'})
-        } else {
-          countersController.incrLastPageId((err) => {if (err) logger.log('info','Error incrementing last page id: '+err)})
-          latestPageId = lpi
         }
-      })
-    } catch(err) {
-      logger.log('info','Error reading last page id: '+ err)
-    }
-    var idString = `${latestPageId}`
-    if (idString.length < 6) {
-      var idLen = idString.length
-      for (i = 0; i < 6-idLen; i++) {
-        idString = `0${idString}`
-      }
-    }
+        var idString = `${latestPageId}`
+        if (idString.length < 6) {
+          var idLen = idString.length
+          for (i = 0; i < 6-idLen; i++) {
+            idString = `0${idString}`
+          }
+        }
 
-    Pages.create({
-      name:req.body.name, 
-      publicKey:req.body.key, 
-      pageId:idString, 
-      memo:req.body.memo,
-      description: req.body.description,
-      email: req.body.emailInput
-    }).then(
-      (page) => {
-        res.send({id:page.pageId})
+        Pages.create({
+          name:req.body.name, 
+          publicKey:req.body.key, 
+          pageId:idString, 
+          memo:req.body.memo,
+          description: req.body.description,
+          email: req.body.emailInput
+        }).then(
+          (page) => {
+            res.send({id:page.pageId})
+          }
+        )
+        .catch(err => {
+          logger.log('info',err)
+          res.sendStatus(400)
+        })
       }
-    )
-    .catch(err => {
-      logger.log('info',err)
-      res.sendStatus(400)
     })
   })
 

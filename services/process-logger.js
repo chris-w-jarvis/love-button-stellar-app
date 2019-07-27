@@ -9,7 +9,7 @@ module.exports = function(procId) {
 
 const factory = function(procId) {
     return function(req, res, next) {
-        logger.log('info', `Process ${procId} handling [${req.baseUrl}]`)
+        logger.log('info', `Worker ${procId} handling [${req.originalUrl}]`)
         next()
     }
 }
