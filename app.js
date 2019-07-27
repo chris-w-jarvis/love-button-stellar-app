@@ -19,7 +19,14 @@ function startMaster() {
 
     logger.log('info', `Master starting ${WORKERS} slaves.`)
 
-    // value returned by /api/priceCheck
+    // quit startup if this doesn't work
+    countersController.incrLastPageId((err, lpi) => {
+        if (err) {
+            logger.log('info','Error setting last page id in master: '+ err)
+            throw err
+        }
+    })
+
     const stellarPriceCheck = function() {
         if (env === "PROD") {
             stellarController.priceCheck()
@@ -43,8 +50,8 @@ function startMaster() {
 
     stellarPriceCheck()
 
-    // QUERY STELLAR PRICE, run this every 4.9 minutes * number of processes
-    setInterval(stellarPriceCheck, 294000)
+    // QUERY STELLAR PRICE, run this every 4.9 minutes
+    if (env === "PROD") setInterval(stellarPriceCheck, 294000)
 
     // turn on transaction listener
     require('./services/fund-account-listener')

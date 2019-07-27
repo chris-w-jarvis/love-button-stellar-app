@@ -66,7 +66,7 @@ setInterval(stellarPriceCheck, 294000)
 // on startup get last page id
 var latestPageId
 try {
-  countersController.incrLastPageId((err, lpi) => {
+  countersController.readLastPageId((err, lpi) => {
     if (err) {
       logger.log('info','Error loading last page id: '+ err)
     } else {
