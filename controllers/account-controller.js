@@ -21,7 +21,7 @@ const checkBalance = function(balanceId) {
         where: {
           id: userId
         }
-      }).then(res => {console.log("db:",res);resolve(res.balance)})
+      }).then(res => resolve(res.balance))
       .catch(err => reject(err))
     })
   }

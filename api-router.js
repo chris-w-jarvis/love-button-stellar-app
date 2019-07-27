@@ -120,7 +120,7 @@ module.exports = function router(app) {
 
   app.get('/api/checkBalance', requireAuth, function(req, res) {
     accountController.checkBalanceUserId(req.user.id)
-    .then(balance => {console.log(balance);res.send({'balance':balance})})
+    .then(balance => res.send({'balance':balance}))
     .catch(err => {
       logger.log('info',err)
       res.sendStatus(404)
