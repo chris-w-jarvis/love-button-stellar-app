@@ -1,0 +1,43 @@
+Home page
+Top section
+- Opening sentence would read better as "Hate watching ads, but still want to support your favorite content creators?"
+- Opening paragraph fix. "Love *a* blog or a video you just saw?"
+- "Because of transaction fees, it would be unfeasible to do this with a credit card, but with love button it easy!"
+
+Section above video
+- "Don't feel bad about not watching ads. Send the creator a small token of gratitude with love-button and everyone's happy!"
+
+FAQ Section
+- "No, love-button never interacts with your private key. You will setup a crypto wallet (if you don't already have one) of your choice and buy Stellar Lumens (XLM), then you will send XLM from your wallet to your tipping account in love-button. Instructions here: https//:love-button.org/getStellarLumens"
+- "Yeah, pretty much! Brave is a great project and I recommend you check it out. I still wanted to make this since their user base is still very small compared to Chrome and other browsers. Another cool app with a similar focus is SatoshiPay."
+- "When you make a love-button link it is directly pointing to the public address of your cryptocurrency wallet. The wallet I recommend using is Coinbase because you can sell your Stellar Lumens (XLM) back into your desired currency in just a few clicks."
+- "1. You can process hundreds of thousands of transactions for less than a dollar on the Stellar network, making micropayments possible. To send 1 cent with a credit card would cost 30 to 50 cents per transaction entirely defeating the purpose. Many popular cryptocurrencies have transaction fees that make sending someone 1 cent unfeasible as well. 
+  2. Stellar network processes transactions in seconds 
+  3. The APIs to interact with the Stellar network are extremely easy to use, this platform is basically just running one of their code examples every time you send money. 
+  4. Stellar uses a different algorithm to verify transactions, one that doesn't require mining like Bitcoin or Ethereum. The computational resources used to maintain these blockchains are, in my opinion, wasteful and contribute to global warming."
+    - these should be spaced by the numbers
+- "My monetization plan is as follows: 
+  1. In the instructions I have a Coinbase affiliate link. I would have recommended Coinbase anyway though because the exchange is built into their wallet. 
+   2. I plan to sell "premium links". The free love-button link will look like: love-button.org/give/12345678. For a premium link, instead of a numeric id it will be your name or text you choose, e.g. love-button.org/give/YOUR_NAME_HERE"
+   
+Bios
+- "I am a Software Developer at USAA in Phoenix, AZ. I went to the University of Arizona in Tucson, AZ. I have been really interested in how to monetize content online for a few years (even though I never made just consumed) and I really don't like how the online advertising industry operates so this project is my first crack at that problem. Here is my LinkedIn: https://www.linkedin.com/in/christopherjarvis1/. Here is my Keybase: https://keybase.io/chrisjarv . My personal website (not very complete tho): https://chrisjarvis.neocities.org/"
+- "Arturo Aguila
+"I am a Software Developer at USAA in Phoenix, AZ. I graduated from BYU-Idaho in Rexburg, Idaho. I'm a big fan of many online creators and hope to help them with this project. Here is my LinkedIn: https://www.linkedin.com/in/arturoaguila/ "
+
+
+Get My Link Page
+- "Paste your Stellar public address (public key) here. If you're using Coinbase you can find this under Accounts > XLM Wallet > Recieve. More instructions here. "
+- "Name for link: max 128 characters"
+- "Description to display with your key: max 528 characters"
+- "Email: Optional"
+
+Fund Your Tipping Account Page
+- "Send Stellar Lumens (XLM) to your love-button account"
+- The title of the page and the description underneath it seem redundent. Maybe get rid of the description? idk.
+
+
+
+
+   
+   
