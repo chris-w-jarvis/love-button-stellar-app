@@ -12,14 +12,18 @@ module.exports = function(req, res, next) {
     }
   }).then(
     (page) => {
-      res.render('sendPayment', {key:page.publicKey, name:page.name, memo:page.memo, 
-        description:page.description, env:env})
+      if (page) {
+        res.render('sendPayment', {key:page.publicKey, name:page.name, memo:page.memo, 
+          description:page.description, env:env})
+      } else {
+        res.status(404).render('404_page');
+      }
     }
   )
   .catch(
     (err) => {
-      res.sendStatus(404)
-      logger.log('info',`page ${req.params.pageId} not found`)
+      res.status(404).render('404_page');
+      logger.log('error',err)
     }
   )
 }
