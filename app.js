@@ -6,6 +6,7 @@ const WORKERS = process.env.WEB_CONCURRENCY || 1
 const env = process.env.LOVE_BUTTON_RUNTIME_ENV
 const logger = require('./services/winston-logger')
 const countersController = require('./controllers/counters-controller')
+const stellarController = require('./controllers/stellar-controller')
 
 throng({
     workers: WORKERS,
