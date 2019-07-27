@@ -6,7 +6,6 @@ const Pages = require('./models/pages').Pages
 const sendPaymentService = require('./services/payment-account-transaction').sendPaymentService
 const validationService = require('./services/validations')
 require('dotenv').config()
-const env = process.env.LOVE_BUTTON_RUNTIME_ENV
 const passport = require('passport');
 
 const logger = require('./services/winston-logger')
@@ -41,17 +40,15 @@ const paymentLimiter = rateLimit({
 // value returned by /api/priceCheck
 var stellarPrice = "";
 const stellarPriceCheck = function() {
-  if (env === "PROD") {
-    stellarController.priceCheck().then((price) => {
-      stellarPrice = price
-    })
-    .catch((err)  => {
-      stellarPrice = .12
-      logger.log('info',err)
-    })
-  } else {
+  countersController.readStellarPrice()
+  .then((price) => {
+    if (price) stellarPrice =  price
+    else stellarPrice = "0.10"
+  })
+  .catch((err)  => {
     stellarPrice = "0.10"
-  }
+    logger.log('info',err)
+  })
 }
 
 const requireAdmin = function(req, res, next) {
@@ -61,11 +58,10 @@ const requireAdmin = function(req, res, next) {
     return res.sendStatus(403)
   }
 }
-
-stellarPriceCheck()
+setTimeout(stellarPriceCheck, 2000)
 
 // QUERY STELLAR PRICE, run this every 4.9 minutes * number of processes
-setInterval(stellarPriceCheck, 294000 * parseInt(process.env.WEB_CONCURRENCY))
+setInterval(stellarPriceCheck, 294000)
 
 // on startup get last page id
 var latestPageId

@@ -38,5 +38,16 @@ module.exports = {
                 resolve(res)
             })
         })
+    },
+    saveStellarPrice: function(price, cb) {
+        return client.set('stellarPrice', price, cb)
+    },
+    readStellarPrice: function() {
+        return new Promise((resolve, reject) => {
+            client.get('stellarPrice', (err, res) => {
+                if (err) reject(err)
+                resolve(res)
+            })
+        })
     }
 }

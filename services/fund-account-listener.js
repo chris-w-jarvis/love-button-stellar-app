@@ -1,5 +1,5 @@
 var StellarSdk = require('stellar-sdk');
-const logger = require('../services/winston-logger')
+const logger = require('./winston-logger')
 const fs = require('fs')
 require('dotenv').config()
 const path = require('path')   
