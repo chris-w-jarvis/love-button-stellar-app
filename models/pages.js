@@ -10,7 +10,7 @@ Pages.init({
   publicKey: {type: Sequelize.STRING, allowNull: false, validate: {
     len: [56]
   }},
-  memo: {type: Sequelize.BIGINT, defaultValue: 0},
+  memo: {type: Sequelize.BIGINT},
   description: {type: Sequelize.STRING, allowNull: false, validate: {
     len: [1, 512]
   }},
