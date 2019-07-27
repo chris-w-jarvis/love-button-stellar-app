@@ -2,7 +2,7 @@ const throng = require('throng')
 require('dotenv').config()
 
 const startSlave = require('./server')
-const WORKERS = (parseInt(process.env.WEB_CONCURRENCY)-1) || 1
+const WORKERS = process.env.WEB_CONCURRENCY || 1
 const env = process.env.LOVE_BUTTON_RUNTIME_ENV
 const logger = require('./services/winston-logger')
 const countersController = require('./controllers/counters-controller')
@@ -10,7 +10,7 @@ const countersController = require('./controllers/counters-controller')
 throng({
     workers: WORKERS,
     master: startMaster,
-    start: startSlave
+    start: (id) => startSlave(id)
 })
 
 // the master has two jobs in addition to starting workers: 

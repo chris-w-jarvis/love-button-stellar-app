@@ -63,30 +63,25 @@ setTimeout(stellarPriceCheck, 2000)
 // QUERY STELLAR PRICE, run this every 4.9 minutes * number of processes
 setInterval(stellarPriceCheck, 294000)
 
-// on startup get last page id
-var latestPageId
-try {
-  countersController.readLastPageId((err, lpi) => {
-    if (err) {
-      logger.log('info','Error loading last page id: '+ err)
-    } else {
-      latestPageId = lpi
-    }
-  })
-} catch(err) {
-  logger.log('info','Error reading last page id: '+ err)
-}
-
 module.exports = function router(app) {
 
   app.post('/api/get-my-link', validationService.getMyLink, function(req, res) {
     // zerofill latestPageId
-    if (!latestPageId) {
-      // if this isn't loaded we can't create new links
-      logger.log("PROBLEMS LOADING latestPageId")
-      res.status(404).send({msg:'Can\'t make new link right now! We\'re working on it, sorry!'})
+    var latestPageId
+    try {
+      countersController.readLastPageId((err, lpi) => {
+        if (err) {
+          logger.log('info','Error loading last page id: '+ err)
+          return res.status(500).send({msg:'Can\'t make new link right now, sorry!'})
+        } else {
+          countersController.incrLastPageId((err) => {if (err) logger.log('info','Error incrementing last page id: '+err)})
+          latestPageId = lpi
+        }
+      })
+    } catch(err) {
+      logger.log('info','Error reading last page id: '+ err)
     }
-    var idString = `${latestPageId++}`
+    var idString = `${latestPageId}`
     if (idString.length < 6) {
       var idLen = idString.length
       for (i = 0; i < 6-idLen; i++) {
@@ -94,7 +89,6 @@ module.exports = function router(app) {
       }
     }
 
-    // db
     Pages.create({
       name:req.body.name, 
       publicKey:req.body.key, 
@@ -105,7 +99,6 @@ module.exports = function router(app) {
     }).then(
       (page) => {
         res.send({id:page.pageId})
-        countersController.incrLastPageId((err) => {if (err) logger.log('info','Error writing last page id: '+err)})
       }
     )
     .catch(err => {

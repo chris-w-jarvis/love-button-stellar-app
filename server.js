@@ -1,6 +1,6 @@
 // // server.js
 // // where your node app starts
-module.exports = function() {
+module.exports = function(processId) {
   // // init project
   const express = require('express');
   const app = express();
@@ -8,7 +8,9 @@ module.exports = function() {
   const compression = require('compression')
   const logger = require('./services/winston-logger')
 
-  logger.log("info","Starting a new worker!")
+  logger.log("info",`Starting slave #${processId}!`)
+
+  const processLogger = require('./services/process-logger')(processId)
 
   require('dotenv').config()
   const viewController = require('./controllers/view-controller')
@@ -52,6 +54,7 @@ module.exports = function() {
   
   //  apply to all requests
   app.use(generalLimiter);
+  app.use(processLogger)
 
   // http://expressjs.com/en/starter/static-files.html
   app.use(express.static('public'))
