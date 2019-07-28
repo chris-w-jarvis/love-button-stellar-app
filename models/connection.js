@@ -1,7 +1,8 @@
 require('dotenv').config()
 const logger = require('../services/winston-logger')
 const Sequelize = require('sequelize')
-var sequelize;
+const env = process.env.LOVE_BUTTON_RUNTIME_ENV
+var sequelize
 if (env === "PROD") {
   sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_PURPLE_URL, {
     dialect: 'postgres',
