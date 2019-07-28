@@ -6,12 +6,15 @@ var sequelize
 if (env === "PROD") {
   sequelize = new Sequelize(process.env.HEROKU_POSTGRESQL_PURPLE_URL, {
     dialect: 'postgres',
+    dialectOptions: {
+      ssl: true
+    },
     logging: false
   })
 } else {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
       dialect: 'postgres',
-      logging: false
+      logging: true
   })
 }
 
