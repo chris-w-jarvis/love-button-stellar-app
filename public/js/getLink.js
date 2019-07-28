@@ -36,7 +36,10 @@ $( document ).ready(function () {
         }
         if (document.getElementById("memo").value != '') {
             if (document.getElementById('memo').value.length <= 19 && !document.getElementById('memo').value.match(/[a-z]/i)) request['memo'] = document.getElementById("memo").value
-            else alert("XLM Memo Id is all numbers (64 bit integer, the largest of which is 19 digits long)")
+            else {
+                alert("XLM Memo Id is all numbers (64 bit integer, the largest of which is 19 digits long)")
+                return
+            }
         }
         if (document.getElementById("emailInput").value != '') request['email'] = document.getElementById("emailInput").value
         $.post({url:`${host}api/get-my-link`,
