@@ -8,6 +8,8 @@ const logger = require('./services/winston-logger')
 const countersController = require('./controllers/counters-controller')
 const stellarController = require('./controllers/stellar-controller')
 
+logger.log("info", "WEB_CONCURRENCY = "+process.env.WEB_CONCURRENCY)
+
 throng({
     workers: WORKERS,
     master: startMaster,
