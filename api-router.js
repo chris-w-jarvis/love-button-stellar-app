@@ -25,13 +25,9 @@ const paymentLimiter = rateLimit({
     expiry: 10,
     prefix: 'prl:'
   }),
-  max: 1, // start blocking after 5 requests
+  max: 1,
   keyGenerator: function(req) {
-    if (req.user) {
-      return req.user.id
-    } else {
-      return req.header('Authorization')
-    }
+    return req.user.id
   },
   message:
     "Payment rate limiter: 1 payment per 10 seconds"
@@ -170,7 +166,7 @@ module.exports = function router(app) {
 
   app.post('/api/recover', recoveryController.recover)
 
-  app.post('/api/sendPayment', paymentLimiter, requireAuth, paymentLimiter, (req, res, next) => {req.stellarPriceCurrent = stellarPrice;next()}, validationService.sendPayment, sendPaymentService)
+  app.post('/api/sendPayment', requireAuth, paymentLimiter, (req, res, next) => {req.stellarPriceCurrent = stellarPrice;next()}, validationService.sendPayment, sendPaymentService)
 
   app.get('/api/fund', requireAuth, function(req, res) {
     const user = req.user
