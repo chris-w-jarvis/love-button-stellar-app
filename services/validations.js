@@ -73,7 +73,7 @@ module.exports = {
         }
         if (req.body.memo) {
             const memo = validator.trim(req.body.memo)
-            if (!validator.isNumeric(memo) || memo.length >= 19) {
+            if (!validator.isNumeric(memo) || memo.length > 19) {
                 return res.status(400).send({msg:'Memo is all numbers and max length 19 chars (64 bit integer)'})
             }
         }
