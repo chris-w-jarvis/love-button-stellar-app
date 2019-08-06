@@ -1,0 +1,14 @@
+Hi [MAINTAINER_NAME or PROJECT_NAME maintainers],
+
+My name is [YOUR_NAME_HERE_DINGUS] and my application https://love-button.org is the easiest way for users of your software to support it (and you) with small donations/tips with NO TRANSACTION FEES!
+
+love-button is obviously not the only way to garner financial support for your project but with other donation services, the impact of small donations (a few dollars or less) is severely diminished by credit card processing fees :( That's where we come in!
+
+The app is built on top of a cryptocurrency project called Stellar, which costs nothing to transfer no matter how big or small the transaction! Basically you will setup a love-button link with your information, share the link on your github page or wherever the codebase is hosted, then your supporters use this link to easily send you donations in the form of Stellar cryptocurrency. Then you can easily transfer Stellar into your currency of choice!
+
+For many open-source projects, https://love-button.org would be a great complement to existing monetization strategies, so you should check it out!!
+
+I'm available for any questions about this app!
+
+Thank you,
+[YOUR_NAME_HERE]
