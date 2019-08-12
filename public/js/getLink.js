@@ -1,4 +1,13 @@
 $( document ).ready(function () {
+
+    let token
+    if (localStorage.getItem('loveButtonAuthToken')) {
+        token = localStorage.getItem('loveButtonAuthToken')
+    } else {
+        console.log("no auth token")
+        window.location.replace('/login')
+    }
+
     let getLinkBtn = document.getElementById('getLinkSubmitBtn')
     // configure env
     let env = document.getElementById('env').innerHTML
@@ -43,7 +52,8 @@ $( document ).ready(function () {
         }
         if (document.getElementById("emailInput").value != '') request['email'] = document.getElementById("emailInput").value
         $.post({url:`${host}api/get-my-link`,
-            data:request,
+            beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token)},
+            data: request,
             success: function(res) {
                 document.getElementById('link').value = `${host}give/${res.id}`
                 document.getElementById('copyLinkSection').style.display = 'block'

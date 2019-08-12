@@ -61,7 +61,7 @@ setInterval(stellarPriceCheck, 294000)
 
 module.exports = function router(app) {
 
-  app.post('/api/get-my-link', validationService.getMyLink, function(req, res) {
+  app.post('/api/get-my-link', requireAuth, validationService.getMyLink, function(req, res) {
     // zerofill latestPageId
     var latestPageId
     countersController.readLastPageId((err, lpi) => {

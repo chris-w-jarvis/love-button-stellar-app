@@ -27,7 +27,7 @@ $( document ).ready(function () {
     if (localStorage.getItem('loveButtonAuthToken')) {
         token = localStorage.getItem('loveButtonAuthToken')
         $.get({url:`${host}api/fund`,
-            beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token);},
+            beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token)},
             success: function(res) {
                 lBPublicAddr.value = res.loveButtonPublicAddress
                 memo.value = res.memo
