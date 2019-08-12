@@ -80,12 +80,6 @@ module.exports = {
         if (desc.length >= 512) {
             return res.status(400).send({msg:'Description must be 512 chars or less'})
         }
-        if (req.body.email) {
-            const email = validator.trim(req.body.email)
-            if (!validator.isEmail(email) || email.length >= 128) {
-                return res.status(400).send({msg:'Bad email, must be 128 chars or less'})
-            }
-        }
         next()
     },
     sendPayment: function(req, res, next) {

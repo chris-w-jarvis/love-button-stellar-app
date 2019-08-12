@@ -50,7 +50,6 @@ $( document ).ready(function () {
                 return
             }
         }
-        if (document.getElementById("emailInput").value != '') request['email'] = document.getElementById("emailInput").value
         $.post({url:`${host}api/get-my-link`,
             beforeSend: function(xhr){xhr.setRequestHeader('Authorization', token)},
             data: request,

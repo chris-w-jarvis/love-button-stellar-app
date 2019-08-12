@@ -89,7 +89,7 @@ module.exports = function router(app) {
           pageId:idString, 
           memo:req.body.memo,
           description: req.body.description,
-          email: req.body.emailInput
+          email: req.user.email
         }).then(
           (page) => {
             res.send({id:page.pageId})
