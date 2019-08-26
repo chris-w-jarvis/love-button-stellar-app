@@ -3,6 +3,7 @@ const accountController = require('./controllers/account-controller')
 const recoveryController = require('./controllers/recoveryController')
 const countersController = require('./controllers/counters-controller')
 const Pages = require('./models/pages').Pages
+const UnpaidPremiumLinks = require('./models/unpaidPremiumLinks').UnpaidPremiumLinks
 const sendPaymentService = require('./services/payment-account-transaction').sendPaymentService
 const validationService = require('./services/validations')
 require('dotenv').config()
@@ -60,6 +61,20 @@ setTimeout(stellarPriceCheck, 2000)
 setInterval(stellarPriceCheck, 294000)
 
 module.exports = function router(app) {
+
+  app.post('/api/get-my-link/premium', requireAuth, validationService.premiumLink, function(req, res, next) {
+    UnpaidPremiumLinks.upsert({
+      name: req.body.name, 
+      publicKey: req.body.key, 
+      id: req.user.id, 
+      memo: req.body.memo,
+      description: req.body.description,
+      path: req.body.path,
+      email: req.user.email
+    })
+    .then( () => res.sendStatus(201) )
+    .catch( (err) => {res.sendStatus(400) })
+  })
 
   app.post('/api/get-my-link', requireAuth, validationService.getMyLink, function(req, res) {
     // zerofill latestPageId

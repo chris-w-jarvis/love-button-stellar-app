@@ -12,6 +12,8 @@ if (process.env.LOVE_BUTTON_RUNTIME_ENV === 'PROD') {
 
 const accountController = require('../controllers/account-controller')
 const countersController = require('../controllers/counters-controller')
+const premiumLinkController = require('../controllers/premium-link-controller')
+const premiumPrice = parseFloat(process.env.PREMIUM_ACCOUNT_PRICE)
 // Create an API call to query payments involving the account.
 var accountId = process.env.LOVE_BUTTON_PUBLIC_ADDRESS;
 var payments = server.payments().forAccount(accountId);
@@ -48,10 +50,40 @@ payments.stream({
     // }
     if (payment.asset_type != 'native') return
     // read memo from payment
-    payment.transaction().then(res => {
-        var memoText = res.memo
+    payment.transaction().then(transaction => {
+        var memoText = transaction.memo
         // read amount
         const payAmt = payment.amount
+
+        // check if they are buying a premium link
+        if ((parseFloat(amt)+.5) > premiumPrice) {
+          premiumLinkController.buyingPremiumLink(memoText)
+            .then(premRes => {
+              if (premRes) {
+                premiumLinkController.fundPremiumLink(memoText)
+                  .then( paid => {
+                    logger.log('info','Premium link purchased: give/'+paid.path)
+                  })
+                  .catch(err => logger.log('info',err))
+              } else {
+                // just update their balance
+                accountController.modifyFunds(memoText, payAmt)
+                  .then(res => {
+                      if (res === 0) {
+                          logger.log('info','No account updated, bad id?')
+                      } else if (res > 1) {
+                          logger.log('info',`More than one account updated! Audit for id: ${memoText}`)
+                      } else {
+                          return
+                      }
+                  })
+                  .catch(err => logger.log('info',err))
+              }
+            })
+            .catch((err) => {
+              logger.log('info', err)
+            })
+        } else {
         // increase account balance in db
         accountController.modifyFunds(memoText, payAmt)
         .then(res => {
@@ -68,6 +100,7 @@ payments.stream({
             }
         })
         .catch(err => logger.log('info',err))
+      }
     })
   },
 
